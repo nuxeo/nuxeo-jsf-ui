@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Name: Nuxeo Platform Rendering Tests
-Bundle-SymbolicName: org.nuxeo.ecm.platform.rendering.tests

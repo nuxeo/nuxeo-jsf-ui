@@ -1,3 +1,0 @@
-Bundle-SymbolicName: org.nuxeo.ecm.core.management.jtajca
-Require-Bundle: org.nuxeo.ecm.core;visibility:=reexport
-Nuxeo-Component: OSGI-INF/default-monitor-component.xml

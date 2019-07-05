@@ -1,8 +1,0 @@
-<component name="teststore">
-  <extension
-    target="org.nuxeo.ecm.core.transientstore.TransientStorageComponent"
-    point="store">
-    <store name="testPath" path="${nuxeo.data.dir}/test" />
-
-  </extension>
-</component>

@@ -1,3 +1,0 @@
-<install>
-  <pcopy file="${package.root}/test.properties" tofile="${env.config}"/>
-</install>

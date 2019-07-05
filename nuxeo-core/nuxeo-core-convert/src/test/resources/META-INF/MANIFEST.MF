@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: NXCoreConvert
-Bundle-SymbolicName: org.nuxeo.ecm.core.convert.tests
-Bundle-Localization: plugin

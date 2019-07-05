@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 1
-Bundle-Name: ElasticSearch Sequence Generator
-Bundle-SymbolicName: org.nuxeo.elasticsearch.seqgen;singleton:=true
-Bundle-Version: 1.0.0
-Nuxeo-Component: OSGI-INF/elasticsearch-uidgen-sequencer-contrib.xml

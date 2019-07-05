@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<component name="org.nuxeo.elasticsearch.ElasticSearchComponent.contrib" version="1.0">
-
-  <extension point="elasticSearchDocWriter" target="org.nuxeo.elasticsearch.ElasticSearchComponent">
-    <writer class="org.nuxeo.elasticsearch.io.JsonESDocumentWriter" />
-  </extension>
-
-</component>

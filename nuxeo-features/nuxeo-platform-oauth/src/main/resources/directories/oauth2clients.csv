@@ -1,2 +1,0 @@
-name,clientId,redirectURIs,autoGrant
-"Nuxeo Mobile","nuxeo-mobile","nuxeo://authorize",true

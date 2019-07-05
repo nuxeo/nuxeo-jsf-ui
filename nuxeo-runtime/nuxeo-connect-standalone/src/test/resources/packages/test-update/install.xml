@@ -1,3 +1,0 @@
-<install>
-  <update file="${package.root}/bundles/foo-1.1.jar" todir="${env.bundles}" />
-</install>
