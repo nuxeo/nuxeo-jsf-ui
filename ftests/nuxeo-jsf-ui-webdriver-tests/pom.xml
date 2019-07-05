@@ -2,15 +2,19 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.nuxeo.ecm.platform</groupId>
-    <artifactId>nuxeo-jsf-ui-code</artifactId>
+    <artifactId>nuxeo-jsf-ui-ftests</artifactId>
     <version>11.1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <groupId>org.nuxeo.ecm.distribution</groupId>
-  <artifactId>nuxeo-jsf-ui-hotreload-tests</artifactId>
-  <name>Nuxeo JSF UI Hotreload Tests</name>
-  <description>Hotreload Functional tests on Nuxeo JSF UI</description>
+  <artifactId>nuxeo-jsf-ui-webdriver-tests</artifactId>
+  <name>Nuxeo JSF UI WebDriver Tests</name>
+  <description>WebDriver functional tests on Nuxeo JSF UI</description>
+
+  <properties>
+    <connect.password>setTheValueInYourSettings</connect.password>
+  </properties>
 
   <dependencyManagement>
     <dependencies>
@@ -32,6 +36,19 @@
 
   <dependencies>
     <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ecm.automation</groupId>
+      <artifactId>nuxeo-automation-test</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.nuxeo.ecm.distribution</groupId>
       <artifactId>nuxeo-server-tomcat</artifactId>
       <type>zip</type>
@@ -43,7 +60,16 @@
       <type>zip</type>
       <scope>provided</scope>
     </dependency>
-
+    <dependency>
+      <groupId>org.nuxeo.ecm.distribution</groupId>
+      <artifactId>nuxeo-functional-tests</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.runtime</groupId>
+      <artifactId>nuxeo-runtime</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.nuxeo.runtime</groupId>
       <artifactId>nuxeo-runtime-test</artifactId>
@@ -55,14 +81,36 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.nuxeo.ecm.distribution</groupId>
-      <artifactId>nuxeo-functional-tests</artifactId>
+      <groupId>org.nuxeo.ecm.automation</groupId>
+      <artifactId>nuxeo-automation-test</artifactId>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <configuration>
+              <archive>
+                <manifestFile>src/test/resources/META-INF/MANIFEST.MF</manifestFile>
+              </archive>
+            </configuration>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -82,6 +130,7 @@
             <configuration>
               <argLine>-Dlog4j.configurationFile=${file.uri.prefix}${basedir}/src/test/resources/log4j2-test.xml
                 -Dnuxeo.log.dir=${project.build.directory}
+                -DconnectPassword=${connect.password}
                 ${it.failsafe.argLine}
               </argLine>
             </configuration>

@@ -22,6 +22,8 @@
 
   <modules>
     <module>code</module>
+    <module>packages</module>
+    <module>ftests</module>
   </modules>
 
   <dependencyManagement>
