@@ -9,6 +9,19 @@ This module is adapted from the definition built from the Studio project named `
 
 ## Update
 
-Do not directly modify this module.
+Changes in this module should be done in the Studio project to ensure
+accurate synchronization of changes between the Studio project and
+this code.
 
-Check out [nuxeo-routing-default README](../nuxeo-routing-default/README.md) to see how to modify this code.
+Here is the procedure to follow when making changes to files generated
+by Studio:
+
+- make changes in the Studio project, and commit with an accurate
+  description of the changes (references to JIRA issues are very welcome),
+- download the generated jar and unzip it in a temp folder,
+- from this directory, run:
+
+        $ ./etc/update.sh  temp-folder-where-jar-was-unzipped/
+
+If you need more changes to the generated jar, you should update the
+script at `etc/update.sh`.
