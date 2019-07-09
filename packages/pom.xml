@@ -4,7 +4,6 @@
     <groupId>org.nuxeo.ecm.platform</groupId>
     <artifactId>nuxeo-jsf-ui</artifactId>
     <version>11.1-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <groupId>org.nuxeo.ecm.platform</groupId>
@@ -16,5 +15,17 @@
     <module>nuxeo-nxr-jsf-ui</module>
     <module>nuxeo-marketplace-jsf-ui</module>
   </modules>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.nuxeo.ecm.distribution</groupId>
+        <artifactId>nuxeo-distribution</artifactId>
+        <type>pom</type>
+        <scope>import</scope>
+        <version>${project.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
 </project>

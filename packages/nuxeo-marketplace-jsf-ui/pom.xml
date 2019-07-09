@@ -5,31 +5,12 @@
     <groupId>org.nuxeo.ecm.platform</groupId>
     <artifactId>nuxeo-jsf-ui-packages</artifactId>
     <version>11.1-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <groupId>org.nuxeo.ecm.distribution</groupId>
   <artifactId>nuxeo-marketplace-jsf-ui</artifactId>
   <packaging>zip</packaging>
   <name>Nuxeo Marketplace Package for JSF UI</name>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.nuxeo.ecm.distribution</groupId>
-        <artifactId>nuxeo-distribution</artifactId>
-        <type>pom</type>
-        <scope>import</scope>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.distribution</groupId>
-        <artifactId>nuxeo-nxr-jsf-ui</artifactId>
-        <type>zip</type>
-        <version>${project.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <dependencies>
     <!-- Base distribution -->

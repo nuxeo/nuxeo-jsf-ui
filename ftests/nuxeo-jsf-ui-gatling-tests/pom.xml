@@ -4,7 +4,6 @@
     <groupId>org.nuxeo.ecm.platform</groupId>
     <artifactId>nuxeo-jsf-ui-ftests</artifactId>
     <version>11.1-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <groupId>org.nuxeo.ecm.distribution</groupId>
@@ -19,19 +18,6 @@
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>org.nuxeo.ecm.distribution</groupId>
-        <artifactId>nuxeo-distribution</artifactId>
-        <type>pom</type>
-        <scope>import</scope>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.distribution</groupId>
-        <artifactId>nuxeo-marketplace-jsf-ui</artifactId>
-        <type>zip</type>
-        <version>${project.version}</version>
-      </dependency>
       <dependency>
         <groupId>org.nuxeo.tools.testing</groupId>
         <artifactId>data-test-les-arbres</artifactId>
