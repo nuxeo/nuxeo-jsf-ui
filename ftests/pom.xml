@@ -16,6 +16,8 @@
     <module>nuxeo-jsf-ui-gatling-tests</module>
     <module>nuxeo-jsf-ui-hotreload-tests</module>
     <module>nuxeo-jsf-ui-webdriver-tests</module>
+    <module>nuxeo-platform-error-web-tests</module>
+    <module>nuxeo-platform-forms-layout-demo-tests</module>
   </modules>
 
 </project>

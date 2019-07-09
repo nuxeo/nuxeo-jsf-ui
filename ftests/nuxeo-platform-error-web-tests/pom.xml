@@ -2,9 +2,9 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.nuxeo.ecm.platform</groupId>
-    <artifactId>nuxeo-platform-error-web-parent</artifactId>
+    <artifactId>nuxeo-jsf-ui-ftests</artifactId>
     <version>11.1-SNAPSHOT</version>
-    <relativePath>../../pom.xml</relativePath>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <groupId>org.nuxeo.ecm.platform</groupId>
