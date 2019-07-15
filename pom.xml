@@ -49,43 +49,6 @@
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.nuxeo.ecm.annot</groupId>
-        <artifactId>nuxeo-annot-api</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.annot</groupId>
-        <artifactId>nuxeo-annot-contrib</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.annot</groupId>
-        <artifactId>nuxeo-annot-core</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.annot</groupId>
-        <artifactId>nuxeo-annot-gwt</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.annot</groupId>
-        <artifactId>nuxeo-annot-http</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.annot</groupId>
-        <artifactId>nuxeo-annot-repo</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.annot</groupId>
-        <artifactId>nuxeo-annot-repo</artifactId>
-        <version>${nuxeo.features.version}</version>
-        <type>test-jar</type>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
         <groupId>org.nuxeo.ecm.platform</groupId>
         <artifactId>nuxeo-apidoc-webengine</artifactId>
         <version>${project.version}</version>
@@ -254,16 +217,6 @@
       <dependency>
         <groupId>org.nuxeo.ecm.platform</groupId>
         <artifactId>nuxeo-platform-imaging-jsf</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.platform</groupId>
-        <artifactId>nuxeo-platform-imaging-tiling</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.platform</groupId>
-        <artifactId>nuxeo-platform-imaging-tiling-preview</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

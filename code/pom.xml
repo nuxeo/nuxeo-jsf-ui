@@ -16,11 +16,6 @@
     <module>nuxeo-admin-center-jsf</module>
     <module>nuxeo-admin-center-monitoring</module>
     <module>nuxeo-admin-center-oauth</module>
-    <module>nuxeo-annot-api</module>
-    <module>nuxeo-annot-contrib</module>
-    <module>nuxeo-annot-core</module>
-    <module>nuxeo-annot-http</module>
-    <module>nuxeo-annot-repo</module>
     <module>nuxeo-apidoc-webengine</module>
     <module>nuxeo-automation-jsf</module>
     <module>nuxeo-csv-jsf</module>
@@ -52,7 +47,6 @@
     <module>nuxeo-platform-forms-layout-io</module>
     <module>nuxeo-platform-forms-layout-io-plugins</module>
     <module>nuxeo-platform-imaging-jsf</module>
-    <module>nuxeo-platform-imaging-tiling</module>
     <module>nuxeo-platform-io-client</module>
     <module>nuxeo-platform-login-deputy-jsf</module>
     <module>nuxeo-platform-login-shibboleth-jsf</module>
@@ -104,15 +98,5 @@
     <module>nuxeo-user-profile-jsf</module>
     <module>nuxeo-web-resources-jsf</module>
   </modules>
-
-  <profiles>
-    <profile>
-      <id>gwt</id>
-      <modules>
-        <module>nuxeo-annot-gwt</module>
-        <module>nuxeo-platform-imaging-tiling-preview</module>
-      </modules>
-    </profile>
-  </profiles>
 
 </project>
