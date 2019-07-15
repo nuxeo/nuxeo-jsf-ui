@@ -6,10 +6,6 @@
   xmlns:nxr="http://nuxeo.org/nxweb/resources">
   <ui:param name="pageName" value="galaxy/popup" />
 
-  <ui:define name="page head">
-    <nxr:meta name="gwt:property" content="#{localeSelector.localeString}" />
-  </ui:define>
-
   <ui:define name="page title">
     <h:outputText value="#{nuxeoApplicationName} - #{nxd:titleOrId(currentDocument)}"/>
   </ui:define>

@@ -42,7 +42,6 @@ import org.nuxeo.ecm.core.api.blobholder.DocumentBlobHolder;
 import org.nuxeo.ecm.core.blob.BlobManager;
 import org.nuxeo.ecm.core.blob.BlobManager.UsageHint;
 import org.nuxeo.ecm.core.io.download.DownloadService;
-import org.nuxeo.ecm.platform.preview.adapter.base.ConverterBasedHtmlPreviewAdapter;
 import org.nuxeo.ecm.platform.preview.api.HtmlPreviewAdapter;
 import org.nuxeo.ecm.platform.preview.api.NothingToPreviewException;
 import org.nuxeo.ecm.platform.preview.api.PreviewException;
@@ -193,7 +192,6 @@ public class PreviewRestlet extends BaseStatelessNuxeoRestlet {
         HtmlPreviewAdapter preview = null; // getFromCache(targetDocument,
         // xpath);
 
-        targetDocument.putContextData(ConverterBasedHtmlPreviewAdapter.OLD_PREVIEW_PROPERTY, true);
         // if (preview == null) {
         preview = targetDocument.getAdapter(HtmlPreviewAdapter.class);
         // }
