@@ -6,26 +6,48 @@
     <version>11.1-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.nuxeo.ecm.platform</groupId>
+  <groupId>org.nuxeo.jsf.packages</groupId>
   <artifactId>nuxeo-jsf-ui-packages</artifactId>
   <packaging>pom</packaging>
-  <name>Nuxeo - JSF UI Packages</name>
+  <name>Nuxeo JSF UI Packages</name>
 
   <modules>
     <module>nuxeo-nxr-jsf-ui</module>
     <module>nuxeo-marketplace-jsf-ui</module>
+    <module>nuxeo-3d-jsf-ui-package</module>
+    <module>nuxeo-csv-jsf-ui-package</module>
+    <module>nuxeo-dam-jsf-ui-package</module>
+    <module>nuxeo-diff-jsf-ui-package</module>
+    <module>nuxeo-diff-pictures-jsf-ui-package</module>
+    <module>nuxeo-drive-jsf-ui-package</module>
+    <module>nuxeo-easyshare-jsf-ui-package</module>
+    <module>nuxeo-groups-rights-audit-jsf-ui-package</module>
+    <module>nuxeo-imap-connector-jsf-ui-package</module>
+    <module>nuxeo-liveconnect-jsf-ui-package</module>
+    <module>nuxeo-multi-tenant-jsf-ui-package</module>
+    <module>nuxeo-quota-jsf-ui-package</module>
+    <module>nuxeo-shibboleth-invitation-jsf-ui-package</module>
+    <module>nuxeo-shibboleth-login-jsf-ui-package</module>
+    <module>nuxeo-signature-jsf-ui-package</module>
+    <module>nuxeo-smart-search-jsf-ui-package</module>
+    <module>nuxeo-template-rendering-jsf-ui-package</module>
+    <module>nuxeo-tree-snapshot-jsf-ui-package</module>
+    <module>nuxeo-user-registration-jsf-ui-package</module>
+    <module>nuxeo-virtual-navigation-jsf-ui-package</module>
   </modules>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.nuxeo.ecm.distribution</groupId>
-        <artifactId>nuxeo-distribution</artifactId>
-        <type>pom</type>
-        <scope>import</scope>
-        <version>${project.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.nuxeo.build</groupId>
+        <artifactId>ant-assembly-maven-plugin</artifactId>
+        <configuration>
+          <buildFiles>
+            <buildFile>${basedir}/../src/main/assemble/assembly.xml</buildFile>
+          </buildFiles>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
