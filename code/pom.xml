@@ -66,6 +66,7 @@
     <module>nuxeo-platform-ui-select2</module>
     <module>nuxeo-platform-ui-web</module>
     <module>nuxeo-platform-ui-web-test</module>
+    <module>nuxeo-platform-user-registration-core</module>
     <module>nuxeo-platform-user-registration-web</module>
     <module>nuxeo-platform-userworkspace-web</module>
     <module>nuxeo-platform-video-jsf</module>
@@ -81,6 +82,7 @@
     <module>nuxeo-routing-web</module>
     <module>nuxeo-search-ui</module>
     <module>nuxeo-segmentio-connector</module>
+    <module>nuxeo-shibboleth-invitation</module>
     <module>nuxeo-style-guide</module>
     <module>nuxeo-target-platforms-compat</module>
     <module>nuxeo-target-platforms-jsf</module>
