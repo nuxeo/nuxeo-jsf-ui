@@ -324,6 +324,11 @@
       </dependency>
       <dependency>
         <groupId>org.nuxeo.ecm.platform</groupId>
+        <artifactId>nuxeo-platform-user-registration-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.nuxeo.ecm.platform</groupId>
         <artifactId>nuxeo-platform-user-registration-web</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -395,6 +400,11 @@
       <dependency>
         <groupId>org.nuxeo</groupId>
         <artifactId>nuxeo-segmentio-connector</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.nuxeo.shibboleth.invitation</groupId>
+        <artifactId>nuxeo-shibboleth-invitation</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
