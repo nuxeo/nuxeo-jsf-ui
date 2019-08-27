@@ -6,35 +6,29 @@
     <version>11.1-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.nuxeo.ecm.distribution</groupId>
-  <artifactId>nuxeo-jsf-ui-hotreload-tests</artifactId>
-  <name>Nuxeo JSF UI Hotreload Tests</name>
-  <description>Hotreload Functional tests on Nuxeo JSF UI</description>
+  <artifactId>nuxeo-amazon-s3-jsf-ui-ftests</artifactId>
+  <name>Nuxeo Amazon S3 Package JSF UI Functional Tests</name>
 
   <dependencies>
     <dependency>
       <groupId>org.nuxeo.ecm.distribution</groupId>
       <artifactId>nuxeo-server-tomcat</artifactId>
       <type>zip</type>
-      <scope>provided</scope>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.distribution</groupId>
       <artifactId>nuxeo-marketplace-jsf-ui</artifactId>
       <type>zip</type>
-      <scope>provided</scope>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.packages</groupId>
+      <artifactId>nuxeo-amazon-s3-package</artifactId>
+      <type>zip</type>
+      <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.nuxeo.runtime</groupId>
-      <artifactId>nuxeo-runtime-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.nuxeo.ecm.core</groupId>
-      <artifactId>nuxeo-core-test</artifactId>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.distribution</groupId>
       <artifactId>nuxeo-functional-tests</artifactId>
@@ -61,8 +55,8 @@
             </goals>
             <configuration>
               <targets>
-                <target>prepare-environment</target>
-                <target>copy-packages</target>
+                <target>prepare-packages</target>
+                <target>prepare-s3-environment</target>
                 <target>start</target>
               </targets>
             </configuration>
@@ -76,7 +70,7 @@
             <configuration>
               <targets>
                 <target>stop</target>
-                <target>cleanup-environment</target>
+                <target>cleanup-s3-environment</target>
               </targets>
             </configuration>
           </execution>
@@ -84,5 +78,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>
