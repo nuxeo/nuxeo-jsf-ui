@@ -1,0 +1,51 @@
+<project name="ftests" xmlns:nx="urn:nuxeo-build" xmlns:artifact="urn:nuxeo-artifact">
+  <taskdef resource="org/nuxeo/build/antlib.xml" uri="urn:nuxeo-build" />
+  <taskdef resource="org/nuxeo/build/artifact/antlib.xml" uri="urn:nuxeo-artifact" />
+  <taskdef resource="net/sf/antcontrib/antlib.xml" />
+
+  <property name="out.dir" value="${maven.project.build.directory}" />
+  <unzip dest="${out.dir}/" overwrite="false">
+    <artifact:resolveFile key="org.nuxeo:nuxeo-ftest::zip" />
+  </unzip>
+  <import file="${out.dir}/nuxeo-ftest.xml" />
+
+  <target name="prepare-packages">
+    <copy todir="${out.dir}/packages">
+      <artifact:set>
+        <includes>
+          <artifact artifactId="nuxeo-marketplace-jsf-ui" type="zip" />
+          <artifact groupId="org.nuxeo.packages" type="zip" />
+          <artifact groupId="org.nuxeo.jsf.packages" type="zip" />
+        </includes>
+      </artifact:set>
+    </copy>
+
+    <!-- compute mp.install property with the list of packages -->
+    <fileset id="packages.list" dir="${out.dir}/packages" />
+    <pathconvert pathsep="," property="packages.list" refid="packages.list" />
+    <property name="mp.install" value="${packages.list}" />
+  </target>
+
+  <target name="prepare-container">
+    <antcall target="set-conf">
+      <param name="name" value="nuxeo.storage.azure.container" />
+      <param name="value" value="nuxeo-ft-azure-test" />
+    </antcall>
+  </target>
+
+  <target name="cleanup-container">
+    <echo message="Container contents:" />
+    <exec executable="azure">
+      <arg line="storage blob list nuxeo-ft-azure-test" />
+    </exec>
+    <echo message="Deleting container." />
+    <exec executable="azure">
+      <arg line="storage container delete -q nuxeo-ft-azure-test" />
+    </exec>
+  </target>
+
+  <target name="prepare-azure-environment" depends="prepare-environment,prepare-container" />
+
+  <target name="cleanup-azure-environment" depends="cleanup-environment,cleanup-container" />
+
+</project>

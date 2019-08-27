@@ -6,28 +6,96 @@
     <version>11.1-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.nuxeo.ecm.platform</groupId>
+  <groupId>org.nuxeo.jsf.ftests</groupId>
   <artifactId>nuxeo-jsf-ui-ftests</artifactId>
   <packaging>pom</packaging>
-  <name>Nuxeo - JSF UI Functional Tests</name>
+  <name>Nuxeo JSF UI Functional Tests</name>
 
   <modules>
+    <module>nuxeo-3d-jsf-ui-ftests</module>
+    <module>nuxeo-amazon-s3-jsf-ui-ftests</module>
+    <module>nuxeo-csv-jsf-ui-ftests</module>
+    <module>nuxeo-dam-jsf-ui-ftests</module>
+    <module>nuxeo-diff-jsf-ui-ftests</module>
+    <module>nuxeo-diff-pictures-jsf-ui-ftests</module>
+    <module>nuxeo-drive-jsf-ui-ftests</module>
+    <module>nuxeo-easyshare-jsf-ui-ftests</module>
+    <module>nuxeo-groups-rights-audit-jsf-ui-ftests</module>
+    <module>nuxeo-imap-connector-jsf-ui-ftests</module>
     <module>nuxeo-jsf-ui-hotreload-tests</module>
     <module>nuxeo-jsf-ui-webdriver-tests</module>
+    <module>nuxeo-lang-ext-incomplete-jsf-ui-ftests</module>
+    <module>nuxeo-liveconnect-jsf-ui-ftests</module>
+    <module>nuxeo-microsoft-azure-jsf-ui-ftests</module>
+    <module>nuxeo-multi-tenant-jsf-ui-ftests</module>
     <module>nuxeo-platform-error-web-tests</module>
     <module>nuxeo-platform-forms-layout-demo-tests</module>
+    <module>nuxeo-quota-jsf-ui-ftests</module>
+    <module>nuxeo-shibboleth-invitation-jsf-ui-ftests</module>
+    <module>nuxeo-shibboleth-login-jsf-ui-ftests</module>
+    <module>nuxeo-signature-jsf-ui-ftests</module>
+    <module>nuxeo-smart-search-jsf-ui-ftests</module>
+    <module>nuxeo-template-rendering-jsf-ui-ftests</module>
+    <module>nuxeo-tree-snapshot-jsf-ui-ftests</module>
+    <module>nuxeo-virtual-navigation-jsf-ui-ftests</module>
   </modules>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.nuxeo.ecm.distribution</groupId>
-        <artifactId>nuxeo-distribution</artifactId>
-        <type>pom</type>
-        <scope>import</scope>
-        <version>${project.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <skipTests>true</skipTests>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+            <configuration>
+              <argLine>-Dlog4j.configuration=${file.uri.prefix}${basedir}/src/test/resources/log4j.xml
+                -Dnuxeo.log.dir=${project.build.directory}
+              </argLine>
+              <reportNameSuffix>${project.artifactId}</reportNameSuffix>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.nuxeo.build</groupId>
+        <artifactId>ant-assembly-maven-plugin</artifactId>
+        <configuration>
+          <buildFiles>
+            <buildFile>${basedir}/../itests.xml</buildFile>
+          </buildFiles>
+        </configuration>
+      </plugin>
+      <!-- no need to build any ftest jar -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-jar</id>
+            <phase/>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- we do not want to deploy any ftest jar -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>

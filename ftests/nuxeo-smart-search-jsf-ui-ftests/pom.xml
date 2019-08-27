@@ -6,35 +6,29 @@
     <version>11.1-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.nuxeo.ecm.distribution</groupId>
-  <artifactId>nuxeo-jsf-ui-hotreload-tests</artifactId>
-  <name>Nuxeo JSF UI Hotreload Tests</name>
-  <description>Hotreload Functional tests on Nuxeo JSF UI</description>
+  <artifactId>nuxeo-smart-search-jsf-ui-ftests</artifactId>
+  <name>Nuxeo Smart Search Package JSF UI Functional Tests</name>
 
   <dependencies>
     <dependency>
       <groupId>org.nuxeo.ecm.distribution</groupId>
       <artifactId>nuxeo-server-tomcat</artifactId>
       <type>zip</type>
-      <scope>provided</scope>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.distribution</groupId>
       <artifactId>nuxeo-marketplace-jsf-ui</artifactId>
       <type>zip</type>
-      <scope>provided</scope>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.jsf.packages</groupId>
+      <artifactId>nuxeo-smart-search-jsf-ui-package</artifactId>
+      <type>zip</type>
+      <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.nuxeo.runtime</groupId>
-      <artifactId>nuxeo-runtime-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.nuxeo.ecm.core</groupId>
-      <artifactId>nuxeo-core-test</artifactId>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.distribution</groupId>
       <artifactId>nuxeo-functional-tests</artifactId>
@@ -47,11 +41,6 @@
       <plugin>
         <groupId>org.nuxeo.build</groupId>
         <artifactId>ant-assembly-maven-plugin</artifactId>
-        <configuration>
-          <buildFiles>
-            <buildFile>${basedir}/itests.xml</buildFile>
-          </buildFiles>
-        </configuration>
         <executions>
           <execution>
             <id>start-tomcat</id>
@@ -61,8 +50,8 @@
             </goals>
             <configuration>
               <targets>
+                <target>prepare-packages</target>
                 <target>prepare-environment</target>
-                <target>copy-packages</target>
                 <target>start</target>
               </targets>
             </configuration>
@@ -84,5 +73,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>
