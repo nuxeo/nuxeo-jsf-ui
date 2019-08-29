@@ -20,6 +20,7 @@
     <module>nuxeo-automation-jsf</module>
     <module>nuxeo-csv-jsf</module>
     <module>nuxeo-dam-jsf</module>
+    <module>nuxeo-diff</module>
     <module>nuxeo-diff-jsf</module>
     <module>nuxeo-diff-pictures</module>
     <module>nuxeo-drive-jsf</module>

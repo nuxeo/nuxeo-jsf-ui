@@ -71,12 +71,34 @@
       </dependency>
       <dependency>
         <groupId>org.nuxeo.ecm</groupId>
-        <artifactId>nuxeo-diff-jsf</artifactId>
+        <artifactId>nuxeo-diff-core</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.nuxeo.ecm</groupId>
+        <artifactId>nuxeo-diff-content</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.nuxeo.ecm</groupId>
+        <artifactId>nuxeo-diff-content</artifactId>
+        <version>${project.version}</version>
+        <type>test-jar</type>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.nuxeo.ecm</groupId>
         <artifactId>nuxeo-diff-pictures</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.nuxeo.ecm</groupId>
+        <artifactId>nuxeo-diff-test</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.nuxeo.ecm</groupId>
+        <artifactId>nuxeo-diff-jsf</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -656,6 +678,19 @@
         <groupId>org.jboss.seam</groupId>
         <artifactId>jboss-seam-debug</artifactId>
         <version>${seam.version}</version>
+      </dependency>
+      <!-- daisydiff -->
+      <dependency>
+        <groupId>org.outerj.daisy</groupId>
+        <artifactId>daisydiff</artifactId>
+        <classifier>shaded</classifier>
+        <version>1.2-NX2</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.eclipse.core.runtime</groupId>
+            <artifactId>eclipse-core-runtime</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
     </dependencies>
   </dependencyManagement>
