@@ -73,7 +73,6 @@ public class TestSegmentIOService {
     protected void sendAuthenticationEvent(NuxeoPrincipal principal) {
         Map<String, Serializable> props = new HashMap<>();
         props.put("AuthenticationPlugin", "FakeAuth");
-        props.put("LoginPlugin", "FakeLogin");
         EventContext ctx = new UnboundEventContext(principal, props);
         eventProducer.fireEvent(ctx.newEvent("loginSuccess"));
     }
