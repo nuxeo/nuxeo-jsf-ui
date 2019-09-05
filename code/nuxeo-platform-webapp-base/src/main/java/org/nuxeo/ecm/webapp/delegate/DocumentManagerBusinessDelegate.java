@@ -30,8 +30,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.annotation.security.PermitAll;
-import javax.security.auth.login.LoginContext;
-import javax.security.auth.login.LoginException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -114,31 +112,14 @@ public class DocumentManagerBusinessDelegate implements Serializable {
     @Destroy
     @PermitAll
     public void remove() {
-        LoginContext lc = null;
-        try {
-            try {
-                if (Framework.getRuntime() != null) {
-                    lc = Framework.login();
-                }
-            } catch (LoginException le) {
-                log.error("Unable to login as System", le);
-                log.warn("...try to feed CoreSession(s) without system login ...");
-            }
+        Framework.doPrivileged(() -> {
             for (Entry<RepositoryLocation, CloseableCoreSession> entry : sessions.entrySet()) {
                 String serverName = entry.getKey().getName();
                 CloseableCoreSession session = entry.getValue();
                 session.close();
                 log.debug("Closed session for repository " + serverName);
             }
-        } finally {
-            if (lc != null) {
-                try {
-                    lc.logout();
-                } catch (LoginException lo) {
-                    log.error("Error when logout", lo);
-                }
-            }
             sessions.clear();
-        }
+        });
     }
 }

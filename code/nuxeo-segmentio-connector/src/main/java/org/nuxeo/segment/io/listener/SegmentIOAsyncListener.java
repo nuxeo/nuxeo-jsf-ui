@@ -24,10 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.security.auth.login.LoginContext;
-import javax.security.auth.login.LoginException;
-
-import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventBundle;
@@ -57,19 +53,8 @@ public class SegmentIOAsyncListener implements PostCommitFilteringEventListener 
 
         Map<String, List<SegmentIOMapper>> event2Mappers = service.getMappers(eventToProcess);
 
-        try {
-            // Force system login in order to have access to user directory
-            LoginContext login = Framework.login();
-            try {
-                processEvents(event2Mappers, bundle);
-            } finally {
-                if (login != null) {
-                    login.logout();
-                }
-            }
-        } catch (LoginException e) {
-            throw new NuxeoException(e);
-        }
+        // use system in order to have access to the user directory
+        Framework.doPrivileged(() -> processEvents(event2Mappers, bundle));
     }
 
     protected void processEvents(Map<String, List<SegmentIOMapper>> event2Mappers, EventBundle bundle) {

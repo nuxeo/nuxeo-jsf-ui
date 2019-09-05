@@ -30,7 +30,7 @@ import org.dom4j.dom.DOMDocument;
 import org.dom4j.dom.DOMDocumentFactory;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.local.ClientLoginModule;
+import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.platform.filemanager.api.FileManager;
 import org.nuxeo.ecm.platform.ui.web.tag.fn.LiveEditConstants;
 import org.nuxeo.runtime.api.Framework;
@@ -59,7 +59,7 @@ public class CreationContainerListRestlet extends BaseNuxeoRestlet implements Li
         DocumentModelList containers = null;
         String docType = getQueryParamValue(req, DOC_TYPE, DEFAULT_DOCTYPE);
         FileManager fileManager = Framework.getService(FileManager.class);
-        containers = fileManager.getCreationContainers(ClientLoginModule.getCurrentPrincipal(), docType);
+        containers = fileManager.getCreationContainers(NuxeoPrincipal.getCurrent(), docType);
 
         // build the XML response document holding the containers info
         DOMDocumentFactory domFactory = new DOMDocumentFactory();
