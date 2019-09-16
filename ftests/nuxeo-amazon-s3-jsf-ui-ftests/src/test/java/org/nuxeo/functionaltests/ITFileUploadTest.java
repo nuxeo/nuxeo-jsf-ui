@@ -20,6 +20,7 @@ package org.nuxeo.functionaltests;
 
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.nuxeo.functionaltests.pages.DocumentBasePage;
 import org.nuxeo.functionaltests.pages.FileDocumentBasePage;
@@ -30,6 +31,7 @@ import org.nuxeo.functionaltests.pages.FileDocumentBasePage;
 public class ITFileUploadTest extends AbstractTest {
 
     @Test
+    @Ignore("NXP-28036")
     public void testFileUpload() throws Exception {
 
         // Login as Administrator
