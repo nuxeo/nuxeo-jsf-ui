@@ -129,7 +129,7 @@ public class ImportActions implements Serializable {
 
     public DocumentModel getImportDocumentModel() {
         if (importDocumentModel == null) {
-            importDocumentModel = new SimpleDocumentModel();
+            importDocumentModel = SimpleDocumentModel.empty();
         }
         return importDocumentModel;
     }

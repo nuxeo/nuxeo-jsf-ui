@@ -104,7 +104,7 @@ public class TestBulkEditService {
     }
 
     protected DocumentModel buildSimpleDocumentModel() {
-        DocumentModel sourceDoc = new SimpleDocumentModel();
+        DocumentModel sourceDoc = SimpleDocumentModel.empty();
         sourceDoc.setProperty("dublincore", "title", "new title");
         sourceDoc.setProperty("dublincore", "description", "new description");
         sourceDoc.setPropertyValue("dublincore:creator", "new creator");

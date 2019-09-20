@@ -108,7 +108,7 @@ public class BulkEditActions implements Serializable {
 
     public DocumentModel getBulkEditDocumentModel() {
         if (fictiveDocumentModel == null) {
-            fictiveDocumentModel = new SimpleDocumentModel();
+            fictiveDocumentModel = SimpleDocumentModel.empty();
         }
         return fictiveDocumentModel;
     }
