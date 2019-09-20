@@ -107,7 +107,7 @@ public class DndFormActionBean implements Serializable {
     @Factory(value = "dataCollector", scope = ScopeType.PAGE)
     public DocumentModel getCollector() {
         if (metadataCollector == null) {
-            metadataCollector = new SimpleDocumentModel(getSchemas());
+            metadataCollector = SimpleDocumentModel.ofSchemas(getSchemas());
         }
         return metadataCollector;
     }

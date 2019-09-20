@@ -576,7 +576,7 @@ public class TestDefaultPageProviders {
         String parentIdParam = session.getRootDocument().getId();
         PageProvider<DocumentModel> pp = (PageProvider<DocumentModel>) contentView.getPageProviderWithParams(
                 parentIdParam);
-        pp.setSearchDocumentModel(new SimpleDocumentModel());
+        pp.setSearchDocumentModel(SimpleDocumentModel.empty());
         checkCoreQueryWithSimpleDocumentModel(parentIdParam, pp);
     }
 
