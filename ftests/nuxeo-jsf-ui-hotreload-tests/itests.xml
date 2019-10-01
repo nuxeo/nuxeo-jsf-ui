@@ -19,6 +19,11 @@
   <import file="${out.dir}/nuxeo-ftest.xml" />
 
   <target name="prepare-environment" depends="_init,prepare-db,prepare-tomcat">
+    <!-- prevent nuxeoctl from reaching Connect -->
+    <antcall target="set-conf">
+      <param name="name" value="org.nuxeo.connect.server.reachable" />
+      <param name="value" value="false" />
+    </antcall>
     <!-- enable dev mode, needed by dev hot reload tests -->
     <antcall target="set-conf">
       <param name="name" value="org.nuxeo.dev" />
