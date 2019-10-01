@@ -2,11 +2,7 @@
 <package type="addon" name="shibboleth-authentication-jsf-ui" version="@VERSION@">
   <title>Shibboleth Authentication - JSF UI</title>
   <description>This is the JSF UI package for Shibboleth Authentication.</description>
-  <home-page>https://doc.nuxeo.com/nxdoc/shibboleth-authentication/</home-page>
   <vendor>Nuxeo</vendor>
-  <nuxeo-validation>nuxeo_certified</nuxeo-validation>
-  <production-state>production_ready</production-state>
-  <supported>true</supported>
   <platforms>
     <platform>server-@VERSION@</platform>
     <platform>server-@VERSION@-*</platform>
@@ -17,5 +13,4 @@
   </dependencies>
   <license>Apache 2.0</license>
   <license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
-  <visibility>PUBLIC</visibility>
 </package>
