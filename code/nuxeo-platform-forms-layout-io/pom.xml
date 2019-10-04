@@ -53,6 +53,11 @@
       <artifactId>jsonassert</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-el-api</artifactId>
+      <scope>test</scope>
+    </dependency>
 
   </dependencies>
 
