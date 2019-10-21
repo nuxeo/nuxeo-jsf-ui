@@ -37,9 +37,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.model.Property;
-import org.nuxeo.ecm.core.api.validation.ConstraintViolation;
 import org.nuxeo.ecm.core.api.validation.DocumentValidationReport;
 import org.nuxeo.ecm.core.api.validation.DocumentValidationService;
+import org.nuxeo.ecm.core.api.validation.ValidationViolation;
 import org.nuxeo.ecm.core.schema.SchemaManager;
 import org.nuxeo.ecm.core.schema.types.Field;
 import org.nuxeo.ecm.platform.el.DocumentPropertyContext;
@@ -91,16 +91,16 @@ public class DocumentConstraintValidator implements Validator, PartialStateHolde
         }
 
         if (isResolvable(vref, ve)) {
-            List<ConstraintViolation> violations = doValidate(context, vref, ve, value);
+            List<ValidationViolation> violations = doValidate(context, vref, ve, value);
             if (violations != null && !violations.isEmpty()) {
                 Locale locale = context.getViewRoot().getLocale();
                 if (violations.size() == 1) {
-                    ConstraintViolation v = violations.iterator().next();
+                    ValidationViolation v = violations.iterator().next();
                     String msg = v.getMessage(locale);
                     throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
                 } else {
                     Set<FacesMessage> messages = new LinkedHashSet<>(violations.size());
-                    for (ConstraintViolation v : violations) {
+                    for (ValidationViolation v : violations) {
                         String msg = v.getMessage(locale);
                         messages.add(new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
                     }
@@ -134,7 +134,7 @@ public class DocumentConstraintValidator implements Validator, PartialStateHolde
         return false;
     }
 
-    protected List<ConstraintViolation> doValidate(FacesContext context, ValueReference vref, ValueExpression e,
+    protected List<ValidationViolation> doValidate(FacesContext context, ValueReference vref, ValueExpression e,
             Object value) {
         DocumentValidationService validationService = Framework.getService(DocumentValidationService.class);
         // document validation
