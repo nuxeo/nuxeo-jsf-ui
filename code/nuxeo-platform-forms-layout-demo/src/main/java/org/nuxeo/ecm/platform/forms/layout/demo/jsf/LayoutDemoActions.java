@@ -38,9 +38,9 @@ import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.international.StatusMessage;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoException;
-import org.nuxeo.ecm.core.api.validation.ConstraintViolation;
 import org.nuxeo.ecm.core.api.validation.DocumentValidationReport;
 import org.nuxeo.ecm.core.api.validation.DocumentValidationService;
+import org.nuxeo.ecm.core.api.validation.ValidationViolation;
 import org.nuxeo.ecm.platform.forms.layout.api.LayoutDefinition;
 import org.nuxeo.ecm.platform.forms.layout.api.LayoutRowDefinition;
 import org.nuxeo.ecm.platform.forms.layout.api.WidgetDefinition;
@@ -276,7 +276,7 @@ public class LayoutDemoActions implements Serializable {
         DocumentValidationReport report = s.validate(layoutValidationDocument);
         if (report.hasError()) {
             Locale locale = localeSelector.getLocale();
-            for (ConstraintViolation v : report.asList()) {
+            for (ValidationViolation v : report.asList()) {
                 String msg = v.getMessage(locale);
                 facesMessages.addToControl("errors", StatusMessage.Severity.ERROR, msg);
             }
