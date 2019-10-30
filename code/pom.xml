@@ -89,8 +89,6 @@
     <module>nuxeo-target-platforms-jsf</module>
     <module>nuxeo-template-rendering-jsf</module>
     <module>nuxeo-template-rendering-jsf-dependencies</module>
-    <module>nuxeo-template-rendering-samples</module>
-    <module>nuxeo-template-rendering-samples-jsf</module>
     <module>nuxeo-theme-migration</module>
     <module>nuxeo-tree-snapshot-jsf</module>
     <module>nuxeo-user-center</module>
