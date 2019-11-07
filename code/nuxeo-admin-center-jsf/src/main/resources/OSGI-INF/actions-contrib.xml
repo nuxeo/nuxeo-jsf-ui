@@ -97,7 +97,8 @@
       <filter-id>only_for_manager</filter-id>
     </action>
 
-    <action id="ConnectClient" link="/view_admin-fragment.xhtml" label="admcommand.nuxeoconnect"
+    <action id="ConnectClient" link="/view_updatecenter-fragment.xhtml"
+      label="admcommand.nuxeoconnect"
       type="admin_rest_document_link"
       order="20">
       <category>NUXEO_ADMIN</category>
