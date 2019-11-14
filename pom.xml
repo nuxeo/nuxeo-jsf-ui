@@ -8,6 +8,7 @@
 
   <groupId>org.nuxeo.ecm.platform</groupId>
   <artifactId>nuxeo-jsf-ui</artifactId>
+  <version>11.1-SNAPSHOT</version>
   <name>Nuxeo - JSF UI Parent POM</name>
   <packaging>pom</packaging>
 
@@ -500,15 +501,6 @@
         <groupId>org.nuxeo.ecm.platform</groupId>
         <artifactId>nuxeo-web-resources-jsf</artifactId>
         <version>${nuxeo.jsf.version}</version>
-      </dependency>
-
-      <!-- distribution -->
-      <dependency>
-        <groupId>org.nuxeo.ecm.distribution</groupId>
-        <artifactId>nuxeo-distribution</artifactId>
-        <version>${nuxeo.jsf.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
       </dependency>
 
       <dependency>
