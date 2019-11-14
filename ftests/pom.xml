@@ -11,6 +11,10 @@
   <packaging>pom</packaging>
   <name>Nuxeo JSF UI Functional Tests</name>
 
+  <properties>
+    <maven.deploy.skip>true</maven.deploy.skip>
+  </properties>
+
   <modules>
     <module>nuxeo-3d-jsf-ui-ftests</module>
     <module>nuxeo-amazon-s3-jsf-ui-ftests</module>
