@@ -73,6 +73,7 @@ pipeline {
     label 'jenkins-nuxeo-jsf-11'
   }
   environment {
+    CHANGE_BRANCH = "$CHANGE_BRANCH"
     CURRENT_VERSION = getCurrentVersion()
     MAVEN_OPTS = "$MAVEN_OPTS -Xms512m -Xmx3072m"
     NEW_VERSION = getNewVersion()
