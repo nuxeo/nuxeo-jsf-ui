@@ -17,7 +17,8 @@
 
   <modules>
     <module>nuxeo-3d-jsf-ui-ftests</module>
-    <module>nuxeo-amazon-s3-jsf-ui-ftests</module>
+    <!-- NXP-28036: ignored -->
+    <!-- <module>nuxeo-amazon-s3-jsf-ui-ftests</module> -->
     <module>nuxeo-csv-jsf-ui-ftests</module>
     <module>nuxeo-dam-jsf-ui-ftests</module>
     <module>nuxeo-diff-jsf-ui-ftests</module>
@@ -30,7 +31,8 @@
     <module>nuxeo-jsf-ui-webdriver-tests</module>
     <module>nuxeo-lang-ext-incomplete-jsf-ui-ftests</module>
     <module>nuxeo-liveconnect-jsf-ui-ftests</module>
-    <module>nuxeo-microsoft-azure-jsf-ui-ftests</module>
+    <!-- NXP-28036: ignored -->
+    <!-- <module>nuxeo-microsoft-azure-jsf-ui-ftests</module> -->
     <module>nuxeo-multi-tenant-jsf-ui-ftests</module>
     <module>nuxeo-platform-error-web-tests</module>
     <module>nuxeo-platform-forms-layout-demo-tests</module>
