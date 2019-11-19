@@ -118,7 +118,7 @@ pipeline {
           withCredentials([usernameColonPassword(credentialsId: 'jx-pipeline-git-github-git', variable: 'GITHUB_USERNAME_PASSWORD')]) {
             script {
               def branchRef = sh(script: "curl -u '${GITHUB_USERNAME_PASSWORD}' https://api.github.com/repos/nuxeo/nuxeo/git/ref/heads/${CHANGE_BRANCH} | jq -r '.ref'", returnStdout: true).trim();
-              if (branchRef != null) {
+              if (branchRef != 'null') {
                 currentBuild.result = 'ABORTED';
                 currentBuild.description = "Branch: ${CHANGE_BRANCH} exists on nuxeo/nuxeo repository, aborting build."
                 error(currentBuild.description)
