@@ -253,7 +253,7 @@ pipeline {
             Package
             ----------------------------------------
           """
-          sh 'mvn -B -nsu -T0.8C -DskipTests -f packages/pom.xml install'
+          sh 'mvn -B -nsu -DskipTests -f packages/pom.xml install'
         }
       }
 
