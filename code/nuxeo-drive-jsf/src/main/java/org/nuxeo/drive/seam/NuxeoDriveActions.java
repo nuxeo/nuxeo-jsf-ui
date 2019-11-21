@@ -100,6 +100,8 @@ public class NuxeoDriveActions extends InputController implements Serializable {
 
     public static final String DESKTOP_PACKAGE_PREFIX = "nuxeo-drive.";
 
+    public static final String DESKTOP_PACKAGE_APPIMAGE = "nuxeo-drive-x86_64.AppImage";
+
     public static final String MSI_EXTENSION = "exe";
 
     public static final String DMG_EXTENSION = "dmg";
@@ -107,6 +109,8 @@ public class NuxeoDriveActions extends InputController implements Serializable {
     public static final String WINDOWS_PLATFORM = "windows";
 
     public static final String OSX_PLATFORM = "osx";
+
+    public static final String LINUX_PLATFORM = "linux";
 
     private static final String DRIVE_METADATA_VIEW = "view_drive_metadata";
 
@@ -366,9 +370,14 @@ public class NuxeoDriveActions extends InputController implements Serializable {
         Object desktopPackageBaseURL = Component.getInstance("desktopPackageBaseURL", ScopeType.APPLICATION);
         // Add link to packages from the update site
         if (desktopPackageBaseURL != ObjectUtils.NULL) {
-            // Mac OS X
-            String packageName = DESKTOP_PACKAGE_PREFIX + DMG_EXTENSION;
+            // Linux
+            String packageName = DESKTOP_PACKAGE_APPIMAGE;
             String packageURL = desktopPackageBaseURL + packageName;
+            packages.add(new DesktopPackageDefinition(packageURL, packageName, LINUX_PLATFORM));
+            log.debug("Added {} to the list of desktop packages available for download.", packageURL);
+            // Mac OS X
+            packageName = DESKTOP_PACKAGE_PREFIX + DMG_EXTENSION;
+            packageURL = desktopPackageBaseURL + packageName;
             packages.add(new DesktopPackageDefinition(packageURL, packageName, OSX_PLATFORM));
             log.debug("Added {} to the list of desktop packages available for download.", packageURL);
             // Windows
@@ -377,11 +386,6 @@ public class NuxeoDriveActions extends InputController implements Serializable {
             packages.add(new DesktopPackageDefinition(packageURL, packageName, WINDOWS_PLATFORM));
             log.debug("Added {} to the list of desktop packages available for download.", packageURL);
         }
-        // Debian / Ubuntu
-        // TODO: remove when Debian package is available
-        packages.add(new DesktopPackageDefinition(
-                "https://github.com/nuxeo/nuxeo-drive#debian-based-distributions-and-other-gnulinux-variants-client",
-                "user.center.nuxeoDrive.platform.ubuntu.docLinkTitle", "ubuntu"));
         return packages;
     }
 
