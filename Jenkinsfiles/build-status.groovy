@@ -303,7 +303,7 @@ pipeline {
             Deploy Maven artifacts
             ----------------------------------------
           """
-          sh 'mvn -B -nsu -T0.8C -DskipTests deploy'
+          sh 'mvn -B -nsu -DskipTests deploy'
         }
       }
       post {
