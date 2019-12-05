@@ -28,7 +28,6 @@ import org.nuxeo.ecm.automation.OperationChain;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.OperationParameters;
-import org.nuxeo.ecm.automation.core.mail.Mailer;
 import org.nuxeo.ecm.automation.core.operations.notification.SendMail;
 import org.nuxeo.ecm.automation.core.util.StringList;
 import org.nuxeo.ecm.core.api.Blob;
@@ -131,14 +130,5 @@ public class PublishByMail implements IResultPublisher {
         document.setPropertyValue("file:content", (Serializable) blob);
         document.setPropertyValue("dublincore:title", title);
         return document;
-    }
-
-    protected void logMailerConfiguration() {
-        Mailer m = SendMail.COMPOSER.getMailer();
-        log.info("mail.smtp.auth:{}", m.getConfiguration().get("mail.smtp.auth"));
-        log.info("mail.smtp.starttls.enable:{}", m.getConfiguration().get("mail.smtp.starttls.enable"));
-        log.info("mail.smtp.host:{}", m.getConfiguration().get("mail.smtp.host"));
-        log.info("mail.smtp.user:{}", m.getConfiguration().get("mail.smtp.user"));
-        log.info("mail.smtp.password:{}", m.getConfiguration().get("mail.smtp.password"));
     }
 }

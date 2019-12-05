@@ -38,7 +38,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.NuxeoException;
-import org.nuxeo.ecm.core.test.FakeSmtpMailServerFeature;
 import org.nuxeo.functionaltests.AjaxRequestManager;
 import org.nuxeo.functionaltests.Locator;
 import org.nuxeo.functionaltests.RestHelper;
@@ -48,6 +47,7 @@ import org.nuxeo.functionaltests.pages.DocumentBasePage;
 import org.nuxeo.functionaltests.pages.DocumentBasePage.UserNotConnectedException;
 import org.nuxeo.functionaltests.pages.forms.FileCreationFormPage;
 import org.nuxeo.functionaltests.pages.search.SearchPage;
+import org.nuxeo.mail.SmtpMailServerFeature;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import org.openqa.selenium.By;
@@ -61,7 +61,7 @@ import org.openqa.selenium.WebElement;
  * @since 9.3
  */
 @RunWith(FeaturesRunner.class)
-@Features({ FakeSmtpMailServerFeature.class })
+@Features({ SmtpMailServerFeature.class })
 public class ITDevJSFHotReloadTest extends NuxeoITCaseHelper {
 
     private static final String USERNAME = "gudule";
