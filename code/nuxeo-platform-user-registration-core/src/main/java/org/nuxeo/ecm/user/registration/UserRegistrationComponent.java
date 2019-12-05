@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.mail.MessagingException;
-import javax.naming.NamingException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.nuxeo.common.utils.IdUtils;
@@ -230,7 +229,7 @@ public class UserRegistrationComponent extends UserInvitationComponent implement
         if (!Framework.isTestModeSet()) {
             try {
                 generateMail(emailAdress, null, title, body);
-            } catch (NamingException | MessagingException e) {
+            } catch (MessagingException e) {
                 throw new NuxeoException("Error while sending mail", e);
             }
         } else {
