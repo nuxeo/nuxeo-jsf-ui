@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2011-2018 Nuxeo (http://nuxeo.com/) and others.
+ * (C) Copyright 2011-2019 Nuxeo (http://nuxeo.com/) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -127,9 +127,9 @@ public class UserRegistrationComponent extends UserInvitationComponent implement
             doc.setPropertyValue(DocumentRegistrationInfo.DOCUMENT_END_FIELD, docInfo.getEnd());
 
             // additionnal infos
-            for (String key : additionnalInfo.keySet()) {
+            for (var entry : additionnalInfo.entrySet()) {
                 try {
-                    doc.setPropertyValue(key, additionnalInfo.get(key));
+                    doc.setPropertyValue(entry.getKey(), entry.getValue());
                 } catch (PropertyException e) {
                     // skip silently
                 }
@@ -212,8 +212,7 @@ public class UserRegistrationComponent extends UserInvitationComponent implement
 
         Map<String, Serializable> registrationInfo = validateRegistration(requestId, additionnalInfo);
 
-        Map<String, Serializable> input = new HashMap<>();
-        input.putAll(registrationInfo);
+        Map<String, Serializable> input = new HashMap<>(registrationInfo);
         input.put("info", (Serializable) additionnalInfo);
         StringWriter writer = new StringWriter();
 
