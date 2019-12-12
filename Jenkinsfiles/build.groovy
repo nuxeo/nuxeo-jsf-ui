@@ -63,8 +63,8 @@ void updateVersion() {
   """
   echo "MAVEN_OPTS=$MAVEN_OPTS"
   sh """
-    mvn -nsu versions:set -DnewVersion=${NEW_VERSION} -DgenerateBackupPoms=false
     perl -i -pe 's|<nuxeo.jsf.version>${CURRENT_VERSION}</nuxeo.jsf.version>|<nuxeo.jsf.version>${NEW_VERSION}</nuxeo.jsf.version>|' pom.xml
+    mvn -nsu versions:set -DnewVersion=${NEW_VERSION} -DgenerateBackupPoms=false
   """
 }
 
