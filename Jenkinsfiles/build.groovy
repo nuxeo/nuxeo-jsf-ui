@@ -80,6 +80,22 @@ pipeline {
   }
 
   stages {
+    stage('Set labels') {
+      steps {
+        container('maven') {
+          echo """
+          ----------------------------------------
+          Set Kubernetes resource labels
+          ----------------------------------------
+          """
+          echo "Set label 'branch: ${BRANCH_NAME}' on pod ${NODE_NAME}"
+          sh """
+            kubectl label pods ${NODE_NAME} branch=${BRANCH_NAME}
+          """
+        }
+      }
+    }
+
     stage('Print Variables') {
       steps {
         container('maven') {
