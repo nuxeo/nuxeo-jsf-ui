@@ -20,6 +20,8 @@
 
 package org.nuxeo.ecm.webapp.action;
 
+import static org.nuxeo.ecm.core.query.sql.NXQL.ECM_UUID;
+import static org.nuxeo.ecm.core.trash.AbstractTrashService.TRASHED_QUERY;
 import static org.nuxeo.ecm.webapp.documentsLists.DocumentsListsManager.CURRENT_DOCUMENT_SECTION_SELECTION;
 import static org.nuxeo.ecm.webapp.documentsLists.DocumentsListsManager.CURRENT_DOCUMENT_SELECTION;
 import static org.nuxeo.ecm.webapp.documentsLists.DocumentsListsManager.CURRENT_DOCUMENT_TRASH_SELECTION;
@@ -30,6 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -47,7 +51,12 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
+import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
+import org.nuxeo.ecm.core.api.scroll.Scroll;
+import org.nuxeo.ecm.core.api.scroll.ScrollRequest;
+import org.nuxeo.ecm.core.api.scroll.ScrollService;
 import org.nuxeo.ecm.core.api.security.SecurityConstants;
+import org.nuxeo.ecm.core.scroll.DocumentScrollRequest;
 import org.nuxeo.ecm.core.trash.TrashInfo;
 import org.nuxeo.ecm.core.trash.TrashService;
 import org.nuxeo.ecm.platform.actions.Action;
@@ -67,6 +76,8 @@ public class DeleteActionsBean implements DeleteActions, Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final Log log = LogFactory.getLog(DeleteActionsBean.class);
+
+    protected static final String SELECT_DOCUMENTS_IN = "SELECT * FROM Document, Relation WHERE %s IN (%s)";
 
     @In(create = true, required = false)
     protected FacesMessages facesMessages;
@@ -143,10 +154,43 @@ public class DeleteActionsBean implements DeleteActions, Serializable {
     public boolean getCanEmptyTrash() {
         List<DocumentModel> selectedDocuments = documentsListsManager.getWorkingList(CURRENT_DOCUMENT_TRASH_SELECTION);
         if (selectedDocuments.size() == 0) {
-            DocumentModelList currentTrashDocuments = trashService.getDocuments(navigationContext.getCurrentDocument());
-            return trashService.canPurgeOrUntrash(currentTrashDocuments, currentUser);
+            DocumentModel parent = navigationContext.getCurrentDocument();
+            return executeOnScroll(parent, currentUser, scroll -> {
+                while (scroll.hasNext()) {
+                    var docs = loadDocuments(parent.getCoreSession(), scroll.next());
+                    if (!trashService.canPurgeOrUntrash(docs, currentUser)) {
+                        return false;
+                    }
+                }
+                return true;
+            });
         }
         return false;
+    }
+
+    protected <R> R executeOnScroll(DocumentModel documentModel, NuxeoPrincipal nuxeoPrincipal,
+            Function<Scroll, R> function) {
+        // build the trash scroll
+        String nxql = String.format(TRASHED_QUERY, documentModel.getId());
+        ScrollRequest request = DocumentScrollRequest.builder(nxql)
+                                                     .username(nuxeoPrincipal.getName())
+                                                     .repository(documentModel.getRepositoryName())
+                                                     .build();
+        ScrollService service = Framework.getService(ScrollService.class);
+        try (Scroll scroll = service.scroll(request)) {
+            return function.apply(scroll);
+        }
+    }
+
+    /**
+     * Helper to load a list of documents.
+     */
+    protected static List<DocumentModel> loadDocuments(CoreSession session, List<String> documentIds) {
+        if (documentIds.isEmpty()) {
+            return List.of();
+        }
+        String inClause = documentIds.stream().collect(Collectors.joining("', '", "'", "'"));
+        return session.query(String.format(SELECT_DOCUMENTS_IN, ECM_UUID, inClause));
     }
 
     @Override
@@ -183,8 +227,14 @@ public class DeleteActionsBean implements DeleteActions, Serializable {
     }
 
     public String emptyTrash() {
-        DocumentModelList currentTrashDocuments = trashService.getDocuments(navigationContext.getCurrentDocument());
-        return purgeSelection(currentTrashDocuments);
+        DocumentModel parent = navigationContext.getCurrentDocument();
+        return executeOnScroll(parent, currentUser, scroll -> {
+            while (scroll.hasNext()) {
+                var docs = loadDocuments(parent.getCoreSession(), scroll.next());
+                purgeSelection(docs);
+            }
+            return null;
+        });
     }
 
     @Override
