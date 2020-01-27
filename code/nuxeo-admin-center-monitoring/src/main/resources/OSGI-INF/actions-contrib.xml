@@ -47,16 +47,6 @@
       <filter-id>only_for_manager</filter-id>
     </action>
 
-    <action
-      id="Shell"
-      type="admin_rest_document_link"
-      link="/incl/monitoring/adminShell.xhtml"
-      label="tab.monitoring.shell"
-      order="40">
-      <category>Monitoring_sub_tab</category>
-      <filter-id>only_for_manager</filter-id>
-    </action>
-
   </extension>
 
 </component>
