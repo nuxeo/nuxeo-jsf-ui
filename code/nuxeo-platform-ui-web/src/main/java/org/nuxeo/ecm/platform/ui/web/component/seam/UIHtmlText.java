@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -68,7 +69,7 @@ public class UIHtmlText extends org.jboss.seam.pdf.ui.UIHtmlText {
     }
 
     private void addFromHtml(String html, FacesContext context) {
-        HashMap<String, Object> interfaceProps = new HashMap<>();
+        Map<String, Object> interfaceProps = new HashMap<>();
         interfaceProps.put("img_provider", new NuxeoITextImageProvider(
                 (HttpServletRequest) context.getExternalContext().getRequest()));
 
