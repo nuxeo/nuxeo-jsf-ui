@@ -44,6 +44,7 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.platform.actions.Action;
+import org.nuxeo.ecm.platform.comment.api.CommentConstants;
 import org.nuxeo.ecm.platform.comment.api.CommentableDocument;
 import org.nuxeo.ecm.platform.comment.workflow.utils.CommentsConstants;
 import org.nuxeo.ecm.platform.comment.workflow.utils.FollowTransitionUnrestricted;
@@ -171,11 +172,11 @@ public abstract class AbstractCommentManagerActionsBean implements CommentManage
 
     @Override
     public String addComment() {
-        DocumentModel myComment = documentManager.createDocumentModel(CommentsConstants.COMMENT_DOC_TYPE);
+        DocumentModel myComment = documentManager.createDocumentModel(CommentConstants.COMMENT_DOC_TYPE);
 
-        myComment.setPropertyValue(CommentsConstants.COMMENT_AUTHOR, principal.getName());
-        myComment.setPropertyValue(CommentsConstants.COMMENT_TEXT, newContent);
-        myComment.setPropertyValue(CommentsConstants.COMMENT_CREATION_DATE, Calendar.getInstance());
+        myComment.setPropertyValue(CommentConstants.COMMENT_AUTHOR_PROPERTY, principal.getName());
+        myComment.setPropertyValue(CommentConstants.COMMENT_TEXT_PROPERTY, newContent);
+        myComment.setPropertyValue(CommentConstants.COMMENT_CREATION_DATE_PROPERTY, Calendar.getInstance());
         myComment = addComment(myComment);
 
         // do not navigate to newly-created comment, they are hidden documents
@@ -184,7 +185,7 @@ public abstract class AbstractCommentManagerActionsBean implements CommentManage
 
     @Override
     public String createComment(DocumentModel docToComment) {
-        DocumentModel myComment = documentManager.createDocumentModel(CommentsConstants.COMMENT_DOC_TYPE);
+        DocumentModel myComment = documentManager.createDocumentModel(CommentConstants.COMMENT_DOC_TYPE);
 
         myComment.setProperty("comment", "author", principal.getName());
         myComment.setProperty("comment", "text", newContent);
