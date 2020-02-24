@@ -10,7 +10,7 @@
   <name>Elasticsearch WebApp integration</name>
   <dependencies>
     <dependency>
-      <groupId>io.dropwizard.metrics</groupId>
+      <groupId>io.dropwizard.metrics5</groupId>
       <artifactId>metrics-core</artifactId>
     </dependency>
     <dependency>

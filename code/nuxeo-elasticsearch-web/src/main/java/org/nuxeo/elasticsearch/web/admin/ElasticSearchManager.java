@@ -18,9 +18,9 @@
  */
 package org.nuxeo.elasticsearch.web.admin;
 
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.SharedMetricRegistries;
-import com.codahale.metrics.Timer;
+import io.dropwizard.metrics5.MetricRegistry;
+import io.dropwizard.metrics5.SharedMetricRegistries;
+import io.dropwizard.metrics5.Timer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.elasticsearch.action.search.SearchRequest;
