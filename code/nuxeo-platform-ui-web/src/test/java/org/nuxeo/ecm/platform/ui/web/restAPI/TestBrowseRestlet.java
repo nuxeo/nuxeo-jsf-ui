@@ -125,7 +125,8 @@ public class TestBrowseRestlet extends AbstractRestletTest {
     public void testPatternBadRepo() throws Exception {
         String path = "/nosuchrepo" + ENDPOINT;
         String expected = XML //
-                + "<error message=\"Unable to init repository\"/>";
+                + "<error message=\"No such repository: nosuchrepo\""
+                + " class=\"org.nuxeo.ecm.core.api.DocumentNotFoundException\"/>";
         executeRequest(path, expected);
     }
 
