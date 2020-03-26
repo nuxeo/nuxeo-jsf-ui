@@ -9,7 +9,6 @@
   </platforms>
   <dependencies>
     <package>nuxeo-platform-3d</package>
-    <package>nuxeo-dam-jsf-ui</package>
   </dependencies>
   <license>Apache 2.0</license>
   <license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>

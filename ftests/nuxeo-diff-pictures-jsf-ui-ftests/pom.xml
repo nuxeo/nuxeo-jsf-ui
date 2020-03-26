@@ -34,18 +34,6 @@
       <type>zip</type>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.nuxeo.packages</groupId>
-      <artifactId>nuxeo-dam-package</artifactId>
-      <type>zip</type>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.nuxeo.jsf.packages</groupId>
-      <artifactId>nuxeo-dam-jsf-ui-package</artifactId>
-      <type>zip</type>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <build>
