@@ -16,7 +16,6 @@
     <module>nuxeo-marketplace-jsf-ui</module>
     <module>nuxeo-3d-jsf-ui-package</module>
     <module>nuxeo-csv-jsf-ui-package</module>
-    <module>nuxeo-dam-jsf-ui-package</module>
     <module>nuxeo-diff-jsf-ui-package</module>
     <module>nuxeo-diff-pictures-jsf-ui-package</module>
     <module>nuxeo-drive-jsf-ui-package</module>

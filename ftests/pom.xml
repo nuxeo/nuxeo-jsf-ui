@@ -20,7 +20,6 @@
     <!-- NXP-28036: ignored -->
     <!-- <module>nuxeo-amazon-s3-jsf-ui-ftests</module> -->
     <module>nuxeo-csv-jsf-ui-ftests</module>
-    <module>nuxeo-dam-jsf-ui-ftests</module>
     <module>nuxeo-diff-jsf-ui-ftests</module>
     <module>nuxeo-diff-pictures-jsf-ui-ftests</module>
     <module>nuxeo-drive-jsf-ui-ftests</module>
