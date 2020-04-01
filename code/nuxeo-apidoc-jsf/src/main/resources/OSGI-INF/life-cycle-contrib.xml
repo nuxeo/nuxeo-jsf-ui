@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.apidoc.lifecycle.contrib.jsf">
+
+  <extension target="org.nuxeo.ecm.core.lifecycle.LifeCycleService" point="types">
+    <types>
+      <type name="NXSeamComponent">default</type>
+    </types>
+  </extension>
+
+</component>
