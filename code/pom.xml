@@ -16,7 +16,8 @@
     <module>nuxeo-admin-center-jsf</module>
     <module>nuxeo-admin-center-monitoring</module>
     <module>nuxeo-admin-center-oauth</module>
-    <module>nuxeo-apidoc-webengine</module>
+    <module>nuxeo-apidoc-jsf</module>
+    <module>nuxeo-apidoc-jsf-webengine</module>
     <module>nuxeo-automation-jsf</module>
     <module>nuxeo-csv-jsf</module>
     <module>nuxeo-diff</module>

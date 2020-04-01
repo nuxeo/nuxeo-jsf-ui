@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 1
+Bundle-Name: nuxeo apidoc jsf webengine
+Bundle-SymbolicName: org.nuxeo.apidoc.jsf.webengine;singleton:=true
+Bundle-Version: 0.0.1
+Bundle-Vendor: Nuxeo
+Nuxeo-Require: org.nuxeo.apidoc.core,
+ org.nuxeo.apidoc.webengine
+ org.nuxeo.apidoc.jsf
+Fragment-Host: org.nuxeo.apidoc.webengine
+ 

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.apidoc.adapterContrib.jsf">
+
+  <extension target="org.nuxeo.ecm.core.api.DocumentAdapterService" point="adapters">
+    <adapter type="NXSeamComponent" class="org.nuxeo.apidoc.seam.api.SeamComponentInfo"
+      factory="org.nuxeo.apidoc.seam.adapters.AdapterFactory" />
+    <adapter type="NXSeamComponent" class="org.nuxeo.apidoc.api.NuxeoArtifact"
+      factory="org.nuxeo.apidoc.seam.adapters.AdapterFactory" />
+  </extension>
+
+</component>

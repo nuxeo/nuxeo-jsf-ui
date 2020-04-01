@@ -52,7 +52,12 @@
       </dependency>
       <dependency>
         <groupId>org.nuxeo.ecm.platform</groupId>
-        <artifactId>nuxeo-apidoc-webengine</artifactId>
+        <artifactId>nuxeo-apidoc-jsf</artifactId>
+        <version>${nuxeo.jsf.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.nuxeo.ecm.platform</groupId>
+        <artifactId>nuxeo-apidoc-jsf-webengine</artifactId>
         <version>${nuxeo.jsf.version}</version>
       </dependency>
       <dependency>
