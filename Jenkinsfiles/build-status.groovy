@@ -292,20 +292,21 @@ pipeline {
             Run "dev" functional tests
             ----------------------------------------
           """
-          script {
-            try {
-              runFunctionalTests('ftests')
-              setGitHubBuildStatus('jsfui/ftests/dev', 'Functional tests - dev environment', 'SUCCESS')
-            } catch (err) {
-              setGitHubBuildStatus('jsfui/ftests/dev', 'Functional tests - dev environment', 'FAILURE')
-            }
-          }
+          runFunctionalTests('ftests')
         }
       }
 
       post {
         always {
           junit testResults: '**/target/surefire-reports/*.xml'
+        }
+
+        success {
+          setGitHubBuildStatus('jsfui/ftests/dev', 'Functional tests - dev environment', 'SUCCESS')
+        }
+
+        failure {
+          setGitHubBuildStatus('jsfui/ftests/dev', 'Functional tests - dev environment', 'FAILURE')
         }
       }
     }
