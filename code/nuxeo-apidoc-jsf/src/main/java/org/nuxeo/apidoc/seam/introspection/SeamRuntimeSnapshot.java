@@ -26,26 +26,35 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.nuxeo.apidoc.plugin.AbstractPluginSnapshot;
 import org.nuxeo.apidoc.plugin.PluginSnapshot;
 import org.nuxeo.apidoc.seam.api.SeamComponentInfo;
+import org.nuxeo.apidoc.seam.plugin.SeamPlugin;
 import org.nuxeo.apidoc.snapshot.DistributionSnapshot;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SeamRuntimeSnapshot implements PluginSnapshot<SeamComponentInfo> {
+public class SeamRuntimeSnapshot extends AbstractPluginSnapshot<SeamComponentInfo>
+        implements PluginSnapshot<SeamComponentInfo> {
 
     protected boolean seamInitialized = false;
 
     protected List<SeamComponentInfo> seamComponents = new ArrayList<>();
 
-    public SeamRuntimeSnapshot() {
-        super();
+    public SeamRuntimeSnapshot(String pluginId) {
+        super(pluginId);
     }
 
     @JsonCreator
-    private SeamRuntimeSnapshot(@JsonProperty("seamComponents") List<SeamComponentInfo> seamComponents) {
+    private SeamRuntimeSnapshot(@JsonProperty("items") List<SeamComponentInfo> seamComponents) {
+        this(SeamPlugin.ID);
         this.seamComponents.addAll(seamComponents);
+    }
+
+    @Override
+    public String getPluginId() {
+        return SeamPlugin.ID;
     }
 
     @SuppressWarnings("unchecked")
@@ -57,10 +66,18 @@ public class SeamRuntimeSnapshot implements PluginSnapshot<SeamComponentInfo> {
         try {
             Class<?> klass = Class.forName("org.nuxeo.apidoc.seam.SeamRuntimeIntrospector");
             Method method = klass.getDeclaredMethod("listNuxeoComponents", HttpServletRequest.class);
-            seamComponents = (List<SeamComponentInfo>) method.invoke(null, request);
+            initSeamComponents(snapshot, (List<SeamComponentInfo>) method.invoke(null, request));
         } catch (ReflectiveOperationException e) {
             // ignore, no Seam
+            seamInitialized = true;
         }
+    }
+
+    public void initSeamComponents(DistributionSnapshot snapshot, List<SeamComponentInfo> components) {
+        if (seamInitialized) {
+            return;
+        }
+        seamComponents = components;
         for (SeamComponentInfo seamComp : seamComponents) {
             ((SeamComponentInfoImpl) seamComp).setVersion(snapshot.getVersion());
         }

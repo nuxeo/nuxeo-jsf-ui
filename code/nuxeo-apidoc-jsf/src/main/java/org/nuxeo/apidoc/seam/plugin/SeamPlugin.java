@@ -89,7 +89,7 @@ public class SeamPlugin extends AbstractPlugin<SeamComponentInfo> implements Plu
     protected void persistSeamComponents(List<SeamComponentInfo> seamComponents, CoreSession session,
             DocumentModel parent, SnapshotFilter filter) {
         for (SeamComponentInfo seamComponent : seamComponents) {
-            if (includeSeamComponent(filter, seamComponent)) {
+            if (filter == null || includeSeamComponent(filter, seamComponent)) {
                 persistSeamComponent(seamComponent, session, parent);
             }
         }
@@ -118,12 +118,12 @@ public class SeamPlugin extends AbstractPlugin<SeamComponentInfo> implements Plu
 
     @Override
     public PluginSnapshot<SeamComponentInfo> getRuntimeSnapshot(DistributionSnapshot snapshot) {
-        return new SeamRuntimeSnapshot();
+        return new SeamRuntimeSnapshot(getId());
     }
 
     @Override
     public PluginSnapshot<SeamComponentInfo> getRepositorySnapshot(DocumentModel root) {
-        return new SeamRepositorySnapshot(root);
+        return new SeamRepositorySnapshot(getId(), root);
     }
 
     @Override
