@@ -22,18 +22,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.nuxeo.apidoc.api.QueryHelper;
+import org.nuxeo.apidoc.plugin.AbstractPluginSnapshot;
 import org.nuxeo.apidoc.plugin.PluginSnapshot;
 import org.nuxeo.apidoc.seam.api.SeamComponentInfo;
+import org.nuxeo.apidoc.seam.plugin.SeamPlugin;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.query.sql.NXQL;
 
-public class SeamRepositorySnapshot implements PluginSnapshot<SeamComponentInfo> {
+public class SeamRepositorySnapshot extends AbstractPluginSnapshot<SeamComponentInfo>
+        implements PluginSnapshot<SeamComponentInfo> {
 
     protected DocumentModel doc;
 
-    public SeamRepositorySnapshot(DocumentModel doc) {
+    public SeamRepositorySnapshot(String pluginId, DocumentModel doc) {
+        super(pluginId);
         this.doc = doc;
+    }
+
+    @Override
+    public String getPluginId() {
+        return SeamPlugin.ID;
     }
 
     @Override

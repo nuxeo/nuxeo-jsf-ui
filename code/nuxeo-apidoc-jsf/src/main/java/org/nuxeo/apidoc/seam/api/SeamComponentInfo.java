@@ -22,6 +22,8 @@ import java.util.List;
 
 import org.nuxeo.apidoc.api.NuxeoArtifact;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public interface SeamComponentInfo extends NuxeoArtifact, Comparable<SeamComponentInfo> {
 
     String TYPE_NAME = "NXSeamComponent";
@@ -45,5 +47,13 @@ public interface SeamComponentInfo extends NuxeoArtifact, Comparable<SeamCompone
     String getClassName();
 
     List<String> getInterfaceNames();
+
+    @Override
+    @JsonIgnore
+    String getId();
+
+    @Override
+    @JsonIgnore
+    String getArtifactType();
 
 }

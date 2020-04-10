@@ -1,0 +1,44 @@
+{
+  "key": "server-11.1-SNAPSHOT",
+  "operations": [],
+  "bundles": [],
+  "pluginSnapshots": {
+    "seam": {
+      "@type": "seam",
+      "items": [
+        {
+          "@type": "SeamComponentInfoImpl",
+          "name": "actionContextProvider",
+          "scope": "STATELESS",
+          "precedence": null,
+          "className": "org.nuxeo.ecm.webapp.action.ActionContextProvider",
+          "interfaceNames": [
+            "org.nuxeo.ecm.webapp.action.ActionContextProvider"
+          ],
+          "version": "10.10",
+          "id": "seam:actionContextProvider",
+          "artifactType": "NXSeamComponent",
+          "hierarchyPath": "/"
+        },
+        {
+          "@type": "SeamComponentInfoImpl",
+          "name": "adminMessageManager",
+          "scope": "APPLICATION",
+          "precedence": null,
+          "className": "org.nuxeo.ecm.webapp.admin.AdminMessageActionBean",
+          "interfaceNames": [
+            "org.nuxeo.ecm.webapp.admin.AdminMessageActionBean"
+          ],
+          "version": "10.10",
+          "id": "seam:adminMessageManager",
+          "artifactType": "NXSeamComponent",
+          "hierarchyPath": "/"
+        }
+      ]
+    }
+  },
+  "name": "server",
+  "version": "10.10",
+  "creationDate": 1586875254569,
+  "releaseDate": null
+}
