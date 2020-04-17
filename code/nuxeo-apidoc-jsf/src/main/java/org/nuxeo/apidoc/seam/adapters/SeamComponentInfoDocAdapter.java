@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.nuxeo.apidoc.adapters.BaseNuxeoArtifactDocAdapter;
+import org.nuxeo.apidoc.api.NuxeoArtifact;
 import org.nuxeo.apidoc.seam.api.SeamComponentInfo;
 import org.nuxeo.apidoc.snapshot.DistributionSnapshot;
 import org.nuxeo.common.utils.Path;
@@ -107,7 +108,7 @@ public class SeamComponentInfoDocAdapter extends BaseNuxeoArtifactDocAdapter imp
         }
 
         doc.setPathInfo(containerPath, name);
-        doc.setPropertyValue("dc:title", sci.getName());
+        doc.setPropertyValue(NuxeoArtifact.TITLE_PROPERTY_PATH, sci.getName());
 
         doc.setPropertyValue(PROP_COMPONENT_NAME, sci.getName());
         doc.setPropertyValue(PROP_CLASS_NAME, sci.getClassName());

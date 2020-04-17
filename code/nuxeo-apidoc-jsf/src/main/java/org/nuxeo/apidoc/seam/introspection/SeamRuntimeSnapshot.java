@@ -20,22 +20,20 @@ package org.nuxeo.apidoc.seam.introspection;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.nuxeo.apidoc.api.OperationInfo;
-import org.nuxeo.apidoc.introspection.RuntimeSnapshot;
-import org.nuxeo.apidoc.introspection.ServerInfo;
+import org.nuxeo.apidoc.plugin.PluginSnapshot;
 import org.nuxeo.apidoc.seam.api.SeamComponentInfo;
-import org.nuxeo.apidoc.seam.snapshot.SeamDistributionSnapshot;
+import org.nuxeo.apidoc.snapshot.DistributionSnapshot;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SeamRuntimeSnapshot extends RuntimeSnapshot implements SeamDistributionSnapshot {
+public class SeamRuntimeSnapshot implements PluginSnapshot<SeamComponentInfo> {
 
     protected boolean seamInitialized = false;
 
@@ -45,30 +43,18 @@ public class SeamRuntimeSnapshot extends RuntimeSnapshot implements SeamDistribu
         super();
     }
 
-    public static SeamRuntimeSnapshot build() {
-        return new SeamRuntimeSnapshot();
-    }
-
     @JsonCreator
-    private SeamRuntimeSnapshot(@JsonProperty("serverInfo") ServerInfo serverInfo,
-            @JsonProperty("creationDate") Date created,
-            @JsonProperty("seamComponents") List<SeamComponentInfo> seamComponents,
-            @JsonProperty("operations") List<OperationInfo> operations) {
-        this.serverInfo = serverInfo;
-        this.created = created;
-        index();
+    private SeamRuntimeSnapshot(@JsonProperty("seamComponents") List<SeamComponentInfo> seamComponents) {
         this.seamComponents.addAll(seamComponents);
-        this.operations.addAll(operations);
     }
 
     @SuppressWarnings("unchecked")
-    public void initSeamComponents(HttpServletRequest request) {
+    public void initSeamComponents(DistributionSnapshot snapshot, HttpServletRequest request) {
         if (seamInitialized) {
             return;
         }
         // use reflection to call SeamRuntimeIntrospector, if available
         try {
-            // SeamRuntimeIntrospector.listNuxeoComponents(request);
             Class<?> klass = Class.forName("org.nuxeo.apidoc.seam.SeamRuntimeIntrospector");
             Method method = klass.getDeclaredMethod("listNuxeoComponents", HttpServletRequest.class);
             seamComponents = (List<SeamComponentInfo>) method.invoke(null, request);
@@ -76,39 +62,24 @@ public class SeamRuntimeSnapshot extends RuntimeSnapshot implements SeamDistribu
             // ignore, no Seam
         }
         for (SeamComponentInfo seamComp : seamComponents) {
-            ((SeamComponentInfoImpl) seamComp).setVersion(getVersion());
+            ((SeamComponentInfoImpl) seamComp).setVersion(snapshot.getVersion());
         }
         seamInitialized = true;
     }
 
     @Override
-    public SeamComponentInfo getSeamComponent(String id) {
-        for (SeamComponentInfo sci : getSeamComponents()) {
-            if (sci.getId().equals(id)) {
-                return sci;
-            }
-        }
-        return null;
+    public List<String> getItemIds() {
+        return getItems().stream().map(SeamComponentInfo::getId).collect(Collectors.toList());
     }
 
     @Override
-    @JsonIgnore
-    public List<String> getSeamComponentIds() {
-        List<String> ids = new ArrayList<>();
-        for (SeamComponentInfo sci : getSeamComponents()) {
-            ids.add(sci.getId());
-        }
-        return ids;
+    public List<SeamComponentInfo> getItems() {
+        return Collections.unmodifiableList(seamComponents);
     }
 
     @Override
-    public List<SeamComponentInfo> getSeamComponents() {
-        return seamComponents;
-    }
-
-    @Override
-    public boolean containsSeamComponents() {
-        return getSeamComponentIds().size() > 0;
+    public SeamComponentInfo getItem(String id) {
+        return getItems().stream().filter(sci -> sci.getId().equals(id)).findFirst().get();
     }
 
 }

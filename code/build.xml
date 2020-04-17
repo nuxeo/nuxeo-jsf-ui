@@ -13,5 +13,7 @@
       <fileset dir="${basedir}/src/main/resources/web/nuxeo.war" />
     </copy>
   </target>
+  <!-- compatibility target -->
+  <target name="web-tomcat" depends="web" />
 
 </project>

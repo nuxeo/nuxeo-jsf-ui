@@ -24,10 +24,13 @@ import javax.ws.rs.Produces;
 
 import org.nuxeo.apidoc.api.NuxeoArtifact;
 import org.nuxeo.apidoc.browse.NuxeoArtifactWebObject;
+import org.nuxeo.apidoc.plugin.PluginSnapshot;
 import org.nuxeo.apidoc.seam.api.SeamComponentInfo;
+import org.nuxeo.apidoc.seam.plugin.SeamPlugin;
+import org.nuxeo.apidoc.snapshot.DistributionSnapshot;
 import org.nuxeo.ecm.webengine.model.WebObject;
 
-@WebObject(type = "seamComponent")
+@WebObject(type = SeamPlugin.ITEM_VIEW_TYPE)
 public class SeamComponentWO extends NuxeoArtifactWebObject {
 
     @Override
@@ -35,13 +38,15 @@ public class SeamComponentWO extends NuxeoArtifactWebObject {
     @Produces("text/html")
     @Path("introspection")
     public Object doGet() {
-        return getView("view").arg("seamComponent", getTargetComponentInfo());
+        return getView("view").arg(SeamPlugin.ITEM_VIEW_TYPE, getTargetComponentInfo());
     }
 
     public SeamComponentInfo getTargetComponentInfo() {
-        // FIXME
-        return getSnapshotManager().getSnapshot(getDistributionId(), ctx.getCoreSession())
-                                   .getSeamComponent(nxArtifactId);
+        DistributionSnapshot snapshot = getSnapshotManager().getSnapshot(getDistributionId(), ctx.getCoreSession());
+        @SuppressWarnings("unchecked")
+        PluginSnapshot<SeamComponentInfo> seamSnapshot = (PluginSnapshot<SeamComponentInfo>) snapshot.getPluginSnapshots()
+                                                                                                     .get(SeamPlugin.ID);
+        return seamSnapshot.getItem(nxArtifactId);
     }
 
     @Override

@@ -31,8 +31,11 @@ import org.jboss.seam.contexts.ServletLifecycle;
 import org.jboss.seam.web.ServletContexts;
 import org.nuxeo.apidoc.seam.api.SeamComponentInfo;
 import org.nuxeo.apidoc.seam.introspection.SeamComponentInfoImpl;
+import org.nuxeo.apidoc.seam.plugin.SeamPlugin;
 
 public class SeamRuntimeIntrospector {
+
+    protected static List<SeamComponentInfo> components = null;
 
     protected static List<String> listAllComponentsNames() {
         List<String> names = new ArrayList<>();
@@ -46,25 +49,18 @@ public class SeamRuntimeIntrospector {
         return names;
     }
 
-    // called by reflection from org.nuxeo.apidoc.introspection.RuntimeSnapshot#initSeamComponents
+    /**
+     * Called by reflection from {@link SeamPlugin#initSeamComponents(HttpServletRequest)}
+     */
     public static List<SeamComponentInfo> listNuxeoComponents(HttpServletRequest request) {
-
         ServletLifecycle.beginRequest(request);
         ServletContexts.instance().setRequest(request);
-        // ConversationPropagation.instance().setConversationId( conversationId
-        // );
-        // Manager.instance().restoreConversation();
-        // ServletLifecycle.resumeConversation(request);
-
         try {
             return listNuxeoComponents();
         } finally {
             ServletLifecycle.endRequest(request);
         }
-
     }
-
-    protected static List<SeamComponentInfo> components = null;
 
     protected static synchronized List<SeamComponentInfo> listNuxeoComponents() {
         if (components == null) {
