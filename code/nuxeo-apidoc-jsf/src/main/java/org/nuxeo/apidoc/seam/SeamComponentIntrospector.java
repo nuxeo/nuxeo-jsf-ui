@@ -30,6 +30,9 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Startup;
 import org.nuxeo.apidoc.seam.api.SeamComponentInfo;
 
+/**
+ * FIXME: useful for?
+ */
 @Startup
 @Name("nuxeoSeamIntrospector")
 @Scope(ScopeType.APPLICATION)

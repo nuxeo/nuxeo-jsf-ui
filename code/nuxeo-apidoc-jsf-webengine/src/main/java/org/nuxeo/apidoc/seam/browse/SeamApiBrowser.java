@@ -18,14 +18,23 @@
  */
 package org.nuxeo.apidoc.seam.browse;
 
+import java.util.List;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.nuxeo.apidoc.browse.Distribution;
+import org.nuxeo.apidoc.plugin.PluginSnapshot;
+import org.nuxeo.apidoc.seam.api.SeamComponentInfo;
+import org.nuxeo.apidoc.seam.plugin.SeamPlugin;
+import org.nuxeo.apidoc.snapshot.DistributionSnapshot;
+import org.nuxeo.apidoc.snapshot.SnapshotManager;
 import org.nuxeo.ecm.webengine.model.Resource;
 import org.nuxeo.ecm.webengine.model.WebObject;
 import org.nuxeo.ecm.webengine.model.impl.DefaultObject;
+import org.nuxeo.runtime.api.Framework;
 
 @WebObject(type = "seam")
 public class SeamApiBrowser extends DefaultObject {
@@ -43,34 +52,39 @@ public class SeamApiBrowser extends DefaultObject {
         }
     }
 
-    @GET
-    @Produces("text/html")
-    @Path("listSeamComponents")
-    public Object listSeamComponents() {
-        return dolistSeamComponents("listSeamComponents", false);
+    protected SnapshotManager getSnapshotManager() {
+        return Framework.getService(SnapshotManager.class);
     }
 
     @GET
     @Produces("text/html")
-    @Path("listSeamComponentsSimple")
+    @Path(SeamPlugin.LIST_VIEW)
+    public Object listSeamComponents() {
+        return dolistSeamComponents(SeamPlugin.LIST_VIEW, false);
+    }
+
+    @GET
+    @Produces("text/html")
+    @Path(SeamPlugin.LIST_VIEW_SIMPLE)
     public Object listSeamComponentsSimple() {
-        return dolistSeamComponents("listSeamComponentsSimple", true);
+        return dolistSeamComponents(SeamPlugin.LIST_VIEW_SIMPLE, true);
     }
 
     protected Object dolistSeamComponents(String view, boolean hideNav) {
-        // FIXME
-        getSnapshotManager().initSeamContext(getContext().getRequest());
-
-        SeamDistributionSnapshot snap = getSnapshotManager().getSnapshot(distributionId, ctx.getCoreSession());
-        List<SeamComponentInfo> seamComponents = snap.getSeamComponents();
+        getSnapshotManager().initWebContext(getContext().getRequest());
+        DistributionSnapshot snapshot = getSnapshotManager().getSnapshot(distributionId, ctx.getCoreSession());
+        @SuppressWarnings("unchecked")
+        PluginSnapshot<SeamComponentInfo> seamSnapshot = (PluginSnapshot<SeamComponentInfo>) snapshot.getPluginSnapshots()
+                                                                                                     .get(SeamPlugin.ID);
+        List<SeamComponentInfo> seamComponents = seamSnapshot.getItems();
         return getView(view).arg("seamComponents", seamComponents)
-                .arg(SeamDistribution.DIST_ID, ctx.getProperty(SeamDistribution.DIST_ID))
-                .arg("hideNav", Boolean.valueOf(hideNav));
+                            .arg(Distribution.DIST_ID, ctx.getProperty(Distribution.DIST_ID))
+                            .arg("hideNav", Boolean.valueOf(hideNav));
     }
 
-    @Path("viewSeamComponent/{componentId}")
+    @Path(SeamPlugin.ITEM_VIEW + "/{componentId}")
     public Resource viewSeamComponent(@PathParam("componentId") String componentId) {
-        return ctx.newObject("seamComponent", componentId);
+        return ctx.newObject(SeamPlugin.ITEM_VIEW_TYPE, componentId);
     }
 
 }
