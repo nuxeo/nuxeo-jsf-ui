@@ -208,7 +208,7 @@ public class SetupWizardActionBean implements Serializable {
         advancedParameters = new TreeMap<>();
         // will remove managed parameters later in setParameter()
         for (String key : userConfig.stringPropertyNames()) {
-            if (System.getProperty(key) == null || key.matches("^(nuxeo|org\\.nuxeo|catalina|derby|h2|java\\.home|"
+            if (System.getProperty(key) == null || key.matches("^(nuxeo|org\\.nuxeo|catalina|h2|java\\.home|"
                     + "java\\.io\\.tmpdir|tomcat|sun\\.rmi\\.dgc).*")) {
                 advancedParameters.put(key, userConfig.getProperty(key).trim());
             }
