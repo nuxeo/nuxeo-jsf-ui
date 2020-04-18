@@ -33,7 +33,6 @@
         </includes>
         <excludes>
           <!-- these will be re-added through the templates -->
-          <artifact artifactId="derby" />
           <artifact artifactId="h2" />
           <artifact artifactId="mongo-java-driver" />
           <artifact artifactId="mysql-connector-java" />
