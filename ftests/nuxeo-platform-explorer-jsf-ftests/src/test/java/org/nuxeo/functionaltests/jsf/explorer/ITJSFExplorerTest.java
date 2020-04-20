@@ -17,11 +17,23 @@
  */
 package org.nuxeo.functionaltests.jsf.explorer;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.nuxeo.functionaltests.AbstractTest;
-import org.nuxeo.functionaltests.JavaScriptErrorCollector.JavaScriptErrorIgnoreRule;
+import org.nuxeo.functionaltests.Locator;
+import org.nuxeo.functionaltests.RestHelper;
+import org.nuxeo.functionaltests.jsf.explorer.pages.AdminCenterExplorerPage;
+import org.nuxeo.functionaltests.jsf.explorer.pages.ArtifactHomePage;
+import org.nuxeo.functionaltests.jsf.explorer.pages.ArtifactPage;
+import org.nuxeo.functionaltests.jsf.explorer.pages.ExplorerHomePage;
+import org.nuxeo.functionaltests.pages.DocumentBasePage;
 import org.nuxeo.functionaltests.pages.DocumentBasePage.UserNotConnectedException;
-import org.nuxeo.functionaltests.pages.LoginPage;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 /**
  * Test explorer JSF-specific pages.
@@ -30,14 +42,87 @@ import org.nuxeo.functionaltests.pages.LoginPage;
  */
 public class ITJSFExplorerTest extends AbstractTest {
 
+    @Before
+    public void before() {
+        RestHelper.createUser(TEST_USERNAME, TEST_PASSWORD, null, null, null, null, "members");
+    }
+
+    @After
+    public void after() {
+        RestHelper.cleanup();
+    }
+
+    protected void doLogin() {
+        getLoginPage().login(TEST_USERNAME, TEST_PASSWORD);
+    }
+
+    protected void doLogout() {
+        // logout avoiding JS error check
+        driver.get(NUXEO_URL + "/logout");
+    }
+
+    protected ExplorerHomePage goHome() {
+        open(ExplorerHomePage.URL);
+        return asPage(ExplorerHomePage.class);
+    }
+
     /**
      * Simple login, logout test, checking the home page is displayed without errors after login.
      */
     @Test
     public void testLoginLogout() throws UserNotConnectedException {
-        login();
-        open("/site/distribution");
-        get(NUXEO_URL + "/logout", LoginPage.class,
-                JavaScriptErrorIgnoreRule.startsWith("unreachable code after return statement"));
+        doLogin();
+        goHome();
+        doLogout();
     }
+
+    @Test
+    public void testSeamComponents() throws UserNotConnectedException {
+        doLogin();
+        ExplorerHomePage home = goHome();
+        ArtifactHomePage ahome = home.navigateTo(home.currentExtensionPoints);
+        ahome.navigateTo(ahome.seamComponents);
+        assertTrue(ahome.isSelected(ahome.seamComponents));
+        WebElement elt = ahome.getFirstListingElement();
+        WebElement link = elt.findElement(By.xpath(".//a"));
+        assertEquals("actionContextProvider", link.getText());
+        assertEquals("STATELESS", elt.findElement(By.xpath(".//span[@class='sticker']")).getText());
+        assertEquals("org.nuxeo.ecm.webapp.action.ActionContextProvider",
+                elt.findElement(By.xpath(".//td[3]")).getText());
+        Locator.scrollAndForceClick(link);
+        ArtifactPage apage = asPage(ArtifactPage.class);
+        assertTrue(apage.isSelected(apage.seamComponents));
+        assertEquals("Seam component actionContextProvider", apage.getTitle());
+        assertEquals("Seam component actionContextProvider", apage.header.getText());
+        doLogout();
+    }
+
+    @Test
+    public void testAdminCenter() throws UserNotConnectedException {
+        // log in as admin this time
+        DocumentBasePage page = login();
+        page.getAdminCenter();
+
+        // tab is here but cannot click on it: need to fix NXP-28911 first, so navigate directly to second tab
+        driver.findElement(By.linkText("Platform Explorer"));
+        driver.get(NUXEO_URL
+                + "/nxadmin/default/default-domain@view_admin?tabIds=NUXEO_ADMIN%3APlatformExplorer%3APlatformExplorerXP");
+        AdminCenterExplorerPage amPage = asPage(AdminCenterExplorerPage.class);
+
+        assertEquals(amPage.selectedTab, amPage.extensionPoints);
+        assertEquals("actions\nActionService - org.nuxeo.ecm.platform.actions.ActionService",
+                amPage.getFrameFirstContent());
+
+        amPage.clickOnTab(amPage.seamComponents);
+        assertEquals(amPage.selectedTab, amPage.seamComponents);
+        assertEquals("STATELESS actionContextProvider org.nuxeo.ecm.webapp.action.ActionContextProvider",
+                amPage.getFrameFirstContent());
+
+        amPage.clickOnTab(amPage.operations);
+        assertEquals(amPage.selectedTab, amPage.operations);
+        assertEquals("acceptComment\nCHAIN acceptComment", amPage.getFrameFirstContent());
+
+        doLogout();
+    }
+
 }
