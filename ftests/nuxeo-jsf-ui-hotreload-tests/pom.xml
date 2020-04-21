@@ -55,9 +55,6 @@
               <goal>verify</goal>
             </goals>
             <configuration>
-              <argLine>-Dlog4j.configuration=${file.uri.prefix}${basedir}/src/test/resources/log4j2-test.xml
-                -Dnuxeo.log.dir=${project.build.directory}
-              </argLine>
               <reportNameSuffix>${project.artifactId}</reportNameSuffix>
               <runOrder>alphabetical</runOrder> <!-- We need this for NXP-28445 -->
             </configuration>
