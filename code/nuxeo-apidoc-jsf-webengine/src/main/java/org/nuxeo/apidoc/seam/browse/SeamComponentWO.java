@@ -18,10 +18,6 @@
  */
 package org.nuxeo.apidoc.seam.browse;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-
 import org.nuxeo.apidoc.api.NuxeoArtifact;
 import org.nuxeo.apidoc.browse.NuxeoArtifactWebObject;
 import org.nuxeo.apidoc.plugin.PluginSnapshot;
@@ -33,15 +29,7 @@ import org.nuxeo.ecm.webengine.model.WebObject;
 @WebObject(type = SeamPlugin.ITEM_VIEW_TYPE)
 public class SeamComponentWO extends NuxeoArtifactWebObject {
 
-    @Override
-    @GET
-    @Produces("text/html")
-    @Path("introspection")
-    public Object doGet() {
-        return getView("view").arg(SeamPlugin.ITEM_VIEW_TYPE, getTargetComponentInfo());
-    }
-
-    public SeamComponentInfo getTargetComponentInfo() {
+    protected SeamComponentInfo getTargetComponentInfo() {
         DistributionSnapshot snapshot = getSnapshotManager().getSnapshot(getDistributionId(), ctx.getCoreSession());
         @SuppressWarnings("unchecked")
         PluginSnapshot<SeamComponentInfo> seamSnapshot = (PluginSnapshot<SeamComponentInfo>) snapshot.getPluginSnapshots()
