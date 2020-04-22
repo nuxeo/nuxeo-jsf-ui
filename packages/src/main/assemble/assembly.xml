@@ -58,7 +58,7 @@
     </copy>
     <nx:rmdups dir="${outdir}/nxr/lib" />
 
-    <unzip src="${outdir}/nuxeo-nxr-server-${maven.project.version}.zip"
+    <unzip src="${outdir}/nuxeo-nxr-server-${nuxeo.platform.version}.zip"
            dest="${outdir}/nuxeo-nxr-server-jsf-ui" />
     <unzip src="${outdir}/nuxeo-nxr-jsf-ui-${maven.project.version}.zip"
            dest="${outdir}/nuxeo-nxr-server-jsf-ui" />
@@ -138,7 +138,7 @@
     <delete dir="${outdir}/package" failonerror="false" />
     <delete dir="${outdir}/nxr" failonerror="false" />
     <delete dir="${outdir}/nuxeo-nxr-server-jsf-ui" failonerror="false" />
-    <delete file="${outdir}/nuxeo-nxr-server-${maven.project.version}.zip" failonerror="false" />
+    <delete file="${outdir}/nuxeo-nxr-server-${nuxeo.platform.versionn}.zip" failonerror="false" />
     <delete file="${outdir}/nuxeo-nxr-jsf-ui-${maven.project.version}.zip" failonerror="false" />
     <delete file="${outdir}/nuxeo-nxr-server-jsf-ui-${maven.project.version}.zip" failonerror="false" />
     <delete file="${outdir}/nxr-${maven.project.version}.zip" failonerror="false" />
