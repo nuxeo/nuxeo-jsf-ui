@@ -18,6 +18,9 @@
  */
 package org.nuxeo.functionaltests.jsf.explorer.pages;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.nuxeo.functionaltests.Required;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -34,11 +37,14 @@ public class ArtifactPage extends ArtifactHomePage {
     @FindBy(xpath = "//section/article[@role='contentinfo']/h1")
     public WebElement header;
 
-    @FindBy(xpath = "//section/article[@role='contentinfo']/div[contains(@class, 'include-in')]")
-    public WebElement description;
-
     public ArtifactPage(WebDriver driver) {
         super(driver);
+    }
+
+    public void checkReference() {
+        assertTrue(isSelected(seamComponents));
+        assertEquals("Seam component actionContextProvider", getTitle());
+        assertEquals("Seam component actionContextProvider", header.getText());
     }
 
 }

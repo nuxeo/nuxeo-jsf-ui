@@ -30,7 +30,7 @@ import org.openqa.selenium.support.FindBy;
  */
 public class ExplorerHomePage extends AbstractExplorerPage {
 
-    public static final String URL = "/site/distribution";
+    public static final String URL = "/site/distribution/";
 
     @Required
     @FindBy(className = "current")

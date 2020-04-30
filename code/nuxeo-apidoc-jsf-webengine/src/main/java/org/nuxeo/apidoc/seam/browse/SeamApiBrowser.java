@@ -71,7 +71,6 @@ public class SeamApiBrowser extends DefaultObject {
     }
 
     protected Object dolistSeamComponents(String view, boolean hideNav) {
-        getSnapshotManager().initWebContext(getContext().getRequest());
         DistributionSnapshot snapshot = getSnapshotManager().getSnapshot(distributionId, ctx.getCoreSession());
         @SuppressWarnings("unchecked")
         PluginSnapshot<SeamComponentInfo> seamSnapshot = (PluginSnapshot<SeamComponentInfo>) snapshot.getPluginSnapshots()
