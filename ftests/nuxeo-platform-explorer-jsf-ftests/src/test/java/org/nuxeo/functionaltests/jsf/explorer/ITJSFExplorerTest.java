@@ -18,12 +18,17 @@
 package org.nuxeo.functionaltests.jsf.explorer;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.http.HttpStatus;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.nuxeo.apidoc.browse.ApiBrowserConstants;
+import org.nuxeo.apidoc.seam.plugin.SeamPlugin;
 import org.nuxeo.functionaltests.AbstractTest;
+import org.nuxeo.functionaltests.JavaScriptErrorCollector;
 import org.nuxeo.functionaltests.Locator;
 import org.nuxeo.functionaltests.RestHelper;
 import org.nuxeo.functionaltests.jsf.explorer.pages.AdminCenterExplorerPage;
@@ -61,9 +66,26 @@ public class ITJSFExplorerTest extends AbstractTest {
         driver.get(NUXEO_URL + "/logout");
     }
 
+    protected void open(String url) {
+        JavaScriptErrorCollector.from(driver).ignore(ignores).checkForErrors();
+        driver.get(NUXEO_URL + url);
+        check404();
+    }
+
+    protected void check404() {
+        assertFalse("404 on URL: '" + driver.getCurrentUrl(),
+                driver.getTitle().contains(String.valueOf(HttpStatus.SC_NOT_FOUND)));
+    }
+
     protected ExplorerHomePage goHome() {
         open(ExplorerHomePage.URL);
         return asPage(ExplorerHomePage.class);
+    }
+
+    protected ArtifactPage goToArtifact(String id) {
+        open(String.format("%s%s/%s/%s/%s", ExplorerHomePage.URL, ApiBrowserConstants.DISTRIBUTION_ALIAS_CURRENT,
+                SeamPlugin.VIEW_TYPE, SeamPlugin.ITEM_VIEW, id));
+        return asPage(ArtifactPage.class);
     }
 
     /**
@@ -79,6 +101,10 @@ public class ITJSFExplorerTest extends AbstractTest {
     @Test
     public void testSeamComponents() throws UserNotConnectedException {
         doLogin();
+
+        // navigate directly to seam component page to check for web context init
+        goToArtifact("seam:actionContextProvider").checkReference();
+
         ExplorerHomePage home = goHome();
         ArtifactHomePage ahome = home.navigateTo(home.currentExtensionPoints);
         ahome.navigateTo(ahome.seamComponents);
@@ -90,10 +116,7 @@ public class ITJSFExplorerTest extends AbstractTest {
         assertEquals("org.nuxeo.ecm.webapp.action.ActionContextProvider",
                 elt.findElement(By.xpath(".//td[3]")).getText());
         Locator.scrollAndForceClick(link);
-        ArtifactPage apage = asPage(ArtifactPage.class);
-        assertTrue(apage.isSelected(apage.seamComponents));
-        assertEquals("Seam component actionContextProvider", apage.getTitle());
-        assertEquals("Seam component actionContextProvider", apage.header.getText());
+        asPage(ArtifactPage.class).checkReference();
         doLogout();
     }
 
