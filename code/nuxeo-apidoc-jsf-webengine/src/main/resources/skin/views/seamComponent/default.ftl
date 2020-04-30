@@ -9,14 +9,6 @@
 
 <div class="tabscontent">
 
-  <h2>Documentation</h2>
-  <@viewSecDescriptions docsByCat=docs.getDocumentationItems(Context.getCoreSession()) title=false/>
-  <#if Root.canAddDocumentation()>
-    <div class="tabsbutton">
-      <a class="button" href="${This.path}/doc">Manage Documentation</a>
-    </div>
-  </#if>
-
   <h2>Scope</h2>
   ${nxItem.scope}
 
@@ -60,8 +52,6 @@
     </#list>
   </ul>
   </#if>
-
-  <@viewAdditionalDoc docsByCat=docs.getDocumentationItems(Context.getCoreSession())/>
 
 </div>
 
