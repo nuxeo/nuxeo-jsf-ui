@@ -21,6 +21,8 @@ package org.nuxeo.apidoc.seam.adapters;
 import java.io.Serializable;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.nuxeo.apidoc.adapters.BaseNuxeoArtifactDocAdapter;
 import org.nuxeo.apidoc.api.NuxeoArtifact;
 import org.nuxeo.apidoc.seam.api.SeamComponentInfo;
@@ -32,6 +34,8 @@ import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.PropertyException;
 
 public class SeamComponentInfoDocAdapter extends BaseNuxeoArtifactDocAdapter implements SeamComponentInfo {
+
+    private static final Logger log = LogManager.getLogger(SeamComponentInfoDocAdapter.class);
 
     protected SeamComponentInfoDocAdapter(DocumentModel doc) {
         super(doc);
