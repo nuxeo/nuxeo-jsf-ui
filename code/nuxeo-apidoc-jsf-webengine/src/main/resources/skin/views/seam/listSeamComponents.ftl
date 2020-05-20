@@ -16,11 +16,11 @@
 
 <div class="tabscontent">
   <@tableFilterArea "seam component"/>
-  <table id="seamComponentsTable" class="tablesorter">
+  <table id="contentTable" class="tablesorter">
     <thead>
     <tr>
       <th>Scope</th>
-      <th>Seam component</th>
+      <th>Seam Component</th>
       <th>Class</th>
     </tr>
     </thead>
@@ -28,22 +28,16 @@
   <#list seamComponents as component>
   <#assign rowCss = (component_index % 2 == 0)?string("even","odd")/>
     <tr class="${rowCss}">
-      <td><span class="sticker">${component.scope}</span></td>
+      <td><span class="sticker scope">${component.scope}</span></td>
       <td>
-        <a href="${Root.path}/${distId}/seam/viewSeamComponent/${component.id}">${component.name}</a>
+        <a href="${Root.path}/${distId}/seam/viewSeamComponent/${component.id}" class="itemLink">${component.name}</a>
       </td>
       <td>
-        <#assign class=component.className>
-        <#assign javaDocBaseUrl="${Root.currentDistribution.javaDocHelper.getBaseUrl(class)}"/>
-        <#assign javaDocUrl="${javaDocBaseUrl}/javadoc/${class?replace('.','/')}.html"/>
-        <a href="${javaDocUrl}" target="_new">${class}</a>
+        <@javadoc component.className false />
         <#list component.interfaceNames as iface>
           <#if iface != component.className>
             <br/>
-            <#assign class=iface>
-            <#assign javaDocBaseUrl="${Root.currentDistribution.javaDocHelper.getBaseUrl(class)}"/>
-            <#assign javaDocUrl="${javaDocBaseUrl}/javadoc/${class?replace('.','/')}.html"/>
-            <a href="${javaDocUrl}" target="_new">${class}</a>
+            <@javadoc iface false />
           </#if>
         </#list>
       </td>
@@ -56,7 +50,7 @@
 </@block>
 
 <@block name="footer_scripts">
-<@tableSortFilterScript "#seamComponentsTable" "[1,0]" />
+<@tableSortFilterScript "#contentTable" "[1,0]" />
 </@block>
 
 </@extends>

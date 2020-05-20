@@ -21,6 +21,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
 import org.apache.http.HttpStatus;
 import org.junit.After;
 import org.junit.Before;
@@ -29,16 +31,15 @@ import org.nuxeo.apidoc.browse.ApiBrowserConstants;
 import org.nuxeo.apidoc.seam.plugin.SeamPlugin;
 import org.nuxeo.functionaltests.AbstractTest;
 import org.nuxeo.functionaltests.JavaScriptErrorCollector;
-import org.nuxeo.functionaltests.Locator;
 import org.nuxeo.functionaltests.RestHelper;
 import org.nuxeo.functionaltests.jsf.explorer.pages.AdminCenterExplorerPage;
 import org.nuxeo.functionaltests.jsf.explorer.pages.ArtifactHomePage;
 import org.nuxeo.functionaltests.jsf.explorer.pages.ArtifactPage;
 import org.nuxeo.functionaltests.jsf.explorer.pages.ExplorerHomePage;
+import org.nuxeo.functionaltests.jsf.explorer.pages.SeamListingFragment;
 import org.nuxeo.functionaltests.pages.DocumentBasePage;
 import org.nuxeo.functionaltests.pages.DocumentBasePage.UserNotConnectedException;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 /**
  * Test explorer JSF-specific pages.
@@ -49,6 +50,7 @@ public class ITJSFExplorerTest extends AbstractTest {
 
     @Before
     public void before() {
+        RestHelper.deleteUser(TEST_USERNAME);
         RestHelper.createUser(TEST_USERNAME, TEST_PASSWORD, null, null, null, null, "members");
     }
 
@@ -109,14 +111,22 @@ public class ITJSFExplorerTest extends AbstractTest {
         ArtifactHomePage ahome = home.navigateTo(home.currentExtensionPoints);
         ahome.navigateTo(ahome.seamComponents);
         assertTrue(ahome.isSelected(ahome.seamComponents));
-        WebElement elt = ahome.getFirstListingElement();
-        WebElement link = elt.findElement(By.xpath(".//a"));
-        assertEquals("actionContextProvider", link.getText());
-        assertEquals("STATELESS", elt.findElement(By.xpath(".//span[@class='sticker']")).getText());
-        assertEquals("org.nuxeo.ecm.webapp.action.ActionContextProvider",
-                elt.findElement(By.xpath(".//td[3]")).getText());
-        Locator.scrollAndForceClick(link);
-        asPage(ArtifactPage.class).checkReference();
+
+        SeamListingFragment listing = asPage(SeamListingFragment.class);
+        listing.checkListing(-1, "actionContextProvider", "/seam/viewSeamComponent/seam:actionContextProvider",
+                "STATELESS", List.of("org.nuxeo.ecm.webapp.action.ActionContextProvider"),
+                List.of("/javadoc/org/nuxeo/ecm/webapp/action/ActionContextProvider.html"));
+
+        listing = listing.filterOn("clipboardActions");
+        listing.checkListing(-1, "clipboardActions", "/seam/viewSeamComponent/seam:clipboardActions", "SESSION",
+                List.of("org.nuxeo.ecm.webapp.clipboard.ClipboardActionsBean",
+                        "org.nuxeo.ecm.webapp.clipboard.ClipboardActions"),
+                List.of("/javadoc/org/nuxeo/ecm/webapp/clipboard/ClipboardActionsBean.html",
+                        "/javadoc/org/nuxeo/ecm/webapp/clipboard/ClipboardActions.html"));
+
+        listing.navigateToFirstItem();
+        asPage(ArtifactPage.class).checkAlternative();
+
         doLogout();
     }
 

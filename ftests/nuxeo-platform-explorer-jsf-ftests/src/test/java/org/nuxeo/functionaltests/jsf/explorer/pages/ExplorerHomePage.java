@@ -24,7 +24,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 /**
- * Page reprenting home at /site/distribution.
+ * Page representing home at /site/distribution.
  *
  * @since 11.1
  */
