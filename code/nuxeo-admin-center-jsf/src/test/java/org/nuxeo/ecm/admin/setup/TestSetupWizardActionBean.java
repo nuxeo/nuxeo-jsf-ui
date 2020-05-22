@@ -97,8 +97,6 @@ public class TestSetupWizardActionBean {
         // simulate Seam injection of variable setupConfigGenerator
         setupWizardActionBean.getConfigurationGenerator();
 
-        // WARN [UnknownServerConfigurator] Unknown server.
-        // WARN [ConfigurationGenerator] Server will be considered as not configurable.
         // WARN [ConfigurationGenerator] Parameter mail.transport.username is deprecated ...
         // ERROR [ConfigurationGenerator] Template 'oldchange' not found ...
         // WARN [ConfigurationGenerator] Parameter mail.transport.username is deprecated ...
@@ -106,8 +104,6 @@ public class TestSetupWizardActionBean {
         capturedLog.assertHasEvent();
 
         String[] expectedFixedEvents = {
-            "Unknown server.",
-            "Server will be considered as not configurable.",
             "Parameter mail.transport.username is deprecated - please use mail.transport.user instead",
             "Parameter mail.transport.username is deprecated - please use mail.transport.user instead",
             "Missing value for nuxeo.db.type, using default"
