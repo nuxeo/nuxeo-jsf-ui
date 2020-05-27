@@ -252,28 +252,6 @@ pipeline {
         }
       }
     }
-
-    stage('Deploy Maven artifacts') {
-      steps {
-        setGitHubBuildStatus('jsfui/deploy', 'Deploy Maven artifacts', 'PENDING')
-        container('maven') {
-          echo """
-            ----------------------------------------
-            Deploy Maven artifacts
-            ----------------------------------------
-          """
-          sh 'mvn -B -nsu -DskipTests deploy'
-        }
-      }
-      post {
-        success {
-          setGitHubBuildStatus('jsfui/deploy', 'Deploy Maven artifacts', 'SUCCESS')
-        }
-        failure {
-          setGitHubBuildStatus('jsfui/deploy', 'Deploy Maven artifacts', 'FAILURE')
-        }
-      }
-    }
   }
 
   post {
