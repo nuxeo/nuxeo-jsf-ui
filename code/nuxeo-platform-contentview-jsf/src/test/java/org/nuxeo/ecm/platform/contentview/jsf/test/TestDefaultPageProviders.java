@@ -550,6 +550,7 @@ public class TestDefaultPageProviders {
     @SuppressWarnings("unchecked")
     @Test
     public void testCoreQueryWithSearchDocument() {
+        assumeTrue("fulltext search not supported", coreFeature.getStorageConfiguration().supportsFulltextSearch());
         assumeTrue(coreFeature.getStorageConfiguration().supportsMultipleFulltextIndexes());
 
         ContentView contentView = service.getContentView("CURRENT_DOCUMENT_CHILDREN_WITH_SEARCH_DOCUMENT");
@@ -583,6 +584,7 @@ public class TestDefaultPageProviders {
     @SuppressWarnings("unchecked")
     @Test
     public void testCoreQueryWithSearchDocumentReference() {
+        assumeTrue("fulltext search not supported", coreFeature.getStorageConfiguration().supportsFulltextSearch());
         assumeTrue(coreFeature.getStorageConfiguration().supportsMultipleFulltextIndexes());
 
         ContentView contentView = service.getContentView("CURRENT_DOCUMENT_CHILDREN_WITH_SEARCH_DOCUMENT_REF");

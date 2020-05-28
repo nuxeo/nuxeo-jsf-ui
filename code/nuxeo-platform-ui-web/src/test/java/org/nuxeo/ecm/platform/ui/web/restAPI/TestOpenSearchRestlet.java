@@ -18,6 +18,8 @@
  */
 package org.nuxeo.ecm.platform.ui.web.restAPI;
 
+import static org.junit.Assume.assumeTrue;
+
 import java.net.URLEncoder;
 
 import javax.inject.Inject;
@@ -45,6 +47,9 @@ public class TestOpenSearchRestlet extends AbstractRestletTest {
     protected TransactionalFeature txFeature;
 
     @Inject
+    protected CoreFeature coreFeature;
+
+    @Inject
     protected CoreSession session;
 
     @Inject
@@ -58,6 +63,8 @@ public class TestOpenSearchRestlet extends AbstractRestletTest {
 
     @Before
     public void before() {
+        assumeTrue("fulltext search not supported", coreFeature.getStorageConfiguration().supportsFulltextSearch());
+
         repositoryName = session.getRepositoryName();
         root = session.getRootDocument();
         doc = session.createDocumentModel("/", "doc", "File");
