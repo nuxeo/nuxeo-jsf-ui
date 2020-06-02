@@ -2,7 +2,7 @@
 <package type="addon" name="nuxeo-jsf-ui" version="@VERSION@">
   <title>Nuxeo JSF UI</title>
   <description>
-    <p>JSF UI addon offers a complete user interface for Nuxeo server, fully extensible and configurable: forms, process, user actions. It is very easy to implement your business process on top of Nuxe JSF UI with Nuxeo Studio. </p>
+    <p>The JSF UI addon is a previously supported UI for the Nuxeo Platform. It is fully extensible and configurable. It includes forms, processes, and user actions.</p>
   </description>
   <vendor>Nuxeo</vendor>
   <platforms>
