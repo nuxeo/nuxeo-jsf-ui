@@ -27,8 +27,8 @@ import org.apache.http.HttpStatus;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.nuxeo.apidoc.browse.ApiBrowserConstants;
 import org.nuxeo.apidoc.seam.plugin.SeamPlugin;
+import org.nuxeo.apidoc.snapshot.SnapshotManager;
 import org.nuxeo.functionaltests.AbstractTest;
 import org.nuxeo.functionaltests.JavaScriptErrorCollector;
 import org.nuxeo.functionaltests.RestHelper;
@@ -85,7 +85,7 @@ public class ITJSFExplorerTest extends AbstractTest {
     }
 
     protected ArtifactPage goToArtifact(String id) {
-        open(String.format("%s%s/%s/%s/%s", ExplorerHomePage.URL, ApiBrowserConstants.DISTRIBUTION_ALIAS_CURRENT,
+        open(String.format("%s%s/%s/%s/%s", ExplorerHomePage.URL, SnapshotManager.DISTRIBUTION_ALIAS_CURRENT,
                 SeamPlugin.VIEW_TYPE, SeamPlugin.ITEM_VIEW, id));
         return asPage(ArtifactPage.class);
     }
