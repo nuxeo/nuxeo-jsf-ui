@@ -34,6 +34,7 @@ import org.nuxeo.apidoc.seam.introspection.SeamRuntimeSnapshot;
 import org.nuxeo.apidoc.seam.repository.SeamRepositorySnapshot;
 import org.nuxeo.apidoc.snapshot.DistributionSnapshot;
 import org.nuxeo.apidoc.snapshot.SnapshotFilter;
+import org.nuxeo.apidoc.snapshot.SnapshotManager;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.runtime.api.Framework;
@@ -139,7 +140,7 @@ public class SeamPlugin extends AbstractPlugin<SeamComponentInfo> implements Plu
     @Override
     public boolean isHidden() {
         return Framework.isBooleanPropertyTrue(PROPERTY_HIDE)
-                || Framework.isBooleanPropertyTrue(ApiBrowserConstants.PROPERTY_SITE_MODE);
+                || Framework.isBooleanPropertyTrue(SnapshotManager.PROPERTY_SITE_MODE);
     }
 
 }
