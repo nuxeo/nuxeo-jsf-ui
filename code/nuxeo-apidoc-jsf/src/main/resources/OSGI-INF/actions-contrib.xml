@@ -11,6 +11,7 @@
       label="admcommand.explorer" order="40">
       <category>NUXEO_ADMIN</category>
       <filter-id>only_for_manager</filter-id>
+      <filter-id>not_apidoc_site_mode</filter-id>
     </action>
 
     <action id="PlatformExplorerBrowse"
@@ -43,5 +44,16 @@
     </action>
 
   </extension>
+
+  <extension target="org.nuxeo.ecm.platform.actions.ActionService"
+    point="filters">
+
+    <filter id="not_apidoc_site_mode">
+      <rule grant="true">
+        <condition>#{!snapshotManager.isSiteMode()}</condition>
+      </rule>
+    </filter>
+
+    </extension>
 
 </component>
