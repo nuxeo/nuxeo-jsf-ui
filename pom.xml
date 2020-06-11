@@ -3,12 +3,12 @@
   <parent>
     <groupId>org.nuxeo</groupId>
     <artifactId>nuxeo-ecm</artifactId>
-    <version>11.1-SNAPSHOT</version>
+    <version>11.2-SNAPSHOT</version>
   </parent>
 
   <groupId>org.nuxeo.ecm.platform</groupId>
   <artifactId>nuxeo-jsf-ui</artifactId>
-  <version>11.1-SNAPSHOT</version>
+  <version>11.2-SNAPSHOT</version>
   <name>Nuxeo - JSF UI Parent POM</name>
   <packaging>pom</packaging>
 
