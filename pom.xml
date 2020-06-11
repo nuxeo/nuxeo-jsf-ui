@@ -13,7 +13,7 @@
   <packaging>pom</packaging>
 
   <properties>
-    <nuxeo.jsf.version>11.1-SNAPSHOT</nuxeo.jsf.version>
+    <nuxeo.jsf.version>11.2-SNAPSHOT</nuxeo.jsf.version>
     <jsf.version>2.2.6</jsf.version>
     <nxjsf.version>2.2.6-NX01</nxjsf.version>
     <richfaces.version>4.5.12.Final-NX1</richfaces.version>
