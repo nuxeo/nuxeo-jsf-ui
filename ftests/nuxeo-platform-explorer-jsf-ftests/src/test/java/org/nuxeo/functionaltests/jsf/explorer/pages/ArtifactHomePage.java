@@ -18,6 +18,7 @@
  */
 package org.nuxeo.functionaltests.jsf.explorer.pages;
 
+import org.nuxeo.functionaltests.explorer.pages.AbstractExplorerPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -36,6 +37,11 @@ public class ArtifactHomePage extends AbstractExplorerPage {
 
     public ArtifactHomePage(WebDriver driver) {
         super(driver);
+    }
+
+    @Override
+    public void check() {
+        // NOOP
     }
 
     public WebElement getFirstListingElement() {
