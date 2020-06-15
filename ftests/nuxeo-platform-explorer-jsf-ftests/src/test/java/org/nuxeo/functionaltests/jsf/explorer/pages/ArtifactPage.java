@@ -61,7 +61,7 @@ public class ArtifactPage extends ArtifactHomePage {
 
     public void checkReference() {
         assertTrue(isSelected(seamComponents));
-        assertEquals("Seam Component actionContextProvider", getTitle());
+        checkTitle("Seam Component actionContextProvider");
         assertEquals("Seam Component actionContextProvider", header.getText());
         checkImplementationText("org.nuxeo.ecm.webapp.action.ActionContextProvider");
         checkJavadocLink("/javadoc/org/nuxeo/ecm/webapp/action/ActionContextProvider.html");
@@ -71,7 +71,7 @@ public class ArtifactPage extends ArtifactHomePage {
 
     public void checkAlternative() {
         assertTrue(isSelected(seamComponents));
-        assertEquals("Seam Component clipboardActions", getTitle());
+        checkTitle("Seam Component clipboardActions");
         assertEquals("Seam Component clipboardActions", header.getText());
         checkImplementationText("org.nuxeo.ecm.webapp.clipboard.ClipboardActionsBean");
         checkJavadocLink("/javadoc/org/nuxeo/ecm/webapp/clipboard/ClipboardActionsBean.html");

@@ -42,6 +42,11 @@
       <artifactId>nuxeo-functional-tests</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ftests</groupId>
+      <artifactId>nuxeo-explorer-ftests-base</artifactId>
+      <scope>test</scope>
+    </dependency>
 
   </dependencies>
 

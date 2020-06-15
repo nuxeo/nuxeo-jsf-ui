@@ -23,46 +23,20 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import org.nuxeo.functionaltests.Locator;
-import org.nuxeo.functionaltests.Required;
-import org.nuxeo.functionaltests.pages.AbstractPage;
+import org.nuxeo.functionaltests.explorer.pages.ListingFragment;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-
-import com.google.common.base.Function;
 
 /**
  * Represents the Seam components listing on explorer.
  *
  * @since 11.1
  */
-public class SeamListingFragment extends AbstractPage {
-
-    @Required
-    @FindBy(xpath = "//input[@class='searchFilter']")
-    public WebElement searchFilter;
-
-    @Required
-    @FindBy(id = "contentTable")
-    public WebElement listingTable;
+public class SeamListingFragment extends ListingFragment {
 
     public SeamListingFragment(WebDriver driver) {
         super(driver);
-    }
-
-    public WebElement getFirstItem() {
-        return listingTable.findElement(By.xpath("./tbody//tr"));
-    }
-
-    public List<WebElement> getItems() {
-        return listingTable.findElements(By.xpath("./tbody//tr"));
-    }
-
-    public WebElement getListingItemLink(WebElement item) {
-        return item.findElement(By.xpath(".//a[@class='itemLink']"));
     }
 
     public WebElement getListingItemScope(WebElement item) {
@@ -73,49 +47,9 @@ public class SeamListingFragment extends AbstractPage {
         return item.findElements(By.xpath(".//a[@class='javadoc']"));
     }
 
-    public void navigateToFirstItem() {
-        Locator.scrollAndForceClick(getListingItemLink(getFirstItem()));
-    }
-
-    class RequestManager {
-
-        protected JavascriptExecutor js;
-
-        protected String id;
-
-        protected String event;
-
-        public RequestManager(WebDriver driver, String id, String event) {
-            this.js = (JavascriptExecutor) driver;
-            this.id = id;
-            this.event = event;
-        }
-
-        public void begin() {
-            String beginCode = String.format(
-                    "window.%s = true; jQuery('#contentTable').bind('%s', () => { window.%s = false; });", id, event,
-                    id);
-            js.executeScript(beginCode);
-        }
-
-        public void waitForEnd() {
-            Locator.waitUntilGivenFunction(new Function<WebDriver, Boolean>() {
-                @Override
-                public Boolean apply(WebDriver driver) {
-                    String endCode = String.format("return window.%s == false;", id);
-                    Boolean res = (Boolean) ((JavascriptExecutor) driver).executeScript(endCode);
-                    return res;
-                }
-            });
-        }
-
-    }
-
+    @Override
     public SeamListingFragment filterOn(String filterText) {
-        RequestManager rm = new RequestManager(driver, "nxexplorerFilterOngoing", "filterEnd");
-        rm.begin();
-        searchFilter.sendKeys(filterText);
-        rm.waitForEnd();
+        super.filterOn(filterText);
         return asPage(SeamListingFragment.class);
     }
 
