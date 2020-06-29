@@ -34,7 +34,6 @@
     <!-- <module>nuxeo-microsoft-azure-jsf-ui-ftests</module> -->
     <module>nuxeo-multi-tenant-jsf-ui-ftests</module>
     <module>nuxeo-platform-error-web-tests</module>
-    <module>nuxeo-platform-explorer-jsf-ftests</module>
     <module>nuxeo-platform-forms-layout-demo-tests</module>
     <module>nuxeo-quota-jsf-ui-ftests</module>
     <module>nuxeo-shibboleth-invitation-jsf-ui-ftests</module>
