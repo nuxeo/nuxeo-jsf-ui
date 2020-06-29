@@ -51,16 +51,6 @@
         <version>${nuxeo.jsf.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.nuxeo.ecm.platform</groupId>
-        <artifactId>nuxeo-apidoc-jsf</artifactId>
-        <version>${nuxeo.jsf.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.platform</groupId>
-        <artifactId>nuxeo-apidoc-jsf-webengine</artifactId>
-        <version>${nuxeo.jsf.version}</version>
-      </dependency>
-      <dependency>
         <groupId>org.nuxeo.ecm.automation</groupId>
         <artifactId>nuxeo-automation-jsf</artifactId>
         <version>${nuxeo.jsf.version}</version>
@@ -577,12 +567,6 @@
       <dependency>
         <groupId>org.nuxeo.jsf.packages</groupId>
         <artifactId>nuxeo-multi-tenant-jsf-ui-package</artifactId>
-        <version>${nuxeo.jsf.version}</version>
-        <type>zip</type>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.jsf.packages</groupId>
-        <artifactId>nuxeo-platform-explorer-jsf-package</artifactId>
         <version>${nuxeo.jsf.version}</version>
         <type>zip</type>
       </dependency>

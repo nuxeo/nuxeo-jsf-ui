@@ -24,7 +24,6 @@
     <module>nuxeo-imap-connector-jsf-ui-package</module>
     <module>nuxeo-liveconnect-jsf-ui-package</module>
     <module>nuxeo-multi-tenant-jsf-ui-package</module>
-    <module>nuxeo-platform-explorer-jsf-package</module>
     <module>nuxeo-quota-jsf-ui-package</module>
     <module>nuxeo-shibboleth-invitation-jsf-ui-package</module>
     <module>nuxeo-shibboleth-login-jsf-ui-package</module>
