@@ -32,13 +32,8 @@ void setGitHubBuildStatus(String context, String message, String state) {
   ])
 }
 
-String getCurrentVersion() {
-  return readMavenPom().getVersion()
-}
-
-String getNewVersion() {
-  String currentVersion = getCurrentVersion()
-  return BRANCH_NAME == 'master' ? currentVersion : "${BRANCH_NAME}-" + currentVersion
+def isPullRequest() {
+  return BRANCH_NAME =~ /PR-.*/
 }
 
 void runFunctionalTests(String baseDir) {
@@ -53,30 +48,20 @@ void runFunctionalTests(String baseDir) {
   }
 }
 
-void updateVersion() {
-  echo """
-    ----------------------------------------
-    Update version
-    ----------------------------------------
-    Current version: ${CURRENT_VERSION}
-    New version: ${NEW_VERSION}
-  """
-  echo "MAVEN_OPTS=$MAVEN_OPTS"
-  sh """
-    mvn -nsu versions:set -DnewVersion=${NEW_VERSION} -DgenerateBackupPoms=false
-    perl -i -pe 's|<nuxeo.jsf.version>${CURRENT_VERSION}</nuxeo.jsf.version>|<nuxeo.jsf.version>${NEW_VERSION}</nuxeo.jsf.version>|' pom.xml
-  """
-}
-
 pipeline {
   agent {
     label 'jenkins-nuxeo-jsf-11'
   }
+  triggers {
+    upstream(
+      threshold: hudson.model.Result.SUCCESS,
+      upstreamProjects: '/nuxeo/nuxeo/master',
+    )
+  }
   environment {
-    CHANGE_BRANCH = "$CHANGE_BRANCH"
-    CURRENT_VERSION = getCurrentVersion()
+    MAVEN_ARGS = '-B -nsu -Dnuxeo.skip.enforcer=true'
     MAVEN_OPTS = "$MAVEN_OPTS -Xms512m -Xmx3072m"
-    NEW_VERSION = getNewVersion()
+    CONNECT_PREPROD_URL = 'https://nos-preprod-connect.nuxeocloud.com/nuxeo'
   }
 
   stages {
@@ -96,24 +81,6 @@ pipeline {
       }
     }
 
-    stage('Print Variables') {
-      steps {
-        container('maven') {
-          echo """
-            ----------------------------------------
-            Print Variables
-            ----------------------------------------
-            BRANCH_NAME = ${BRANCH_NAME}
-            CHANGE_BRANCH = ${CHANGE_BRANCH}
-            CURRENT_VERSION = ${CURRENT_VERSION}
-            MAVEN_OPTS = ${MAVEN_OPTS}
-            NEW_VERSION = ${NEW_VERSION}
-          """
-          sh 'mvn -v'
-        }
-      }
-    }
-
     stage('Workaround bower root issue') {
       steps {
         container('maven') {
@@ -125,130 +92,108 @@ pipeline {
       }
     }
 
-    stage('Check Nuxeo branch') {
-      when {
-        branch 'PR-*'
-      }
+    stage('Build') {
       steps {
-        container('maven') {
-          withCredentials([usernameColonPassword(credentialsId: 'jx-pipeline-git-github-git', variable: 'GITHUB_USERNAME_PASSWORD')]) {
-            script {
-              def branchRef = sh(script: "curl -u '${GITHUB_USERNAME_PASSWORD}' https://api.github.com/repos/nuxeo/nuxeo/git/ref/heads/${CHANGE_BRANCH} | jq -r '.ref'", returnStdout: true).trim();
-              if (branchRef != 'null') {
-                currentBuild.result = 'ABORTED';
-                currentBuild.description = "Branch: ${CHANGE_BRANCH} exists on nuxeo/nuxeo repository, aborting build."
-                error(currentBuild.description)
-              }
-            }
-          }
-        }
-      }
-    }
-
-    stage('Update version') {
-      steps {
-        container('maven') {
-          updateVersion()
-        }
-      }
-    }
-
-    stage('Compile') {
-      steps {
-        setGitHubBuildStatus('jsfui/compile', 'Compile', 'PENDING')
+        setGitHubBuildStatus('maven/build', 'Build', 'PENDING')
         container('maven') {
           echo """
             ----------------------------------------
             Compile
             ----------------------------------------
           """
-          sh 'mvn -B -nsu -N install'
-          sh 'mvn -B -nsu -T0.8C -DskipTests -f code/pom.xml install'
+          echo "MAVEN_OPTS=$MAVEN_OPTS"
+          sh "mvn ${MAVEN_ARGS} -V -N install"
+          sh "mvn ${MAVEN_ARGS} -T4C -DskipTests -f code/pom.xml install"
         }
       }
-
       post {
         success {
-          setGitHubBuildStatus('jsfui/compile', 'Compile', 'SUCCESS')
+          setGitHubBuildStatus('maven/build', 'Build', 'SUCCESS')
         }
         failure {
-          setGitHubBuildStatus('jsfui/compile', 'Compile', 'FAILURE')
+          setGitHubBuildStatus('maven/build', 'Build', 'FAILURE')
         }
       }
     }
 
     stage('Run "dev" unit tests') {
       steps {
-        setGitHubBuildStatus('jsfui/utests/dev', 'Unit tests - dev environment', 'PENDING')
+        setGitHubBuildStatus('utests/dev', 'Unit tests - dev environment', 'PENDING')
         container('maven') {
           echo """
             ----------------------------------------
             Run "dev" unit tests
             ----------------------------------------
           """
-          sh "mvn -B -nsu -f code/pom.xml test"
+          sh "mvn ${MAVEN_ARGS} -f code/pom.xml test"
         }
       }
-
       post {
         always {
           junit testResults: '**/target/surefire-reports/*.xml'
         }
         success {
-          setGitHubBuildStatus('jsfui/utests/dev', 'Unit tests - dev environment', 'SUCCESS')
+          setGitHubBuildStatus('utests/dev', 'Unit tests - dev environment', 'SUCCESS')
         }
         failure {
-          setGitHubBuildStatus('jsfui/utests/dev', 'Unit tests - dev environment', 'FAILURE')
+          setGitHubBuildStatus('utests/dev', 'Unit tests - dev environment', 'FAILURE')
         }
       }
     }
 
-    stage('Package') {
+    stage('Build Nuxeo Packages') {
       steps {
-        setGitHubBuildStatus('jsfui/package', 'Package', 'PENDING')
+        setGitHubBuildStatus('packages/build', 'Build Nuxeo packages', 'PENDING')
         container('maven') {
           echo """
             ----------------------------------------
             Package
             ----------------------------------------
           """
-          sh 'mvn -B -nsu -DskipTests -f packages/pom.xml install'
+          sh 'mvn ${MAVEN_ARGS} -DskipTests -f packages/pom.xml install'
         }
       }
-
       post {
         success {
-          setGitHubBuildStatus('jsfui/package', 'Package', 'SUCCESS')
+          setGitHubBuildStatus('packages/build', 'Build Nuxeo packages', 'SUCCESS')
         }
         failure {
-          setGitHubBuildStatus('jsfui/package', 'Package', 'FAILURE')
+          setGitHubBuildStatus('packages/build', 'Build Nuxeo packages', 'FAILURE')
         }
       }
     }
 
     stage('Run "dev" functional tests') {
       steps {
-        setGitHubBuildStatus('jsfui/ftests/dev', 'Functional tests - dev environment', 'PENDING')
-        container('maven') {
-          echo """
-            ----------------------------------------
-            Run "dev" functional tests
-            ----------------------------------------
-          """
-          script {
-            try {
-              runFunctionalTests('ftests')
-              setGitHubBuildStatus('jsfui/ftests/dev', 'Functional tests - dev environment', 'SUCCESS')
-            } catch (err) {
-              setGitHubBuildStatus('jsfui/ftests/dev', 'Functional tests - dev environment', 'FAILURE')
-            }
+        setGitHubBuildStatus('ftests/dev', 'Functional tests - dev environment', 'PENDING')
+        retry(2) {
+          container('maven') {
+            echo """
+              ----------------------------------------
+              Run "dev" functional tests
+              ----------------------------------------
+            """
+            runFunctionalTests('ftests')
           }
         }
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-diff-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-jsf-ui-hotreload-tests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-jsf-ui-webdriver-tests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-lang-ext-incomplete-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-platform-forms-layout-demo-tests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-signature-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-smart-search-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-virtual-navigation-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
       }
-
       post {
         always {
-          junit testResults: '**/target/surefire-reports/*.xml'
+          junit testResults: '**/target/failsafe-reports/*.xml'
+        }
+        success {
+          setGitHubBuildStatus('ftests/dev', 'Functional tests - dev environment', 'SUCCESS')
+        }
+        failure {
+          setGitHubBuildStatus('ftests/dev', 'Functional tests - dev environment', 'FAILURE')
         }
       }
     }
@@ -257,7 +202,7 @@ pipeline {
   post {
     always {
       script {
-        if (BRANCH_NAME == 'master') {
+        if (!isPullRequest()) {
           // update JIRA issue
           step([$class: 'JiraIssueUpdater', issueSelector: [$class: 'DefaultIssueSelector'], scm: scm])
         }

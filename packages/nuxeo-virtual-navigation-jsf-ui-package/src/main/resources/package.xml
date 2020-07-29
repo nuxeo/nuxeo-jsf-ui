@@ -12,8 +12,8 @@
   </description>
   <vendor>Nuxeo</vendor>
   <platforms>
-    <platform>server-@VERSION@</platform>
-    <platform>server-@VERSION@-*</platform>
+    <platform>server-@NUXEO_PLATFORM_VERSION@</platform>
+    <platform>server-@NUXEO_PLATFORM_VERSION@-*</platform>
   </platforms>
   <dependencies>
     <package>nuxeo-jsf-ui</package>
