@@ -15,6 +15,7 @@
       <fileset dir="src/main/resources" />
       <filterset>
         <filter token="VERSION" value="${maven.project.version}" />
+        <filter token="NUXEO_PLATFORM_VERSION" value="${nuxeo.platform.version}" />
       </filterset>
     </copy>
 
@@ -26,7 +27,7 @@
 
     <!-- Compute the diff to marketplace/install/ -->
     <nx:zipdiff file1="${outdir}/nuxeo-nxr-jsf-ui-${maven.project.version}.zip"
-                file2="${outdir}/nuxeo-nxr-server-${maven.project.version}.zip"
+                file2="${outdir}/nuxeo-nxr-server-${nuxeo.platform.version}.zip"
                 includesfile="${outdir}/includes"
                 excludesfile="${outdir}/excludesfile"
                 patternsetid="jsf-ui.versus.server"
@@ -43,7 +44,7 @@
 
     <!-- Cleanup -->
     <delete file="${outdir}/nuxeo-nxr-jsf-ui-${maven.project.version}.zip" />
-    <delete file="${outdir}/nuxeo-nxr-server-${maven.project.version}.zip" />
+    <delete file="${outdir}/nuxeo-nxr-server-${nuxeo.platform.version}.zip" />
     <delete dir="${outdir}/marketplace" failonerror="false" />
   </target>
 
