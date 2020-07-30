@@ -35,6 +35,7 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.NuxeoException;
@@ -134,6 +135,7 @@ public class ITDevJSFHotReloadTest extends NuxeoITCaseHelper {
         return d;
     }
 
+    @Ignore("NXP-29473")
     @Test
     public void testCreateStudioDocument() throws Exception {
         getOrCreateTestWorkspace().getContentTab().getDocumentCreatePage("My test document", StudioDocumentPage.class);
@@ -152,6 +154,7 @@ public class ITDevJSFHotReloadTest extends NuxeoITCaseHelper {
         Assert.assertEquals("State\nProject", form.getText());
     }
 
+    @Ignore("NXP-29473")
     @Test
     public void testEditStudioDocument() throws Exception {
         getOrCreateTestWorkspace().getContentTab().getDocumentCreatePage("My test document", StudioDocumentPage.class);
@@ -212,6 +215,7 @@ public class ITDevJSFHotReloadTest extends NuxeoITCaseHelper {
         return driver.findElement(By.id(buttonId));
     }
 
+    @Ignore("NXP-29473")
     @Test
     public void testWorkflow() throws Exception {
         getOrCreateTestWorkspace().getContentTab().getDocumentCreatePage("My test document", StudioDocumentPage.class);
