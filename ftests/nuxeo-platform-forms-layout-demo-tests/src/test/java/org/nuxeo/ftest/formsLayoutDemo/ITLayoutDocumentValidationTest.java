@@ -42,6 +42,7 @@ public class ITLayoutDocumentValidationTest extends AbstractTest {
         page.checkLayoutEmpty();
     }
 
+    @Ignore("NXP-29479")
     @Test
     public void testDocumentValidationInvalid() {
         ValidationPage page = get(ValidationPage.PAGE_PATH, ValidationPage.class);
@@ -71,6 +72,7 @@ public class ITLayoutDocumentValidationTest extends AbstractTest {
         assertEquals(1, firstSubList.getRows().size());
     }
 
+    @Ignore("NXP-29479")
     @Test
     public void testDocumentValidationValid() {
         ValidationPage page = get(ValidationPage.PAGE_PATH, ValidationPage.class);
