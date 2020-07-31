@@ -21,6 +21,7 @@ import java.util.Date;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ftest.smart.search.pages.SmartFolderContentTab;
@@ -45,6 +46,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * @since 8.1
  */
+@Ignore("NXP-29481")
 public class ITSmartSearchTest extends AbstractTest {
 
     protected final static String WS_ROOT_TITLE = "Workspaces";
