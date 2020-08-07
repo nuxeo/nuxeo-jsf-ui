@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <component name="org.nuxeo.easyshare.jsf.resources.contrib">
 
+  <require>studio.extensions.easyshare</require>
+
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
              point="actions">
 
@@ -63,6 +65,22 @@
         <property name="ajaxSupport">true</property>
       </properties>
     </action>
+  </extension>
+
+  <extension target="org.nuxeo.ecm.platform.actions.ActionService" point="filters">
+    <filter id="create" append="true">
+      <rule grant="true">
+        <permission>AddChildren</permission>
+        <type>EasyShareFolder</type>
+        <condition>!document.isImmutable()</condition>
+        <condition>#{typeManager.getAllowedSubTypes(document.getType(), document).size() &gt; 0}</condition>
+      </rule>
+    </filter>
+    <filter id="denyForEasyShareFolder">
+      <rule grant="false">
+        <type>EasyShareFolder</type>
+      </rule>
+    </filter>
   </extension>
 
   <extension target="org.nuxeo.ecm.platform.actions.ActionService" point="actions">
