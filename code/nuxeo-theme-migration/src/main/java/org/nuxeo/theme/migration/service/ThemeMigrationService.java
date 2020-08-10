@@ -20,6 +20,7 @@ package org.nuxeo.theme.migration.service;
 
 import org.nuxeo.ecm.web.resources.api.service.WebResourceManager;
 import org.nuxeo.ecm.web.resources.core.ResourceDescriptor;
+import org.nuxeo.runtime.RuntimeMessage.Level;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.logging.DeprecationLogger;
 import org.nuxeo.runtime.model.ComponentInstance;
@@ -45,7 +46,7 @@ public class ThemeMigrationService extends DefaultComponent {
                         + "point '%s': a compatibility registration was performed but it may not be " + "accurate.",
                         r.getName(), contributor.getName(), WR_XP);
                 DeprecationLogger.log(message, "7.4");
-                Framework.getRuntime().getMessageHandler().addWarning(message);
+                addRuntimeMessage(Level.WARNING, message);
                 // ensure path is absolute, consider that resource is in the war, and if not, user will have to declare
                 // it directly to the WRM endpoint
                 String path = r.getPath();
@@ -58,14 +59,14 @@ public class ThemeMigrationService extends DefaultComponent {
                 String message = String.format("Warning: unknown contribution to target extension point '%s' of '%s'. "
                         + "Check your extension in component %s", extensionPoint, XP, contributor.getName());
                 DeprecationLogger.log(message, "7.4");
-                Framework.getRuntime().getMessageHandler().addWarning(message);
+                addRuntimeMessage(Level.WARNING, message);
             }
         } else {
             String message = String.format("Warning: target extension point '%s' of '%s'"
                     + " is unknown as it has been removed since 7.4. Check your extension in component %s",
                     extensionPoint, XP, contributor.getName());
             DeprecationLogger.log(message, "7.4");
-            Framework.getRuntime().getMessageHandler().addWarning(message);
+            addRuntimeMessage(Level.WARNING, message);
         }
     }
 
