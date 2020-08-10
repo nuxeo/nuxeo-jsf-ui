@@ -31,7 +31,7 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.VersioningOption;
 import org.nuxeo.ecm.core.api.model.PropertyNotFoundException;
-import org.nuxeo.runtime.api.Framework;
+import org.nuxeo.runtime.RuntimeMessage.Level;
 import org.nuxeo.runtime.logging.DeprecationLogger;
 import org.nuxeo.runtime.model.ComponentInstance;
 import org.nuxeo.runtime.model.DefaultComponent;
@@ -126,7 +126,7 @@ public class BulkEditServiceImpl extends DefaultComponent implements BulkEditSer
             String message = "Extension point 'versioning' has been deprecated and corresponding behavior removed from "
                     + "Nuxeo Platform. Please use versioning policy instead.";
             DeprecationLogger.log(message, "9.1");
-            Framework.getRuntime().getMessageHandler().addWarning(message);
+            addRuntimeMessage(Level.WARNING, message);
             VersioningDescriptor desc = (VersioningDescriptor) contribution;
             String defaultVer = desc.getDefaultVersioningOption();
             if (!StringUtils.isBlank(defaultVer)) {
