@@ -165,21 +165,14 @@ pipeline {
       steps {
         container('maven') {
           script {
-            // fetch version released
+            // fetch released version
             sh "git checkout release"
             def releaseVersion = readMavenPom().getVersion()
             // fetch current master SNAPSHOT version
             sh "git checkout master"
             def currentVersion = readMavenPom().getVersion()
-
-            echo """
-            ----------------------------------------
-            Update master parent version to latest SNAPSHOT
-            ----------------------------------------
-            """
-            sh "mvn ${MAVEN_ARGS} -V versions:update-parent -DgenerateBackupPoms=false -DallowSnapshots=true"
-            // fetch new SNAPSHOT version, same as the new parent version
-            def nextVersion = readMavenPom().getParent().getVersion()
+            // increment minor version
+            def nextVersion = sh(returnStdout: true, script: "perl -pe 's/\\b(\\d+)(?=\\D*\$)/\$1+1/e' <<< ${currentVersion}").trim()
 
             echo """
             ----------------------------------------
@@ -187,6 +180,9 @@ pipeline {
             ----------------------------------------
             """
             sh """
+              # root POM
+              perl -i -pe 's|<version>${currentVersion}</version>|<version>${nextVersion}</version>|' pom.xml
+
               mvn ${MAVEN_ARGS} versions:set -DnewVersion=${nextVersion} -DgenerateBackupPoms=false
               perl -i -pe 's|<nuxeo.jsf.version>.*?</nuxeo.jsf.version>|<nuxeo.jsf.version>${nextVersion}</nuxeo.jsf.version>|' pom.xml
 
