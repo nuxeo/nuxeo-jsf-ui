@@ -38,7 +38,9 @@ def isPullRequest() {
 
 void runFunctionalTests(String baseDir) {
   try {
-    sh "mvn -B -nsu -f ${baseDir}/pom.xml verify"
+    retry(2) {
+      sh "mvn -B -nsu -f ${baseDir}/pom.xml verify"
+    }
   } finally {
     try {
       archiveArtifacts allowEmptyArchive: true, artifacts: "${baseDir}/**/target/failsafe-reports/*, ${baseDir}/**/target/**/*.log, ${baseDir}/**/target/*.png, ${baseDir}/**/target/**/distribution.properties, ${baseDir}/**/target/**/configuration.properties"
@@ -110,7 +112,7 @@ pipeline {
         success {
           setGitHubBuildStatus('maven/build', 'Build', 'SUCCESS')
         }
-        failure {
+        unsuccessful {
           setGitHubBuildStatus('maven/build', 'Build', 'FAILURE')
         }
       }
@@ -135,7 +137,7 @@ pipeline {
         success {
           setGitHubBuildStatus('utests/dev', 'Unit tests - dev environment', 'SUCCESS')
         }
-        failure {
+        unsuccessful {
           setGitHubBuildStatus('utests/dev', 'Unit tests - dev environment', 'FAILURE')
         }
       }
@@ -157,7 +159,7 @@ pipeline {
         success {
           setGitHubBuildStatus('packages/build', 'Build Nuxeo packages', 'SUCCESS')
         }
-        failure {
+        unsuccessful {
           setGitHubBuildStatus('packages/build', 'Build Nuxeo packages', 'FAILURE')
         }
       }
@@ -166,24 +168,22 @@ pipeline {
     stage('Run "dev" functional tests') {
       steps {
         setGitHubBuildStatus('ftests/dev', 'Functional tests - dev environment', 'PENDING')
-        retry(2) {
-          container('maven') {
-            echo """
-              ----------------------------------------
-              Run "dev" functional tests
-              ----------------------------------------
-            """
-            runFunctionalTests('ftests')
-          }
+        container('maven') {
+          echo """
+            ----------------------------------------
+            Run "dev" functional tests
+            ----------------------------------------
+          """
+          runFunctionalTests('ftests')
         }
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-diff-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-jsf-ui-hotreload-tests/**/log/server.log", unstableIfFound: true
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-jsf-ui-webdriver-tests/**/log/server.log", unstableIfFound: true
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-lang-ext-incomplete-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-platform-forms-layout-demo-tests/**/log/server.log", unstableIfFound: true
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-signature-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-smart-search-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-virtual-navigation-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-diff-jsf-ui-ftests/**/log/server.log"
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-jsf-ui-hotreload-tests/**/log/server.log"
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-jsf-ui-webdriver-tests/**/log/server.log"
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-lang-ext-incomplete-jsf-ui-ftests/**/log/server.log"
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-platform-forms-layout-demo-tests/**/log/server.log"
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-signature-jsf-ui-ftests/**/log/server.log"
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-smart-search-jsf-ui-ftests/**/log/server.log"
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-virtual-navigation-jsf-ui-ftests/**/log/server.log"
       }
       post {
         always {
@@ -192,7 +192,7 @@ pipeline {
         success {
           setGitHubBuildStatus('ftests/dev', 'Functional tests - dev environment', 'SUCCESS')
         }
-        failure {
+        unsuccessful {
           setGitHubBuildStatus('ftests/dev', 'Functional tests - dev environment', 'FAILURE')
         }
       }
