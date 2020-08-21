@@ -63,7 +63,6 @@ pipeline {
   environment {
     MAVEN_ARGS = '-B -nsu -Dnuxeo.skip.enforcer=true'
     MAVEN_OPTS = "$MAVEN_OPTS -Xms512m -Xmx3072m"
-    CONNECT_PREPROD_URL = 'https://nos-preprod-connect.nuxeocloud.com/nuxeo'
   }
 
   stages {
