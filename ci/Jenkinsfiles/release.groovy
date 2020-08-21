@@ -23,6 +23,22 @@ properties([
   disableConcurrentBuilds(),
 ])
 
+void uploadPackages(String url, String credentialsId) {
+  echo """
+  ----------------------------------------
+  Upload Nuxeo Packages to ${url}
+  ----------------------------------------
+  """
+  withCredentials([usernameColonPassword(credentialsId: credentialsId, variable: 'auth')]) {
+    sh """
+      PACKAGES_TO_UPLOAD="packages/nuxeo-marketplace-jsf-ui/target/nuxeo-marketplace-jsf-ui-*.zip packages/nuxeo-*-package/target/nuxeo-*-package-*.zip"
+      for file in \$PACKAGES_TO_UPLOAD ; do
+        curl --fail -i -u "${auth}" -F package=@\$(ls \$file) "${url}"/site/marketplace/upload?batch=true ;
+      done
+    """
+  }
+}
+
 pipeline {
   agent {
     label 'jenkins-nuxeo-jsf-11'
@@ -36,6 +52,7 @@ pipeline {
   environment {
     MAVEN_ARGS = '-B -nsu -Dnuxeo.skip.enforcer=true -Prelease'
     MAVEN_OPTS = "$MAVEN_OPTS -Xms512m -Xmx3072m"
+    CONNECT_PREPROD_URL = 'https://nos-preprod-connect.nuxeocloud.com/nuxeo'
     CONNECT_PROD_URL = 'https://connect.nuxeo.com/nuxeo'
   }
 
@@ -144,19 +161,8 @@ pipeline {
       }
       steps {
         container('maven') {
-          echo """
-          ----------------------------------------
-          Upload Nuxeo Packages to ${CONNECT_PROD_URL}
-          ----------------------------------------
-          """
-          withCredentials([usernameColonPassword(credentialsId: 'connect-prod', variable: 'CONNECT_PASS')]) {
-            sh """
-              PACKAGES_TO_UPLOAD="packages/nuxeo-marketplace-jsf-ui/target/nuxeo-marketplace-jsf-ui-*.zip packages/nuxeo-*-package/target/nuxeo-*-package-*.zip"
-              for file in \$PACKAGES_TO_UPLOAD ; do
-                curl --fail -i -u "$CONNECT_PASS" -F package=@\$(ls \$file) "$CONNECT_PROD_URL"/site/marketplace/upload?batch=true ;
-              done
-            """
-          }
+          uploadPackages("${CONNECT_PROD_URL}", 'connect-prod')
+          uploadPackages("${CONNECT_PREPROD_URL}", 'connect-preprod')
         }
       }
     }
