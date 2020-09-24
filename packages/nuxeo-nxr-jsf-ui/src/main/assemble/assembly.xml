@@ -34,7 +34,10 @@
         <excludes>
           <!-- these will be re-added through the templates -->
           <artifact artifactId="h2" />
-          <artifact artifactId="mongo-java-driver" />
+          <artifact artifactId="bson" />
+          <artifact artifactId="mongodb-driver-core" />
+          <artifact artifactId="mongodb-driver-legacy" />
+          <artifact artifactId="mongodb-driver-sync" />
           <artifact artifactId="mysql-connector-java" />
           <artifact artifactId="mariadb-java-client" />
           <artifact artifactId="postgresql" />
