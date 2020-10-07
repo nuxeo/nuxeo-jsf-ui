@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.nuxeo.ecm.platform</groupId>
     <artifactId>nuxeo-jsf-ui-code</artifactId>
-    <version>11.3-SNAPSHOT</version>
+    <version>11.3</version>
   </parent>
   <artifactId>nuxeo-platform-video-jsf</artifactId>
   <name>Nuxeo Platform Video JSF</name>
