@@ -186,11 +186,13 @@ pipeline {
             ----------------------------------------
             """
             sh """
-              # root POM
-              perl -i -pe 's|<version>${currentVersion}</version>|<version>${nextVersion}</version>|' pom.xml
-
+              # first set the new version while the parent pom version is still the old one
+              # to avoid maven complaining that the new parent SNAPSHOT is not available
               mvn ${MAVEN_ARGS} versions:set -DnewVersion=${nextVersion} -DgenerateBackupPoms=false
               perl -i -pe 's|<nuxeo.jsf.version>.*?</nuxeo.jsf.version>|<nuxeo.jsf.version>${nextVersion}</nuxeo.jsf.version>|' pom.xml
+
+              # now update the root POM parent version
+              perl -i -pe 's|<version>${currentVersion}</version>|<version>${nextVersion}</version>|' pom.xml
 
               git commit -a -m "Post release ${releaseVersion}, update ${currentVersion} to ${nextVersion}"
             """
