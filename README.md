@@ -1,5 +1,7 @@
 # Nuxeo JSF UI
 
+[![Build Status](https://jenkins.platform.dev.nuxeo.com/buildStatus/icon?job=nuxeo/nuxeo-jsf-ui/master)](https://jenkins.platform.dev.nuxeo.com/job/nuxeo/job/nuxeo-jsf-ui/job/master/)
+
 # License
 [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
 
