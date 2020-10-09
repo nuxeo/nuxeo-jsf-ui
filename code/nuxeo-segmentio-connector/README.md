@@ -35,12 +35,6 @@ Install lib
     cp ~/.m2/repository/com/github/segmentio/analytics/0.3.1/analytics-0.3.1.jar $NUXEO_HOME/templates/custom/lib/
     cp ~/.m2/repository/com/google/code/gson/gson/2.2/gson-2.2.jar $NUXEO_HOME/templates/custom/lib/
 
-## Downloadling
-
-The project is automatically built by http://qa.nuxeo.org/jenkins/job/addons_nuxeo-segment.io-connector-master/
-
-You can download the last stable JAR from: http://qa.nuxeo.org/jenkins/job/addons_nuxeo-segment.io-connector-master/lastSuccessfulBuild/artifact/target/
-
 ## Server side integration
 
 The SegmentIO API is exposed a Nuxeo Service and plugged to Nuxeo event bus via a mapping system.
@@ -262,10 +256,6 @@ This extension point allow you to control the segmentIO integrations to enable f
 	</extension>
 
 NB: by default, all integrations are enabled. If only one is enabled, it will disable the others.
-
-## QA results
-
-[![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=addons_nuxeo-segment.io-connector-master)](https://qa.nuxeo.org/jenkins/job/addons_nuxeo-segment.io-connector-master/)
 
 # About Nuxeo
 

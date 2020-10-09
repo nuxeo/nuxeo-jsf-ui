@@ -13,10 +13,6 @@ The comparison also takes into account blob-type properties.
 
 Install [the Nuxeo Diff Marketplace Package](https://connect.nuxeo.com/nuxeo/site/marketplace/package/nuxeo-diff).
 
-## QA results
-
-[![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=master/addons_nuxeo-diff-master)](https://qa.nuxeo.org/jenkins/job/master/job/addons_nuxeo-diff-master/)
-
 ## Configuring
 
 ### Diff display
