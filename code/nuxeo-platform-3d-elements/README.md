@@ -1,5 +1,3 @@
-[![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=master/nuxeo-3d-elements-master)](https://qa.nuxeo.org/jenkins/job/master/job/nuxeo-3d-elements-master/)
-
 # About nuxeo-3d-elements
 
 **Nuxeo 3D Elements** is an ongoing work to develop a set of 3D elements for Polymer applications with Nuxeo.

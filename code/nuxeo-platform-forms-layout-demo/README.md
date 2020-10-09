@@ -6,12 +6,6 @@ The application is visible at http://localhost:8080/nuxeo/layoutDemo
 
 Webdriver tests also ensure that all standard widget types are working ok.
 
-Unit Tests: [![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=addons_nuxeo-platform-forms-layout-demo-master)](https://qa.nuxeo.org/jenkins/job/addons_nuxeo-platform-forms-layout-demo-master/)
-
-Webdriver Tests: [![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=addons_FT_nuxeo-platform-forms-layout-demo-master-webdriver)](https://qa.nuxeo.org/jenkins/job/addons_FT_nuxeo-platform-forms-layout-demo-master-webdriver/)
-
-Webdriver List Widget Compat Tests: [![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=addons_FT_nuxeo-platform-forms-layout-demo-master-webdriver-list-widget)](https://qa.nuxeo.org/jenkins/job/addons_FT_nuxeo-platform-forms-layout-demo-master-webdriver-list-widget/)
-
 The application presents standard widget types available to the Nuxeo layout service, and can be used as a demo, reference and preview application.
 
 You can browse widget types by clicking on items in the left menu.

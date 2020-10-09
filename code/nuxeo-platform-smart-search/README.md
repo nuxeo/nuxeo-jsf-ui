@@ -14,10 +14,6 @@ page.
 
 Status: Deprecated since LTS 2016
 
-Unit Tests: [![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=addons_nuxeo-platform-smart-search-master)](https://qa.nuxeo.org/jenkins/job/addons_nuxeo-platform-smart-search-master/)
-
-Webdriver Tests: [![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=addons_FT_nuxeo-platform-smart-search-master)](https://qa.nuxeo.org/jenkins/job/addons_FT_nuxeo-platform-smart-search-master/)
-
 ## Building
 
     mvn clean install
