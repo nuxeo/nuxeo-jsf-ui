@@ -24,15 +24,7 @@
     </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.liveconnect</groupId>
-      <artifactId>nuxeo-liveconnect-dropbox-jsf</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.nuxeo.ecm.liveconnect</groupId>
       <artifactId>nuxeo-liveconnect-google-drive-jsf</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.nuxeo.ecm.liveconnect</groupId>
-      <artifactId>nuxeo-liveconnect-onedrive-jsf</artifactId>
     </dependency>
 
   </dependencies>
