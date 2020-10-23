@@ -26,11 +26,9 @@
     <module>nuxeo-elasticsearch-web</module>
     <module>nuxeo-groups-rights-audit</module>
     <module>nuxeo-liveconnect-box-jsf</module>
-    <module>nuxeo-liveconnect-dropbox-jsf</module>
     <module>nuxeo-liveconnect-google-drive-jsf</module>
     <module>nuxeo-liveconnect-jsf</module>
     <module>nuxeo-liveconnect-jsf-dependencies</module>
-    <module>nuxeo-liveconnect-onedrive-jsf</module>
     <module>nuxeo-localconf-web</module>
     <module>nuxeo-multi-tenant-jsf</module>
     <module>nuxeo-platform-3d-jsf</module>

@@ -119,11 +119,6 @@
       </dependency>
       <dependency>
         <groupId>org.nuxeo.ecm.liveconnect</groupId>
-        <artifactId>nuxeo-liveconnect-dropbox-jsf</artifactId>
-        <version>${nuxeo.jsf.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.liveconnect</groupId>
         <artifactId>nuxeo-liveconnect-google-drive-jsf</artifactId>
         <version>${nuxeo.jsf.version}</version>
       </dependency>
@@ -137,11 +132,6 @@
         <artifactId>nuxeo-liveconnect-jsf-dependencies</artifactId>
         <version>${nuxeo.jsf.version}</version>
         <type>pom</type>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.liveconnect</groupId>
-        <artifactId>nuxeo-liveconnect-onedrive-jsf</artifactId>
-        <version>${nuxeo.jsf.version}</version>
       </dependency>
       <dependency>
         <groupId>org.nuxeo.ecm.localconf</groupId>
