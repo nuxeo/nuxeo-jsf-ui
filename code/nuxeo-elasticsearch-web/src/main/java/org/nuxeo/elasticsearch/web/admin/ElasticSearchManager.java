@@ -198,7 +198,7 @@ public class ElasticSearchManager implements Serializable {
         String[] indices = getIndexNames();
         SearchResponse ret = esa.getClient().search(new SearchRequest(indices)
                 .source(new SearchSourceBuilder().query(QueryBuilders.matchAllQuery()).size(0)));
-        return Long.valueOf(ret.getHits().totalHits).toString();
+        return Long.valueOf(ret.getHits().getTotalHits().value).toString();
     }
 
     private String[] getIndexNames() {
