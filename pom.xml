@@ -718,6 +718,18 @@
         </exclusions>
       </dependency>
       <dependency>
+        <!-- also a jboss-seam-pdf dependency -->
+        <groupId>com.github.librepdf</groupId>
+        <artifactId>pdf-rtf</artifactId>
+        <version>1.1.0</version>
+      </dependency>
+      <dependency>
+        <!-- also a jboss-seam-pdf dependency -->
+        <groupId>com.github.librepdf</groupId>
+        <artifactId>pdf-html</artifactId>
+        <version>1.2.16</version>
+      </dependency>
+      <dependency>
         <groupId>org.jboss.seam</groupId>
         <artifactId>jboss-seam-rss</artifactId>
         <version>${seam.version}</version>
@@ -767,6 +779,21 @@
             <artifactId>eclipse-core-runtime</artifactId>
           </exclusion>
         </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.restlet.jse</groupId>
+        <artifactId>org.restlet.ext.fileupload</artifactId>
+        <version>${restlet.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.restlet.jee</groupId>
+        <artifactId>org.restlet.ext.servlet</artifactId>
+        <version>${restlet.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>xmlunit</groupId>
+        <artifactId>xmlunit</artifactId>
+        <version>1.4</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
