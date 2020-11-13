@@ -14,7 +14,7 @@
   <dependencies>
     <dependency>
       <groupId>org.nuxeo.ecm.platform</groupId>
-      <artifactId>nuxeo-platform-3d-api</artifactId>
+      <artifactId>nuxeo-platform-3d</artifactId>
     </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.platform</groupId>

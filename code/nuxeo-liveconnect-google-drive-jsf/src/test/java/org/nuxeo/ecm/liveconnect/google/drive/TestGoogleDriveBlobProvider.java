@@ -23,6 +23,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.nuxeo.ecm.liveconnect.LiveConnectFeature.SERVICE_GOOGLE_DRIVE_ID;
+import static org.nuxeo.ecm.liveconnect.LiveConnectFeature.USER_ID;
+import static org.nuxeo.ecm.liveconnect.LiveConnectFeature.createBlob;
+import static org.nuxeo.ecm.liveconnect.google.drive.GoogleDriveBlobProvider.DEFAULT_EXPORT_MIMETYPE;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,24 +40,40 @@ import javax.inject.Inject;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.VersioningOption;
-import org.nuxeo.ecm.core.blob.BlobInfo;
 import org.nuxeo.ecm.core.blob.BlobManager;
 import org.nuxeo.ecm.core.blob.BlobProvider;
 import org.nuxeo.ecm.core.blob.DocumentBlobManager;
 import org.nuxeo.ecm.core.blob.ManagedBlob;
-import org.nuxeo.ecm.core.blob.SimpleManagedBlob;
 import org.nuxeo.ecm.core.blob.apps.AppLink;
+import org.nuxeo.ecm.liveconnect.LiveConnectFeature;
+import org.nuxeo.runtime.test.runner.Deploy;
+import org.nuxeo.runtime.test.runner.Features;
+import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import org.nuxeo.runtime.test.runner.HotDeployer;
 
-public class TestGoogleDriveBlobProvider extends GoogleDriveTestCase {
+@RunWith(FeaturesRunner.class)
+@Features(LiveConnectFeature.class)
+public class TestGoogleDriveBlobProvider {
 
-    // same as in test XML contrib
-    private static final String PREFIX = "googledrive";
+    protected static final String USERNAME = USER_ID.replace("@.*", "");
+
+    protected static final String JPEG_FILE_ID = "12341234";
+
+    protected static final String JPEG_REV_ID = "v1abcd";
+
+    protected static final int JPEG_SIZE = 36830;
+
+    protected static final int JPEG_REV_SIZE = 18581;
+
+    protected static final String GOOGLEDOC_FILE_ID = "56785678";
+
+    protected static final String GOOGLEDOC_REV_ID = "4551";
 
     @Inject
     protected HotDeployer deployer;
@@ -67,32 +87,22 @@ public class TestGoogleDriveBlobProvider extends GoogleDriveTestCase {
     @Inject
     protected CoreSession session;
 
-    protected BlobInfo newBlobInfo() {
-        BlobInfo blobInfo = new BlobInfo();
-        // we need a digest otherwise async convert jobs fail to compute a cache key when there's no actual stream
-        // linked to the blob (native Google documents)
-        blobInfo.digest = UUID.randomUUID().toString();
-        return blobInfo;
-    }
-
     @Test
     public void testSupportsUserUpdate() throws Exception {
-        BlobProvider blobProvider = blobManager.getBlobProvider(PREFIX);
+        BlobProvider blobProvider = blobManager.getBlobProvider(SERVICE_GOOGLE_DRIVE_ID);
         assertTrue(blobProvider.supportsUserUpdate());
         assertTrue(blobProvider.supportsSync());
 
         // check that we can prevent user updates of blobs by configuration
-        deployer.deploy("org.nuxeo.ecm.liveconnect.google.drive.core.test:OSGI-INF/test-googledrive-config2.xml");
-        blobProvider = blobManager.getBlobProvider(PREFIX);
+        deployer.deploy("org.nuxeo.ecm.liveconnect.test:OSGI-INF/test-googledrive-config2.xml");
+        blobProvider = blobManager.getBlobProvider(SERVICE_GOOGLE_DRIVE_ID);
         assertFalse(blobProvider.supportsUserUpdate());
         assertFalse(blobProvider.supportsSync());
     }
 
     @Test
     public void testStreamUploaded() throws Exception {
-        BlobInfo blobInfo = newBlobInfo();
-        blobInfo.key = PREFIX + ":" + USERID + ":" + JPEG_FILEID;
-        Blob blob = new SimpleManagedBlob(blobInfo);
+        Blob blob = createBlob(SERVICE_GOOGLE_DRIVE_ID, JPEG_FILE_ID);
         try (InputStream is = blob.getStream()) {
             assertNotNull(is);
             byte[] bytes = IOUtils.toByteArray(is);
@@ -102,9 +112,7 @@ public class TestGoogleDriveBlobProvider extends GoogleDriveTestCase {
 
     @Test
     public void testStreamRevisionUploaded() throws Exception {
-        BlobInfo blobInfo = newBlobInfo();
-        blobInfo.key = PREFIX + ":" + USERID + ":" + JPEG_FILEID + ":" + JPEG_REVID;
-        Blob blob = new SimpleManagedBlob(blobInfo);
+        Blob blob = createBlob(SERVICE_GOOGLE_DRIVE_ID, JPEG_FILE_ID, UUID.randomUUID().toString(), JPEG_REV_ID);
         try (InputStream is = blob.getStream()) {
             assertNotNull(is);
             byte[] bytes = IOUtils.toByteArray(is);
@@ -114,9 +122,7 @@ public class TestGoogleDriveBlobProvider extends GoogleDriveTestCase {
 
     @Test
     public void testStreamNative() throws Exception {
-        BlobInfo blobInfo = newBlobInfo();
-        blobInfo.key = PREFIX + ":" + USERID + ":" + GOOGLEDOC_FILEID;
-        Blob blob = new SimpleManagedBlob(blobInfo);
+        Blob blob = createBlob(SERVICE_GOOGLE_DRIVE_ID, GOOGLEDOC_FILE_ID);
         try (InputStream is = blob.getStream()) {
             assertNull(is);
         }
@@ -124,9 +130,8 @@ public class TestGoogleDriveBlobProvider extends GoogleDriveTestCase {
 
     @Test
     public void testStreamRevisionNative() throws Exception {
-        BlobInfo blobInfo = newBlobInfo();
-        blobInfo.key = PREFIX + ":" + USERID + ":" + GOOGLEDOC_FILEID + ":" + GOOGLEDOC_REVID;
-        Blob blob = new SimpleManagedBlob(blobInfo);
+        Blob blob = createBlob(SERVICE_GOOGLE_DRIVE_ID, GOOGLEDOC_FILE_ID, UUID.randomUUID().toString(),
+                GOOGLEDOC_REV_ID);
         try (InputStream is = blob.getStream()) {
             assertNull(is);
         }
@@ -134,29 +139,23 @@ public class TestGoogleDriveBlobProvider extends GoogleDriveTestCase {
 
     @Test
     public void testExportedLinksUploaded() throws IOException {
-        BlobInfo blobInfo = newBlobInfo();
-        blobInfo.key = PREFIX + ":" + USERID + ":" + JPEG_FILEID;
-        ManagedBlob blob = new SimpleManagedBlob(blobInfo);
+        Blob blob = createBlob(SERVICE_GOOGLE_DRIVE_ID, JPEG_FILE_ID);
         Map<String, URI> map = blobManager.getAvailableConversions(blob, null);
         assertTrue(map.isEmpty());
     }
 
     @Test
     public void testExportedLinksNative() throws IOException {
-        BlobInfo blobInfo = newBlobInfo();
-        blobInfo.key = PREFIX + ":" + USERID + ":" + GOOGLEDOC_FILEID;
-        ManagedBlob blob = new SimpleManagedBlob(blobInfo);
+        Blob blob = createBlob(SERVICE_GOOGLE_DRIVE_ID, GOOGLEDOC_FILE_ID);
         Map<String, URI> map = blobManager.getAvailableConversions(blob, null);
         assertTrue(map.containsKey("application/pdf"));
     }
 
     @Test
     public void testAppLinks() throws IOException {
-        BlobInfo blobInfo = newBlobInfo();
-        blobInfo.key = PREFIX + ":" + USERID + ":" + JPEG_FILEID;
-        ManagedBlob blob = new SimpleManagedBlob(blobInfo);
+        ManagedBlob blob = createBlob(SERVICE_GOOGLE_DRIVE_ID, JPEG_FILE_ID);
 
-        BlobProvider provider = blobManager.getBlobProvider(PREFIX);
+        BlobProvider provider = blobManager.getBlobProvider(SERVICE_GOOGLE_DRIVE_ID);
         List<AppLink> appLinks = provider.getAppLinks(USERNAME, blob);
 
         assertEquals(2, appLinks.size());
@@ -169,12 +168,10 @@ public class TestGoogleDriveBlobProvider extends GoogleDriveTestCase {
     }
 
     @Test
-    public void testSaveBlob() throws Exception {
+    public void testSaveBlob() {
         DocumentModel doc = session.createDocumentModel("/", "doc", "File");
 
-        BlobInfo blobInfo = newBlobInfo();
-        blobInfo.key = PREFIX + ":" + USERID + ":" + JPEG_FILEID;
-        Blob blob = new SimpleManagedBlob(blobInfo);
+        Blob blob = createBlob(SERVICE_GOOGLE_DRIVE_ID, JPEG_FILE_ID);
         doc.setPropertyValue("file:content", (Serializable) blob);
 
         session.createDocument(doc);
@@ -185,18 +182,19 @@ public class TestGoogleDriveBlobProvider extends GoogleDriveTestCase {
 
         assertTrue(blob instanceof ManagedBlob);
         ManagedBlob mb = (ManagedBlob) blob;
-        assertEquals(PREFIX, mb.getProviderId());
-        assertEquals(PREFIX + ":" + USERID + ":" + JPEG_FILEID, mb.getKey());
+        assertEquals(SERVICE_GOOGLE_DRIVE_ID, mb.getProviderId());
+        assertEquals(SERVICE_GOOGLE_DRIVE_ID + ":" + USER_ID + ":" + JPEG_FILE_ID, mb.getKey());
     }
 
     @Test
-    public void testBlobCheckInUploaded() throws Exception {
-        testBlobCheckIn(JPEG_FILEID, JPEG_REVID);
+    public void testBlobCheckInUploaded() {
+        testBlobCheckIn(JPEG_FILE_ID, JPEG_REV_ID);
     }
 
     @Test
+    @Deploy("org.nuxeo.ecm.liveconnect.google.drive.jsf.test:test-liveconnect-disable-fulltext-config.xml")
     public void testBlobCheckInNative() throws Exception {
-        DocumentModel version = testBlobCheckIn(GOOGLEDOC_FILEID, GOOGLEDOC_REVID);
+        DocumentModel version = testBlobCheckIn(GOOGLEDOC_FILE_ID, GOOGLEDOC_REV_ID);
         assertTrue(version.hasFacet(GoogleDriveBlobProvider.BLOB_CONVERSIONS_FACET));
 
         Blob blob = (Blob) version.getPropertyValue("file:content");
@@ -205,15 +203,13 @@ public class TestGoogleDriveBlobProvider extends GoogleDriveTestCase {
         assertTrue(blobManager.getAvailableConversions(blob, BlobManager.UsageHint.STREAM).isEmpty());
 
         // still we can get our stored conversion
-        assertNotNull(documentBlobManager.getConvertedStream(blob, GoogleDriveBlobProvider.DEFAULT_EXPORT_MIMETYPE, version));
+        assertNotNull(documentBlobManager.getConvertedStream(blob, DEFAULT_EXPORT_MIMETYPE, version));
 
     }
 
     protected DocumentModel testBlobCheckIn(String fileId, String revisionId) {
         DocumentModel doc = session.createDocumentModel("/", "doc", "File");
-        BlobInfo blobInfo = newBlobInfo();
-        blobInfo.key = PREFIX + ":" + USERID + ":" + fileId;
-        Blob blob = new SimpleManagedBlob(blobInfo);
+        Blob blob = createBlob(SERVICE_GOOGLE_DRIVE_ID, fileId);
         doc.setPropertyValue("file:content", (Serializable) blob);
         session.createDocument(doc);
         session.save();
@@ -225,8 +221,8 @@ public class TestGoogleDriveBlobProvider extends GoogleDriveTestCase {
         Blob verBlob = (Blob) version.getPropertyValue("file:content");
         assertTrue(verBlob instanceof ManagedBlob);
         ManagedBlob mvb = (ManagedBlob) verBlob;
-        assertEquals(PREFIX, mvb.getProviderId());
-        assertEquals(PREFIX + ":" + USERID + ":" + fileId + ":" + revisionId, mvb.getKey());
+        assertEquals(SERVICE_GOOGLE_DRIVE_ID, mvb.getProviderId());
+        assertEquals(SERVICE_GOOGLE_DRIVE_ID + ":" + USER_ID + ":" + fileId + ":" + revisionId, mvb.getKey());
 
         return version;
     }
