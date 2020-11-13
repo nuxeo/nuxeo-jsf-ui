@@ -18,7 +18,7 @@
 
     <dependency>
       <groupId>org.nuxeo.ecm.liveconnect</groupId>
-      <artifactId>nuxeo-liveconnect-core</artifactId>
+      <artifactId>nuxeo-liveconnect</artifactId>
     </dependency>
 
     <!-- test -->

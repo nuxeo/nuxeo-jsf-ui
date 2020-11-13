@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.liveconnect.google.drive.work.config.test" version="1.0">
+
+  <extension target="org.nuxeo.ecm.core.work.service" point="queues">
+    <queue id="fulltextExtractor" queueing="false">
+      <name>Fulltext extractor queue deactivated for test purpose</name>
+      <category>fulltextExtractor</category>
+    </queue>
+    <queue id="fulltextUpdater" queueing="false">
+      <name>Fulltext updater queue deactivated for test purpose</name>
+      <category>fulltextUpdater</category>
+    </queue>
+  </extension>
+
+</component>

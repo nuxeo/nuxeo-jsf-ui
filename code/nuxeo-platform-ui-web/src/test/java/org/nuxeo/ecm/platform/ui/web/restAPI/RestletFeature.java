@@ -25,7 +25,7 @@ import org.nuxeo.runtime.test.runner.RunnerFeature;
 
 @Deploy("org.nuxeo.ecm.platform.login")
 @Deploy("org.nuxeo.ecm.platform.ui")
-@Deploy("org.nuxeo.ecm.platform.url.core")
+@Deploy("org.nuxeo.ecm.platform.url")
 @Deploy("org.nuxeo.ecm.platform.web.common")
 @Deploy("org.nuxeo.ecm.platform.ui.test:OSGI-INF/runtimeserver-restlet-contrib.xml")
 @Features(ServletContainerTransactionalFeature.class)

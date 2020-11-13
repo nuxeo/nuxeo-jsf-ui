@@ -21,11 +21,11 @@
     </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.liveconnect</groupId>
-      <artifactId>nuxeo-liveconnect-jsf</artifactId>
+      <artifactId>nuxeo-liveconnect</artifactId>
     </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.liveconnect</groupId>
-      <artifactId>nuxeo-liveconnect-box-core</artifactId>
+      <artifactId>nuxeo-liveconnect-jsf</artifactId>
     </dependency>
 
     <!-- Box libraries -->

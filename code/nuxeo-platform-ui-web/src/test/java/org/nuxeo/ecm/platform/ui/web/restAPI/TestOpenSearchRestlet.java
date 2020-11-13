@@ -38,7 +38,7 @@ import org.nuxeo.runtime.test.runner.TransactionalFeature;
 
 @Features(CoreFeature.class)
 @RepositoryConfig(cleanup = Granularity.METHOD)
-@Deploy("org.nuxeo.ecm.platform.types.core")
+@Deploy("org.nuxeo.ecm.platform.types")
 public class TestOpenSearchRestlet extends AbstractRestletTest {
 
     protected static final String ENDPOINT = "/opensearch";

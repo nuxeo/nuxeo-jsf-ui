@@ -33,8 +33,7 @@ import org.nuxeo.runtime.test.runner.TransactionalFeature;
 
 @Features(CoreFeature.class)
 @RepositoryConfig(cleanup = Granularity.METHOD)
-@Deploy("org.nuxeo.ecm.platform.filemanager.api")
-@Deploy("org.nuxeo.ecm.platform.filemanager.core")
+@Deploy("org.nuxeo.ecm.platform.filemanager")
 @Deploy("org.nuxeo.ecm.platform.query.api")
 public class TestCreationContainerListRestlet extends AbstractRestletTest {
 
