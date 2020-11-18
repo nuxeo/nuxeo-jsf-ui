@@ -4,8 +4,7 @@
   <description>The Nuxeo Shibboleth Invitation addon provides the ability to invite external user to access the Nuxeo Platform through basic or Shibboleth authentication.</description>
   <vendor>Nuxeo</vendor>
   <platforms>
-    <platform>server-@NUXEO_PLATFORM_VERSION@</platform>
-    <platform>server-@NUXEO_PLATFORM_VERSION@-*</platform>
+    <platform>@DISTRIBUTION_NAME@-@NUXEO_PLATFORM_VERSION@</platform>
   </platforms>
   <dependencies>
     <package>shibboleth-authentication</package>

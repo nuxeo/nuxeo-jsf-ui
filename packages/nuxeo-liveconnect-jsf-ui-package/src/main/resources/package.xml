@@ -4,8 +4,7 @@
   <description>This is the JSF UI package for Nuxeo Live Connect.</description>
   <vendor>Nuxeo</vendor>
   <platforms>
-    <platform>server-@NUXEO_PLATFORM_VERSION@</platform>
-    <platform>server-@NUXEO_PLATFORM_VERSION@-*</platform>
+    <platform>@DISTRIBUTION_NAME@-@NUXEO_PLATFORM_VERSION@</platform>
   </platforms>
   <dependencies>
     <package>nuxeo-liveconnect</package>

@@ -5,8 +5,7 @@
 The Nuxeo Platform User Registration addon allows you to invite external people to access a specific workspace / folder to work in with specified rights. The flow is such that user will be able to fill a form so as to create an account in the system.  </description>
   <vendor>Nuxeo</vendor>
   <platforms>
-    <platform>server-@NUXEO_PLATFORM_VERSION@</platform>
-    <platform>server-@NUXEO_PLATFORM_VERSION@-*</platform>
+    <platform>@DISTRIBUTION_NAME@-@NUXEO_PLATFORM_VERSION@</platform>
   </platforms>
   <dependencies>
     <package>nuxeo-jsf-ui</package>
