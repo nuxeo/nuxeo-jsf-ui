@@ -6,8 +6,7 @@
   </description>
   <vendor>Nuxeo</vendor>
   <platforms>
-    <platform>server-@NUXEO_PLATFORM_VERSION@</platform>
-    <platform>server-@NUXEO_PLATFORM_VERSION@-*</platform>
+    <platform>@DISTRIBUTION_NAME@-@NUXEO_PLATFORM_VERSION@</platform>
   </platforms>
   <license>Apache 2.0</license>
   <license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
