@@ -54,6 +54,7 @@ pipeline {
     MAVEN_OPTS = "$MAVEN_OPTS -Xms512m -Xmx3072m"
     CONNECT_PREPROD_URL = 'https://nos-preprod-connect.nuxeocloud.com/nuxeo'
     CONNECT_PROD_URL = 'https://connect.nuxeo.com/nuxeo'
+    SLACK_CHANNEL = 'platform-notifs'
   }
 
   stages {
@@ -210,5 +211,26 @@ pipeline {
       }
     }
 
+  }
+  post {
+    success {
+      script {
+        if (env.DRY_RUN != 'true') {
+          sh "git checkout release"
+          def releaseVersion = readMavenPom().getVersion()
+          currentBuild.description = "Release ${releaseVersion}"
+          slackSend(channel: "${SLACK_CHANNEL}", color: 'good', message: "Successfully released nuxeo/nuxeo-jsf-ui ${releaseVersion}: ${BUILD_URL}")
+        }
+      }
+    }
+    unsuccessful {
+      script {
+        if (env.DRY_RUN != 'true') {
+          sh "git checkout release"
+          def releaseVersion = readMavenPom().getVersion()
+          slackSend(channel: "${SLACK_CHANNEL}", color: 'danger', message: "Failed to release nuxeo/nuxeo-jsf-ui ${releaseVersion}: ${BUILD_URL}")
+        }
+      }
+    }
   }
 }
