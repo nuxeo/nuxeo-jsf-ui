@@ -63,6 +63,7 @@ pipeline {
   environment {
     MAVEN_ARGS = '-B -nsu -Dnuxeo.skip.enforcer=true'
     MAVEN_OPTS = "$MAVEN_OPTS -Xms512m -Xmx3072m"
+    SLACK_CHANNEL = 'platform-notifs'
   }
 
   stages {
@@ -204,6 +205,22 @@ pipeline {
         if (!isPullRequest()) {
           // update JIRA issue
           step([$class: 'JiraIssueUpdater', issueSelector: [$class: 'DefaultIssueSelector'], scm: scm])
+        }
+      }
+    }
+    success {
+      script {
+        if (!isPullRequest() && env.DRY_RUN != 'true') {
+          if (!hudson.model.Result.SUCCESS.toString().equals(currentBuild.getPreviousBuild()?.getResult())) {
+            slackSend(channel: "${SLACK_CHANNEL}", color: 'good', message: "Successfully built nuxeo/nuxeo-jsf-ui ${BRANCH_NAME} #${BUILD_NUMBER}: ${BUILD_URL}")
+          }
+        }
+      }
+    }
+    unsuccessful {
+      script {
+        if (!isPullRequest() && env.DRY_RUN != 'true') {
+          slackSend(channel: "${SLACK_CHANNEL}", color: 'danger', message: "Failed to build nuxeo/nuxeo-jsf-ui ${BRANCH_NAME} #${BUILD_NUMBER}: ${BUILD_URL}")
         }
       }
     }
