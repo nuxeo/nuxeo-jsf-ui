@@ -97,13 +97,13 @@ public class TestContentViewState {
 
     String ENC_CURRENT_DOC_CHILDREN = "H4sIAAAAAAAAAI1Qy27CMBD8lz1b0PboWxWQikRpxOuCULR1FmLJsVM%2FeBTx710n9NJTTx6vZmdm5wbK2Ug2bjWdF9gSSCg2y%2BV0sa4mH8XmPYPibTaf8AgEdHik0ruTrsn%2Fk77S30x7EaCS9%2BxU8gzkk4CvRP5aomeZSD6A3EGkEKsOM63SNYgDmkDCJmPEDrDr2Jl4DCc0usbIeL8XEAi9aiZOpZYXQfZ8CM7HmT24LHzrf4UzqbUcuVYy6mgIBtZrUGRrbY8go090Z0lPIZk4x6tLLHgDO9xaPzwqo0PMCwIGIQkGP8mM%2FhJGZpBgnkcbDGdeDwvZSYDm%2BkuMDQuMMw7j9prfUdeLh8adi9V2euk45iPdb7jhmr421cPqGTg5XUil3Izsy7v%2FAB8GOT7iAQAA";
 
-    String ENC_CURRENT_DOC_CHILDREN_WITH_SEARCH_DOC = "H4sIAAAAAAAAAKWR3U4CMRCFX8XMrUuyC6hJ78iCgQSR8KMXxmw23Vls7LY4bcWV7Ls7BeUF7NX09JxvTtIjSGs8Gv%2Bk8LAoGwQB%2BXa1miw2xfgx3z7EIZ%2FO5mOWiufZZlqsJ6NVPr28QgL7codLsp%2BqQvoPY62%2BOdtPQAYi7rRkDUSawEdAapclMdsjORAvrwk4LEm%2Bja0MDXtBHMG3%2B7j7XmmMRLJ7JK%2FQxbeaxd9gJUVjK1UrrNjdT7NhLx32sttNdiMGd2I4uE75wMnoldeReV529Y7twVLloOu4gCU%2FM7WN2OPpllsdGsP2S%2FLsGjmJplJmB8JTwI5LELqg%2FbxsbeDuJmj9p50hEcp%2FE8ciAw7gF8rgY%2BW61A67H%2B4OaOu6AQAA";
+    String ENC_CURRENT_DOC_CHILDREN_WITH_SEARCH_DOC = "H4sIAAAAAAAAAKWR3U4CMRCFX8XMrUuyC6hJ78iC2U0QCT96Ycxm0x2wsbQ4bcWV7Ls7BeUF7FV7zpxvTtIjSGs8Gv%2Bk8DCrdwgC8vViMZmtqvFjvn6Il7wop2OWqudyVVTLyWiRFxcXEtjXW5yT%2FVQN0n8YS%2FXN2X4CMhBxpzlrINIEPgJSO6%2BJ2R7JgXh5TcBhTfJtbGXY8SyII%2Fh2H3ffK42RSHaP5BW66G1Y%2FA02UnjldRw9M67esT1YahycTOVcwIbdfpoNe%2Bmwl92ushsxuBPDwXXKB7qO11vypdnYCD2eXrnVYWc4d1lwnho5iaZRZgvCU8COKxC6oP20bm3g5iZo%2FaedIRHKPxOvVQYcwC%2BUwcdWm1o77H4ApZIr67gBAAA%3D";
 
     @Before
     public void setUp() {
         searchDocument = session.createDocumentModel("File");
         searchDocument.setPropertyValue("dc:title", "search keywords");
-        searchDocument.setPropertyValue("dc:modified", getModifiedDate());
+        searchDocument.setPropertyValue("dc:issued", getModifiedDate());
 
         currentDocument = session.getRootDocument();
 
@@ -238,7 +238,7 @@ public class TestContentViewState {
         state.setResultLayout(new ContentViewLayoutImpl("document_listing", "label.document_listing.layout", true,
                 "/icons/myicon.png", true));
         List<SortInfo> sortInfos = new ArrayList<>();
-        sortInfos.add(new SortInfo("dc:modified", false));
+        sortInfos.add(new SortInfo("dc:issued", false));
         state.setSortInfos(sortInfos);
 
         ContentView contentView = service.restoreContentView(state);
@@ -262,7 +262,7 @@ public class TestContentViewState {
         sortInfos = pp.getSortInfos();
         assertNotNull(sortInfos);
         assertEquals(1, sortInfos.size());
-        assertEquals("dc:modified", sortInfos.get(0).getSortColumn());
+        assertEquals("dc:issued", sortInfos.get(0).getSortColumn());
         assertFalse(sortInfos.get(0).getSortAscending());
 
         ContentViewLayout resultLayout = contentView.getCurrentResultLayout();
@@ -373,7 +373,7 @@ public class TestContentViewState {
         DocumentModel searchDoc = state.getSearchDocumentModel();
         assertNotNull(searchDoc);
         assertEquals("search keywords", searchDoc.getPropertyValue("dc:title"));
-        assertEquals(getModifiedDate(), searchDoc.getPropertyValue("dc:modified"));
+        assertEquals(getModifiedDate(), searchDoc.getPropertyValue("dc:issued"));
         assertNull(searchDoc.getPropertyValue("dc:description"));
         assertNull(state.getSortInfos());
 
@@ -409,7 +409,7 @@ public class TestContentViewState {
         DocumentModel searchDoc = state.getSearchDocumentModel();
         assertNotNull(searchDoc);
         assertEquals("search keywords", searchDoc.getPropertyValue("dc:title"));
-        assertEquals(getModifiedDate(), searchDoc.getPropertyValue("dc:modified"));
+        assertEquals(getModifiedDate(), searchDoc.getPropertyValue("dc:issued"));
         assertNull(searchDoc.getPropertyValue("dc:description"));
 
         List<SortInfo> sortInfos = state.getSortInfos();
@@ -435,7 +435,7 @@ public class TestContentViewState {
         state.setResultLayout(new ContentViewLayoutImpl("document_listing", "label.document_listing.layout", true,
                 "/icons/myicon.png", true));
         List<SortInfo> sortInfos = new ArrayList<>();
-        sortInfos.add(new SortInfo("dc:modified", false));
+        sortInfos.add(new SortInfo("dc:issued", false));
         state.setSortInfos(sortInfos);
         state.setSearchDocumentModel(searchDocument);
 
@@ -461,7 +461,7 @@ public class TestContentViewState {
         sortInfos = pp.getSortInfos();
         assertNotNull(sortInfos);
         assertEquals(1, sortInfos.size());
-        assertEquals("dc:modified", sortInfos.get(0).getSortColumn());
+        assertEquals("dc:issued", sortInfos.get(0).getSortColumn());
         assertFalse(sortInfos.get(0).getSortAscending());
 
         ContentViewLayout resultLayout = contentView.getCurrentResultLayout();
@@ -498,7 +498,7 @@ public class TestContentViewState {
         state.setResultLayout(new ContentViewLayoutImpl("document_listing", "label.document_listing.layout", true,
                 "/icons/myicon.png", true));
         List<SortInfo> sortInfos = new ArrayList<>();
-        sortInfos.add(new SortInfo("dc:modified", false));
+        sortInfos.add(new SortInfo("dc:issued", false));
         state.setSortInfos(sortInfos);
         state.setSearchDocumentModel(searchDocument);
 
@@ -549,7 +549,7 @@ public class TestContentViewState {
         String expectedJson = "{" + "\"contentViewName\":\"CURRENT_DOCUMENT_CHILDREN_WITH_SEARCH_DOCUMENT\","
                 + "\"pageProviderName\":\"CURRENT_DOCUMENT_CHILDREN_WITH_SEARCH_DOCUMENT\"," + "\"pageSize\":2,"
                 + "\"currentPage\":0," + "\"queryParameters\":[],"
-                + "\"searchDocument\":{\"type\":\"File\",\"properties\":{\"dc:modified\":\"2014-04-16T15:37:43+0000\",\"dc:title\":\"search keywords\",\"files\":[]}},"
+                + "\"searchDocument\":{\"type\":\"File\",\"properties\":{\"dc:issued\":\"2014-04-16T15:37:43+0000\",\"dc:title\":\"search keywords\",\"files\":[]}},"
                 + "\"sortInfos\":[{\"sortColumn\":\"dc:title\",\"sortAscending\":true}]," + "\"resultLayout\":null,"
                 + "\"resultColumns\":[\"column_1\"]," + "\"executed\":false" + "}";
         JSONAssert.assertEquals(expectedJson, json, true);
@@ -564,7 +564,7 @@ public class TestContentViewState {
         String json = "{" + "\"contentViewName\":\"CURRENT_DOCUMENT_CHILDREN_WITH_SEARCH_DOCUMENT\","
                 + "\"pageProviderName\":\"CURRENT_DOCUMENT_CHILDREN_WITH_SEARCH_DOCUMENT\"," + "\"pageSize\":2,"
                 + "\"currentPage\":0," + "\"queryParameters\":[],"
-                + "\"searchDocument\":{\"type\":\"File\",\"properties\":{\"dc:modified\":\"2014-04-16T17:37:43+0200\",\"dc:title\":\"search keywords\"}},"
+                + "\"searchDocument\":{\"type\":\"File\",\"properties\":{\"dc:issued\":\"2014-04-16T17:37:43+0200\",\"dc:title\":\"search keywords\"}},"
                 + "\"sortInfos\":[{\"sortColumn\":\"dc:title\",\"sortAscending\":true}]," + "\"resultLayout\":null,"
                 + "\"resultColumns\":[\"column_1\"]" + "}";
         ContentViewState state = JSONContentViewState.fromJSON(json, false);

@@ -48,6 +48,7 @@ import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelFactory;
 import org.nuxeo.ecm.core.api.SortInfo;
+import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.ecm.core.query.sql.model.Literal;
 import org.nuxeo.ecm.platform.contentview.jsf.ContentViewLayout;
 import org.nuxeo.ecm.platform.contentview.jsf.ContentViewLayoutImpl;
@@ -275,7 +276,11 @@ public class JSONContentViewState {
         Iterator<String> keys = props.keys();
         while (keys.hasNext()) {
             String key = keys.next();
-            doc.setPropertyValue(key, getDocumentPropertyValue(props.get(key)));
+            // avoid setting secured properties, that can happen on dc:creator with saved searches for instance
+            Property prop = doc.getProperty(key);
+            if (!prop.isReadOnly() && !prop.isSecured()) {
+                prop.setValue(getDocumentPropertyValue(props.get(key)));
+            }
         }
         return doc;
     }
@@ -330,7 +335,7 @@ public class JSONContentViewState {
             for (Object aJsonArray : jsonArray) {
                 Serializable pValue = getDocumentPropertyValue(aJsonArray);
                 if (pValue != null) {
-                  list.add(pValue);
+                    list.add(pValue);
                 }
             }
             return list;
