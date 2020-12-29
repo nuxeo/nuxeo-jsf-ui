@@ -79,7 +79,7 @@ public class ContentDiffHtmlConverter extends AbstractContentDiffConverter {
                     String.format("for sourceMimeType = %s, destinationMimeType = %s", mimeType, HTML_MIME_TYPE));
         }
 
-        return convert(converterName, blobHolder, parameters);
+        return cs.convert(converterName, blobHolder, parameters);
     }
 
 }

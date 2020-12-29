@@ -23,8 +23,6 @@ import java.util.List;
 
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
-import org.nuxeo.ecm.core.api.blobholder.SimpleBlobHolder;
 import org.nuxeo.ecm.core.convert.api.ConversionService;
 import org.nuxeo.runtime.api.Framework;
 
@@ -36,9 +34,9 @@ public class OfficePreviewer extends AbstractPreviewer implements MimeTypePrevie
     @Override
     public List<Blob> getPreview(Blob blob, DocumentModel dm) {
         ConversionService conversionService = Framework.getService(ConversionService.class);
-        BlobHolder result = conversionService.convert("any2pdf", new SimpleBlobHolder(blob), null);
+        Blob result = conversionService.convert("any2pdf", blob, null);
         PdfPreviewer pdfPreviewer = new PdfPreviewer();
-        return pdfPreviewer.getPreview(result.getBlob(), dm);
+        return pdfPreviewer.getPreview(result, dm);
     }
 
 }

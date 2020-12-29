@@ -25,8 +25,11 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
+import org.nuxeo.ecm.core.api.blobholder.SimpleBlobHolder;
 import org.nuxeo.ecm.core.convert.api.ConversionException;
+import org.nuxeo.ecm.core.convert.api.ConversionService;
 import org.nuxeo.ecm.core.convert.api.ConverterNotRegistered;
+import org.nuxeo.runtime.api.Framework;
 
 /**
  * Text converter for content diff.
@@ -42,12 +45,15 @@ public class ContentDiffTextConverter extends AbstractContentDiffConverter {
 
     @Override
     public BlobHolder convert(BlobHolder blobHolder, Map<String, Serializable> parameters) throws ConversionException {
+        return new SimpleBlobHolder(convert(blobHolder.getBlob(), parameters));
+    }
 
-        BlobHolder convertedBlobHolder = convert(ANY_2_TEXT_CONVERTER_NAME, blobHolder, parameters);
-
+    @Override
+    public Blob convert(Blob blob, Map<String, Serializable> parameters) throws ConversionException {
+        ConversionService cs = Framework.getService(ConversionService.class);
+        Blob convertedBlob = cs.convert(ANY_2_TEXT_CONVERTER_NAME, blob, parameters);
         String convertedBlobString = null;
         try {
-            Blob convertedBlob = convertedBlobHolder.getBlob();
             if (convertedBlob != null) {
                 convertedBlobString = convertedBlob.getString();
             }
@@ -59,14 +65,13 @@ public class ContentDiffTextConverter extends AbstractContentDiffConverter {
             // converter was found (see FullTextConverter). Throw
             // appropriate exception.
             String srcMimeType = null;
-            Blob blob = blobHolder.getBlob();
             if (blob != null) {
                 srcMimeType = blob.getMimeType();
             }
             throw new ConverterNotRegistered(
                     String.format("for sourceMimeType = %s, destinationMimeType = text/plain", srcMimeType));
         }
-        return convertedBlobHolder;
+        return convertedBlob;
     }
 
 }
