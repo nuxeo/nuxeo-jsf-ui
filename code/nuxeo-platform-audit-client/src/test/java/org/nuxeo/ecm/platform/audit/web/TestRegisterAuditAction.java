@@ -37,7 +37,7 @@ import org.nuxeo.runtime.test.runner.RuntimeFeature;
  */
 @RunWith(FeaturesRunner.class)
 @Features(RuntimeFeature.class)
-@Deploy("org.nuxeo.ecm.platform.audit.web.tests:actions-bundle.xml")
+@Deploy("org.nuxeo.ecm.actions:OSGI-INF/actions-framework.xml")
 @Deploy("org.nuxeo.ecm.platform.audit.web.tests:nxauditclient-bundle.xml")
 public class TestRegisterAuditAction {
 

@@ -81,15 +81,6 @@ public class TestActionFilter {
     }
 
     @Test
-    public void testAccessors() {
-        ActionFilter filter = new DefaultActionFilter();
-        filter.setId("foo");
-        assertEquals("foo", filter.getId());
-        filter = new DefaultActionFilter("bar", null);
-        assertEquals("bar", filter.getId());
-    }
-
-    @Test
     public void testNull() {
         ActionFilter filter = getFilter("null");
         assertTrue(filterAccept(null, filter));
