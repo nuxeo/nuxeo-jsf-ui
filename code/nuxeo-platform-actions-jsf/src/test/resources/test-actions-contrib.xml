@@ -28,7 +28,6 @@
 
     <action id="TAB_VIEW" link="view" enabled="true" label="View"
       icon="/icons/view.gif">
-      <filter-id>MyCustomFilter</filter-id>
       <category>tabs</category>
       <category>view</category>
     </action>
@@ -84,9 +83,6 @@
 
   <extension target="org.nuxeo.ecm.platform.actions.ActionService"
     point="filters">
-    <custom-filter id="MyCustomFilter" class="org.nuxeo.ecm.platform.actions.DummyFilter">
-      <rule grant="true" />
-    </custom-filter>
 
     <filter id="theFilter">
       <rule grant="true">

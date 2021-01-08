@@ -24,11 +24,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.nuxeo.common.xmap.annotation.XNode;
 import org.nuxeo.common.xmap.annotation.XObject;
 import org.nuxeo.ecm.platform.actions.Action;
-import org.nuxeo.ecm.platform.actions.ActionPropertiesDescriptor;
 import org.nuxeo.ecm.webapp.directory.DirectoryTreeDescriptor;
 
 /**
@@ -137,20 +137,16 @@ public class NavTreeDescriptor implements Serializable, Comparable<NavTreeDescri
      * @since 6.0
      */
     protected Action getAction() {
-        Action a = new Action(ACTION_ID_PREFIX + getTreeId(),
-                new String[] { DirectoryTreeDescriptor.NAV_ACTION_CATEGORY });
+        String id = ACTION_ID_PREFIX + getTreeId();
+        Action a = new Action(id, new String[] { DirectoryTreeDescriptor.NAV_ACTION_CATEGORY });
         a.setType("rest_document_link");
-        a.setLabel(getTreeLabel());
-        Map<String, String> props = new HashMap<>();
+        a.setLabel(Objects.requireNonNullElse(getTreeLabel(), id));
+        String link = isDirectoryTreeBased() ? "/incl/single_directory_tree_explorer.xhtml" : getXhtmlview();
+        a.setLink(link);
+        Map<String, Serializable> props = new HashMap<>();
         props.put("ajaxSupport", "true");
-        if (isDirectoryTreeBased()) {
-            props.put("link", "/incl/single_directory_tree_explorer.xhtml");
-        } else {
-            props.put("link", getXhtmlview());
-        }
-        ActionPropertiesDescriptor pdesc = new ActionPropertiesDescriptor();
-        pdesc.setProperties(props);
-        a.setPropertiesDescriptor(pdesc);
+        props.put("link", link);
+        a.setProperties(props);
         Integer order = getOrder();
         if (order != null) {
             a.setOrder(order.intValue());

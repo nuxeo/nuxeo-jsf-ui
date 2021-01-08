@@ -20,15 +20,16 @@
  */
 package org.nuxeo.ecm.webapp.directory;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.nuxeo.common.xmap.annotation.XNode;
 import org.nuxeo.common.xmap.annotation.XNodeList;
 import org.nuxeo.common.xmap.annotation.XObject;
 import org.nuxeo.ecm.platform.actions.Action;
-import org.nuxeo.ecm.platform.actions.ActionPropertiesDescriptor;
 
 @XObject(value = "directoryTree")
 public class DirectoryTreeDescriptor {
@@ -223,15 +224,16 @@ public class DirectoryTreeDescriptor {
         } else {
             cats = new String[] { DIR_ACTION_CATEGORY };
         }
-        Action a = new Action(ACTION_ID_PREFIX + getName(), cats);
+        String id = ACTION_ID_PREFIX + getName();
+        Action a = new Action(id, cats);
         a.setType("rest_document_link");
-        a.setLabel(getLabel());
-        Map<String, String> props = new HashMap<>();
+        a.setLabel(Objects.requireNonNullElse(getLabel(), id));
+        String template = "/incl/single_directory_tree_explorer.xhtml";
+        a.setLink(template);
+        Map<String, Serializable> props = new HashMap<>();
         props.put("ajaxSupport", "true");
-        props.put("link", "/incl/single_directory_tree_explorer.xhtml");
-        ActionPropertiesDescriptor pdesc = new ActionPropertiesDescriptor();
-        pdesc.setProperties(props);
-        a.setPropertiesDescriptor(pdesc);
+        props.put("link", template);
+        a.setProperties(props);
         Integer order = getOrder();
         if (order != null) {
             a.setOrder(order.intValue());

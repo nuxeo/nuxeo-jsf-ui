@@ -87,22 +87,22 @@ public class TestTabActionsSelection {
     public void testSetCurrentTabAction() throws Exception {
         TabActionsSelection sel = new TabActionsSelection();
         sel.setCurrentTabAction(CUSTOM_CATEGORY, TAB_ACTION.TAB_CUSTOM.getAction());
-        assertEquals(TAB_ACTION.TAB_CUSTOM.getAction(), sel.getCurrentTabAction(CUSTOM_CATEGORY));
+        assertEquals(TAB_ACTION.TAB_CUSTOM.getAction().getId(), sel.getCurrentTabAction(CUSTOM_CATEGORY).getId());
         assertEquals(TAB_ACTION.TAB_CUSTOM.getId(), sel.getCurrentTabId(CUSTOM_CATEGORY));
         assertEquals("custom_category:TAB_CUSTOM", sel.getCurrentTabIds());
         // add another one
         sel.setCurrentTabAction(DEFAULT_CATEGORY, TAB_ACTION.TAB_VIEW.getAction());
-        assertEquals(TAB_ACTION.TAB_VIEW.getAction(), sel.getCurrentTabAction(DEFAULT_CATEGORY));
+        assertEquals(TAB_ACTION.TAB_VIEW.getAction().getId(), sel.getCurrentTabAction(DEFAULT_CATEGORY).getId());
         assertEquals(TAB_ACTION.TAB_VIEW.getId(), sel.getCurrentTabId(DEFAULT_CATEGORY));
         // check nothing's changed for previous selection
-        assertEquals(TAB_ACTION.TAB_CUSTOM.getAction(), sel.getCurrentTabAction(CUSTOM_CATEGORY));
+        assertEquals(TAB_ACTION.TAB_CUSTOM.getAction().getId(), sel.getCurrentTabAction(CUSTOM_CATEGORY).getId());
         assertEquals(TAB_ACTION.TAB_CUSTOM.getId(), sel.getCurrentTabId(CUSTOM_CATEGORY));
         assertEquals("custom_category:TAB_CUSTOM,:TAB_VIEW", sel.getCurrentTabIds());
         // check reset
         sel.resetCurrentTabs(CUSTOM_CATEGORY);
         assertNull(sel.getCurrentTabAction(CUSTOM_CATEGORY));
         assertNull(sel.getCurrentTabId(CUSTOM_CATEGORY));
-        assertEquals(TAB_ACTION.TAB_VIEW.getAction(), sel.getCurrentTabAction(DEFAULT_CATEGORY));
+        assertEquals(TAB_ACTION.TAB_VIEW.getAction().getId(), sel.getCurrentTabAction(DEFAULT_CATEGORY).getId());
         assertEquals(TAB_ACTION.TAB_VIEW.getId(), sel.getCurrentTabId(DEFAULT_CATEGORY));
         assertEquals(":TAB_VIEW", sel.getCurrentTabIds());
     }
@@ -111,20 +111,20 @@ public class TestTabActionsSelection {
     public void testSetCurrentTabActionWithSubTab() throws Exception {
         TabActionsSelection sel = new TabActionsSelection();
         sel.setCurrentTabAction(CUSTOM_CATEGORY, TAB_ACTION.TAB_CUSTOM.getAction());
-        assertEquals(TAB_ACTION.TAB_CUSTOM.getAction(), sel.getCurrentTabAction(CUSTOM_CATEGORY));
+        assertEquals(TAB_ACTION.TAB_CUSTOM.getAction().getId(), sel.getCurrentTabAction(CUSTOM_CATEGORY).getId());
         assertEquals(TAB_ACTION.TAB_CUSTOM.getId(), sel.getCurrentTabId(CUSTOM_CATEGORY));
         assertEquals("custom_category:TAB_CUSTOM", sel.getCurrentTabIds());
         // add a sub tab
         sel.setCurrentTabAction(TAB_ACTION.TAB_CUSTOM.getId() + WebActions.SUBTAB_CATEGORY_SUFFIX,
                 TAB_ACTION.SUBTAB_CUSTOM.getAction());
-        assertEquals(TAB_ACTION.SUBTAB_CUSTOM.getAction(),
-                sel.getCurrentTabAction(TAB_ACTION.TAB_CUSTOM.getId() + WebActions.SUBTAB_CATEGORY_SUFFIX));
+        assertEquals(TAB_ACTION.SUBTAB_CUSTOM.getAction().getId(),
+                sel.getCurrentTabAction(TAB_ACTION.TAB_CUSTOM.getId() + WebActions.SUBTAB_CATEGORY_SUFFIX).getId());
         assertEquals(TAB_ACTION.SUBTAB_CUSTOM.getId(),
                 sel.getCurrentTabId(TAB_ACTION.TAB_CUSTOM.getId() + WebActions.SUBTAB_CATEGORY_SUFFIX));
         assertEquals("custom_category:TAB_CUSTOM:SUBTAB_CUSTOM", sel.getCurrentTabIds());
         // check override
         sel.setCurrentTabAction(CUSTOM_CATEGORY, TAB_ACTION.TAB_CUSTOM_MULTICATS.getAction());
-        assertEquals(TAB_ACTION.TAB_CUSTOM_MULTICATS.getAction(), sel.getCurrentTabAction(CUSTOM_CATEGORY));
+        assertEquals(TAB_ACTION.TAB_CUSTOM_MULTICATS.getAction().getId(), sel.getCurrentTabAction(CUSTOM_CATEGORY).getId());
         assertEquals(TAB_ACTION.TAB_CUSTOM_MULTICATS.getId(), sel.getCurrentTabId(CUSTOM_CATEGORY));
         // check subtab is not there anymore
         assertNull(sel.getCurrentTabAction(TAB_ACTION.TAB_CUSTOM.getId() + WebActions.SUBTAB_CATEGORY_SUFFIX));
@@ -151,15 +151,15 @@ public class TestTabActionsSelection {
     public void testSetCurrentTabId() throws Exception {
         TabActionsSelection sel = new TabActionsSelection();
         sel.setCurrentTabId(actionManager, null, CUSTOM_CATEGORY, TAB_ACTION.TAB_CUSTOM.getId());
-        assertEquals(TAB_ACTION.TAB_CUSTOM.getAction(), sel.getCurrentTabAction(CUSTOM_CATEGORY));
+        assertEquals(TAB_ACTION.TAB_CUSTOM.getAction().getId(), sel.getCurrentTabAction(CUSTOM_CATEGORY).getId());
         assertEquals(TAB_ACTION.TAB_CUSTOM.getId(), sel.getCurrentTabId(CUSTOM_CATEGORY));
         assertEquals("custom_category:TAB_CUSTOM", sel.getCurrentTabIds());
         // add another one
         sel.setCurrentTabId(actionManager, null, DEFAULT_CATEGORY, TAB_ACTION.TAB_VIEW.getId());
-        assertEquals(TAB_ACTION.TAB_VIEW.getAction(), sel.getCurrentTabAction(DEFAULT_CATEGORY));
+        assertEquals(TAB_ACTION.TAB_VIEW.getAction().getId(), sel.getCurrentTabAction(DEFAULT_CATEGORY).getId());
         assertEquals(TAB_ACTION.TAB_VIEW.getId(), sel.getCurrentTabId(DEFAULT_CATEGORY));
         // check nothing's changed for previous selection
-        assertEquals(TAB_ACTION.TAB_CUSTOM.getAction(), sel.getCurrentTabAction(CUSTOM_CATEGORY));
+        assertEquals(TAB_ACTION.TAB_CUSTOM.getAction().getId(), sel.getCurrentTabAction(CUSTOM_CATEGORY).getId());
         assertEquals(TAB_ACTION.TAB_CUSTOM.getId(), sel.getCurrentTabId(CUSTOM_CATEGORY));
         assertEquals("custom_category:TAB_CUSTOM,:TAB_VIEW", sel.getCurrentTabIds());
         // check reset
@@ -175,9 +175,9 @@ public class TestTabActionsSelection {
     public void testSetCurrentTabIds() throws Exception {
         TabActionsSelection sel = new TabActionsSelection();
         sel.setCurrentTabIds(actionManager, null, "custom_category:TAB_CUSTOM:SUBTAB_CUSTOM,:TAB_VIEW");
-        assertEquals(TAB_ACTION.TAB_VIEW.getAction(), sel.getCurrentTabAction(DEFAULT_CATEGORY));
+        assertEquals(TAB_ACTION.TAB_VIEW.getAction().getId(), sel.getCurrentTabAction(DEFAULT_CATEGORY).getId());
         assertEquals(TAB_ACTION.TAB_VIEW.getId(), sel.getCurrentTabId(DEFAULT_CATEGORY));
-        assertEquals(TAB_ACTION.TAB_CUSTOM.getAction(), sel.getCurrentTabAction(CUSTOM_CATEGORY));
+        assertEquals(TAB_ACTION.TAB_CUSTOM.getAction().getId(), sel.getCurrentTabAction(CUSTOM_CATEGORY).getId());
         assertEquals(TAB_ACTION.TAB_CUSTOM.getId(), sel.getCurrentTabId(CUSTOM_CATEGORY));
         assertEquals(TAB_ACTION.SUBTAB_CUSTOM.getId(),
                 sel.getCurrentTabId(TAB_ACTION.TAB_CUSTOM.getId() + WebActions.SUBTAB_CATEGORY_SUFFIX));
