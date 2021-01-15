@@ -3,7 +3,7 @@
 
   <extension target="org.nuxeo.ecm.platform.actions.ActionService" point="filters">
 
-    <filter id="OverridenFilter">
+    <filter id="OverridenFilter" merge="false">
       <rule grant="true">
         <type>Workspace</type>
       </rule>
