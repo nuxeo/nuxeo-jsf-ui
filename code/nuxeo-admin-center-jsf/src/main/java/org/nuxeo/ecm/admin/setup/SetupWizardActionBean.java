@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2010-2015 Nuxeo SA (http://nuxeo.com/) and others.
+ * (C) Copyright 2010-2021 Nuxeo (http://nuxeo.com/) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -252,7 +252,6 @@ public class SetupWizardActionBean implements Serializable {
         facesMessages.add(StatusMessage.Severity.INFO, messages.get("label.parameters.saved"));
     }
 
-    @SuppressWarnings("unchecked")
     protected void saveParameters() {
         // manage httpProxy settings (setting null is not accepted)
         if (!PROXY_AUTHENTICATED.equals(proxyType)) {

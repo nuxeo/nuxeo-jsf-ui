@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2012 Nuxeo SA (http://nuxeo.com/) and others.
+ * (C) Copyright 2006-2021 Nuxeo (http://nuxeo.com/) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,6 @@ import org.nuxeo.ecm.quota.QuotaStatsService;
 import org.nuxeo.ecm.quota.QuotaStatsUpdater;
 import org.nuxeo.ecm.quota.size.QuotaAware;
 import org.nuxeo.ecm.quota.size.QuotaDisplayValue;
-import org.nuxeo.launcher.config.ConfigurationGenerator;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.services.config.ConfigurationService;
 
@@ -120,7 +119,7 @@ public class QuotaStatsActions implements Serializable {
 
     public void validateQuotaSize(FacesContext context, UIComponent component, Object value) {
         String strValue = value.toString();
-        Long quotaValue = -1L;
+        long quotaValue = -1L;
         boolean quotaAllowed = true;
         try {
             quotaValue = Long.parseLong(strValue);
@@ -132,20 +131,19 @@ public class QuotaStatsActions implements Serializable {
         }
 
         quotaAllowed = getQuotaStatsService().canSetMaxQuota(quotaValue, navigationContext.getCurrentDocument(),
-                documentManager);
+                                                             documentManager);
         if (quotaAllowed) {
             return;
         }
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                messages.get("label.quotaException.QuotaCanNotBeSet"), null);
+                                                messages.get("label.quotaException.QuotaCanNotBeSet"), null);
         // also add global message
         context.addMessage(null, message);
         throw new ValidatorException(message);
     }
 
     public QuotaDisplayValue formatQuota(long value, long max) {
-        QuotaDisplayValue qdv = new QuotaDisplayValue(value, max);
-        return qdv;
+        return new QuotaDisplayValue(value, max);
     }
 
     public double getMinQuotaSliderValue(long totalSize) {
@@ -180,8 +178,9 @@ public class QuotaStatsActions implements Serializable {
         try {
             configuredMaxQuotaSize = SizeUtils.parseSizeInBytes(max);
         } catch (NumberFormatException e) {
-            log.error("Invalid value for configuration property " + QUOTA_MAX_SIZE_PROP + ": " + max
-                    + "; using default: " + QUOTA_MAX_SIZE_DEFAULT);
+            log.error(
+                    "Invalid value for configuration property " + QUOTA_MAX_SIZE_PROP + ": " + max + "; using default: "
+                            + QUOTA_MAX_SIZE_DEFAULT);
             configuredMaxQuotaSize = SizeUtils.parseSizeInBytes(QUOTA_MAX_SIZE_DEFAULT);
         }
     }
@@ -196,7 +195,7 @@ public class QuotaStatsActions implements Serializable {
         }
         getQuotaStatsService().activateQuotaOnUserWorkspaces(maxSize, documentManager);
         getQuotaStatsService().launchSetMaxQuotaOnUserWorkspaces(maxSize, documentManager.getRootDocument(),
-                documentManager);
+                                                                 documentManager);
     }
 
     /**
@@ -204,7 +203,7 @@ public class QuotaStatsActions implements Serializable {
      */
     public void initQuotaActivatedOnUserWorkspaces() {
         long quota = getQuotaStatsService().getQuotaSetOnUserWorkspaces(documentManager);
-        setActivateQuotaOnUsersWorkspaces(quota == -1 ? false : true);
+        setActivateQuotaOnUsersWorkspaces(quota != -1);
         setMaxQuotaOnUsersWorkspaces(quota);
     }
 

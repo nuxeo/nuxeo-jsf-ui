@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2016 Nuxeo SA (http://nuxeo.com/) and others.
+ * (C) Copyright 2006-2021 Nuxeo (http://nuxeo.com/) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -105,8 +105,10 @@ public class AppCenterViewsManager implements Serializable {
         downloading, saving, installing, error, completed, restartNeeded;
     }
 
-    protected static final Map<String, String> view2PackageListName = new HashMap<String, String>() {
+    protected static final Map<String, String> view2PackageListName = new HashMap<>() {
+
         private static final long serialVersionUID = 1L;
+
         {
             put("ConnectAppsUpdates", "updates");
             put("ConnectAppsStudio", "studio");
