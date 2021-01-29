@@ -15,8 +15,7 @@
   <extension
     target="org.nuxeo.ecm.platform.web.common.exceptionhandling.service.ExceptionHandlingService"
     point="requestdump">
-    <requestdump
-      class="org.nuxeo.ecm.platform.web.common.exceptionhandling.service.DefaultRequestDumper">
+    <requestdump merge="true">
       <notListed>
         <attribute>org.jboss.seam.international.messages</attribute>
       </notListed>
