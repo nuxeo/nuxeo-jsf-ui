@@ -34,7 +34,7 @@ import org.jboss.seam.Seam;
 import org.jboss.seam.core.Init;
 import org.jboss.seam.init.Initialization;
 import org.nuxeo.ecm.core.api.NuxeoException;
-import org.nuxeo.launcher.config.ConfigurationGenerator;
+import org.nuxeo.ecm.platform.ui.web.util.SeamConfigurator;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.management.ServerLocator;
 
@@ -47,10 +47,10 @@ public class SeamHotReloadHelper {
     private static final Log log = LogFactory.getLog(SeamHotReloadHelper.class);
 
     @Deprecated
-    public static final String SEAM_HOT_RELOAD_SYSTEM_PROP = ConfigurationGenerator.SEAM_DEBUG_SYSTEM_PROP;
+    public static final String SEAM_HOT_RELOAD_SYSTEM_PROP = SeamConfigurator.SEAM_DEBUG_SYSTEM_PROP;
 
     public static boolean isHotReloadEnabled() {
-        return Framework.isBooleanPropertyTrue(ConfigurationGenerator.SEAM_DEBUG_SYSTEM_PROP);
+        return Framework.isBooleanPropertyTrue(SeamConfigurator.SEAM_DEBUG_SYSTEM_PROP);
     }
 
     public static void flush() {

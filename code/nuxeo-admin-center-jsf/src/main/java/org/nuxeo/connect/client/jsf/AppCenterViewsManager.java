@@ -77,6 +77,7 @@ import org.nuxeo.ecm.platform.ui.web.util.ComponentUtils;
 import org.nuxeo.ecm.webapp.seam.NuxeoSeamHotReloadContextKeeper;
 import org.nuxeo.launcher.config.ConfigurationException;
 import org.nuxeo.launcher.config.ConfigurationGenerator;
+import org.nuxeo.launcher.config.ConfigurationMarshaller;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.reload.ReloadService;
 import org.nuxeo.runtime.services.config.ConfigurationService;
@@ -643,7 +644,7 @@ public class AppCenterViewsManager implements Serializable {
     public void setDevMode(boolean value) {
         String feedbackCompId = "changeDevModeForm";
         ConfigurationGenerator conf = setupWizardAction.getConfigurationGenerator();
-        boolean configurable = conf.isConfigurable();
+        boolean configurable = conf.getConfigurationHolder().isLoaded();
         if (!configurable) {
             facesMessages.addToControl(feedbackCompId, StatusMessage.Severity.ERROR,
                     translate("label.setup.nuxeo.org.nuxeo.dev.changingDevModeNotConfigurable"));
@@ -653,7 +654,7 @@ public class AppCenterViewsManager implements Serializable {
         params.put(Framework.NUXEO_DEV_SYSTEM_PROP, Boolean.toString(value));
         try {
             conf.saveFilteredConfiguration(params);
-            conf.getServerConfigurator().dumpProperties(conf.getUserConfig());
+            new ConfigurationMarshaller(System.getProperties()).dumpConfiguration(conf.getConfigurationHolder());
             // force reload of framework properties to ensure it's immediately
             // taken into account by all code checking for
             // Framework#isDevModeSet
