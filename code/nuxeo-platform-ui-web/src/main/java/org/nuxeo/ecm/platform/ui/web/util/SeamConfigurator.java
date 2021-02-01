@@ -35,7 +35,6 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Startup;
 import org.jboss.seam.core.Init;
-import org.nuxeo.launcher.config.ConfigurationGenerator;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.transaction.TransactionHelper;
 
@@ -53,11 +52,18 @@ public class SeamConfigurator implements Serializable {
 
     private static final Log log = LogFactory.getLog(SeamConfigurator.class);
 
+    /**
+     * Seam hot reload property.
+     *
+     * @since 11.5
+     */
+    public static final String SEAM_DEBUG_SYSTEM_PROP = "org.nuxeo.seam.debug";
+
     @In(value = "org.jboss.seam.core.init")
     transient Init init;
 
     public boolean isDebugEnabled() {
-        return Framework.isBooleanPropertyTrue(ConfigurationGenerator.SEAM_DEBUG_SYSTEM_PROP);
+        return Framework.isBooleanPropertyTrue(SEAM_DEBUG_SYSTEM_PROP);
     }
 
     @Create

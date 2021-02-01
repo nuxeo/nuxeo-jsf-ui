@@ -23,17 +23,14 @@ package org.nuxeo.ecm.admin.setup;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.nuxeo.ecm.admin.setup.SetupWizardActionBean.PARAM_TEMPLATE_DBNAME;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -48,7 +45,7 @@ import org.junit.runner.RunWith;
 import org.nuxeo.common.Environment;
 import org.nuxeo.common.utils.FileUtils;
 import org.nuxeo.ecm.admin.setup.TestSetupWizardActionBean.CustomLogFilter;
-import org.nuxeo.launcher.config.ConfigurationGenerator;
+import org.nuxeo.launcher.config.ConfigurationConstants;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import org.nuxeo.runtime.test.runner.LogCaptureFeature;
@@ -62,6 +59,8 @@ import org.nuxeo.runtime.test.runner.RuntimeFeature;
 @LogCaptureFeature.FilterWith(value = CustomLogFilter.class)
 public class TestSetupWizardActionBean {
 
+    protected static final String BOUNDARY_BEGIN = "### BEGIN - DO NOT EDIT BETWEEN BEGIN AND END ###";
+
     private SetupWizardActionBean setupWizardActionBean;
 
     private Map<String, Serializable> parameters, advancedParameters;
@@ -74,6 +73,7 @@ public class TestSetupWizardActionBean {
     LogCaptureFeature.Result capturedLog;
 
     public static class CustomLogFilter implements LogCaptureFeature.Filter {
+
         @Override
         public boolean accept(LogEvent event) {
             return Level.ERROR.equals(event.getLevel()) || Level.WARN.equals(event.getLevel());
@@ -86,9 +86,9 @@ public class TestSetupWizardActionBean {
         nuxeoHome = env.getServerHome();
         nuxeoConf = new File(nuxeoHome, "bin");
         nuxeoConf.mkdirs();
-        nuxeoConf = new File(nuxeoConf, ConfigurationGenerator.NUXEO_CONF);
+        nuxeoConf = new File(nuxeoConf, ConfigurationConstants.PARAM_NUXEO_CONF);
         FileUtils.copy(FileUtils.getResourceFileFromContext("configurator/nuxeo.conf"), nuxeoConf);
-        System.setProperty(ConfigurationGenerator.NUXEO_CONF, nuxeoConf.getPath());
+        System.setProperty(ConfigurationConstants.PARAM_NUXEO_CONF, nuxeoConf.getPath());
 
         FileUtils.copy(FileUtils.getResourceFileFromContext("templates/jboss"), new File(nuxeoHome, "templates"));
         System.setProperty("jboss.home.dir", nuxeoHome.getPath());
@@ -97,31 +97,27 @@ public class TestSetupWizardActionBean {
         // simulate Seam injection of variable setupConfigGenerator
         setupWizardActionBean.getConfigurationGenerator();
 
-        // WARN [ConfigurationGenerator] Parameter mail.transport.username is deprecated ...
-        // ERROR [ConfigurationGenerator] Template 'oldchange' not found ...
-        // WARN [ConfigurationGenerator] Parameter mail.transport.username is deprecated ...
-        // WARN [ConfigurationGenerator] Missing value for nuxeo.db.type, using default
+        // WARN  [ConfigurationLoader] Parameter: mail.transport.username present in: .../templates/nuxeo.defaults
+        //   is deprecated - please use: mail.transport.user instead
+        // ERROR [ConfigurationGenerator] Template 'oldchange' not found with relative or absolute path
+        //   (.../templates/oldchange). Check your nuxeo.templates parameter, and nuxeo.template.includes for
+        //   included files.
         capturedLog.assertHasEvent();
 
-        String[] expectedFixedEvents = {
-            "Parameter mail.transport.username is deprecated - please use mail.transport.user instead",
-            "Parameter mail.transport.username is deprecated - please use mail.transport.user instead",
-            "Missing value for nuxeo.db.type, using default"
-        };
-        List<String> fixedIntersect = Stream.of(expectedFixedEvents).filter(capturedLog.getCaughtEventMessages()::contains)
-                                                                    .collect(Collectors.toList());
-        assertEquals("Unexpected number of fixed error messages", expectedFixedEvents.length, fixedIntersect.size());
+        var logPattern1 = "Parameter: mail.transport.username present in: .* is deprecated - please use: mail"
+                + ".transport.user instead";
+        assertTrue("Deprecation log not found",
+                   capturedLog.getCaughtEventMessages().stream().anyMatch(m -> m.matches(logPattern1)));
 
-        Pattern expectedEventRegexPattern = Pattern.compile("Template 'oldchange' not found with relative or absolute path (.*). Check your nuxeo.templates parameter, and nuxeo.template.includes for included files.");
-        List<String> variableIntersect = capturedLog.getCaughtEventMessages().stream()
-                                                                             .filter(expectedEventRegexPattern.asPredicate())
-                                                                             .collect(Collectors.toList());
-        assertEquals("Unexpected number of variable error messages", 1, variableIntersect.size());
+        var logPattern2 = "Template 'oldchange' not found with relative or absolute path \\(.*\\). Check your nuxeo"
+                + ".templates parameter, and nuxeo.template.includes for included files.";
+        assertTrue("Template not found log not found",
+                   capturedLog.getCaughtEventMessages().stream().anyMatch(m -> m.matches(logPattern2)));
     }
 
     @After
     public void tearDown() {
-        System.clearProperty(ConfigurationGenerator.NUXEO_CONF);
+        System.clearProperty(ConfigurationConstants.PARAM_NUXEO_CONF);
         System.clearProperty(Environment.NUXEO_HOME);
         System.clearProperty("jboss.home.dir");
         System.clearProperty(Environment.NUXEO_DATA_DIR);
@@ -147,7 +143,7 @@ public class TestSetupWizardActionBean {
         parameters = setupWizardActionBean.getParameters();
         advancedParameters = setupWizardActionBean.getAdvancedParameters();
         parameters.put("nuxeo.bind.address", "127.0.0.1");
-        parameters.put(ConfigurationGenerator.PARAM_TEMPLATE_DBNAME, "postgresql");
+        parameters.put(PARAM_TEMPLATE_DBNAME, "postgresql");
         advancedParameters.put("test.default.nuxeo.defaults", "false");
         setupWizardActionBean.saveParameters();
         log.debug("Generated nuxeoConf: " + nuxeoConf);
@@ -157,9 +153,9 @@ public class TestSetupWizardActionBean {
         String newStr, expStr;
         while ((newStr = bfNew.readLine()) != null) {
             expStr = bfExp.readLine();
-            if (newStr.startsWith(ConfigurationGenerator.BOUNDARY_BEGIN)) {
+            if (newStr.startsWith(BOUNDARY_BEGIN)) {
                 // BOUNDARY is generated, we can't test an exact match
-                assertTrue(expStr.startsWith(ConfigurationGenerator.BOUNDARY_BEGIN));
+                assertTrue(expStr.startsWith(BOUNDARY_BEGIN));
             } else if (newStr.startsWith(Environment.SERVER_STATUS_KEY)) {
                 // server.status.key is generated, we can't test an exact match
                 assertTrue(expStr.startsWith(Environment.SERVER_STATUS_KEY));

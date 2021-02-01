@@ -25,22 +25,16 @@ import static org.nuxeo.common.Environment.NUXEO_DATA_DIR;
 import static org.nuxeo.common.Environment.NUXEO_LOG_DIR;
 import static org.nuxeo.common.Environment.PRODUCT_NAME;
 import static org.nuxeo.common.Environment.PRODUCT_VERSION;
-import static org.nuxeo.launcher.config.ConfigurationGenerator.NUXEO_CONF;
-import static org.nuxeo.launcher.config.ConfigurationGenerator.NUXEO_DEV_SYSTEM_PROP;
-import static org.nuxeo.launcher.config.ConfigurationGenerator.PARAM_BIND_ADDRESS;
-import static org.nuxeo.launcher.config.ConfigurationGenerator.PARAM_DB_HOST;
-import static org.nuxeo.launcher.config.ConfigurationGenerator.PARAM_DB_NAME;
-import static org.nuxeo.launcher.config.ConfigurationGenerator.PARAM_DB_PORT;
-import static org.nuxeo.launcher.config.ConfigurationGenerator.PARAM_DB_PWD;
-import static org.nuxeo.launcher.config.ConfigurationGenerator.PARAM_DB_USER;
-import static org.nuxeo.launcher.config.ConfigurationGenerator.PARAM_NUXEO_URL;
-import static org.nuxeo.launcher.config.ConfigurationGenerator.PARAM_TEMPLATE_DBNAME;
-import static org.nuxeo.launcher.config.ConfigurationGenerator.SECRET_KEYS;
+import static org.nuxeo.launcher.config.ConfigurationConstants.PARAM_BIND_ADDRESS;
+import static org.nuxeo.launcher.config.ConfigurationConstants.PARAM_NUXEO_CONF;
+import static org.nuxeo.launcher.config.ConfigurationConstants.PARAM_NUXEO_URL;
+import static org.nuxeo.launcher.config.ConfigurationConstants.PARAM_TEMPLATES_NAME;
+import static org.nuxeo.runtime.api.Framework.NUXEO_DEV_SYSTEM_PROP;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -58,6 +52,8 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.validator.ValidatorException;
 import javax.naming.AuthenticationException;
 import javax.naming.NamingException;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.InitialDirContext;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -70,10 +66,12 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.StatusMessage;
+import org.nuxeo.ecm.core.storage.DBCheck;
 import org.nuxeo.ecm.platform.ui.web.util.ComponentUtils;
 import org.nuxeo.launcher.commons.DatabaseDriverException;
 import org.nuxeo.launcher.config.ConfigurationException;
 import org.nuxeo.launcher.config.ConfigurationGenerator;
+import org.nuxeo.launcher.config.ConfigurationHolder;
 
 /**
  * Serves UI for the setup screen, handling properties that can be saved on the bin/nuxeo.conf file on server.
@@ -91,11 +89,29 @@ public class SetupWizardActionBean implements Serializable {
 
     protected static final Log log = LogFactory.getLog(SetupWizardActionBean.class);
 
+    /** @since 11.5 */
+    protected static final String PARAM_TEMPLATE_DBNAME = "nuxeo.dbtemplate";
+
+    /** @since 11.5 */
+    protected static final String PARAM_DB_NAME = "nuxeo.db.name";
+
+    /** @since 11.5 */
+    protected static final String PARAM_DB_USER = "nuxeo.db.user";
+
+    /** @since 11.5 */
+    protected static final String PARAM_DB_PWD = "nuxeo.db.password";
+
+    /** @since 11.5 */
+    protected static final String PARAM_DB_HOST = "nuxeo.db.host";
+
+    /** @since 11.5 */
+    protected static final String PARAM_DB_PORT = "nuxeo.db.port";
+
     /**
      * The list of important parameters that need to be presented first to the user
      */
     private static final String[] managedKeyParameters = { PARAM_BIND_ADDRESS, PARAM_NUXEO_URL, NUXEO_DATA_DIR,
-            NUXEO_LOG_DIR, PRODUCT_NAME, PRODUCT_VERSION, NUXEO_CONF, PARAM_TEMPLATE_DBNAME, PARAM_DB_NAME,
+            NUXEO_LOG_DIR, PRODUCT_NAME, PRODUCT_VERSION, PARAM_NUXEO_CONF, PARAM_TEMPLATE_DBNAME, PARAM_DB_NAME,
             PARAM_DB_USER, PARAM_DB_PWD, PARAM_DB_HOST, PARAM_DB_PORT, "nuxeo.db.min-pool-size",
             "nuxeo.db.min-pool-size", "nuxeo.db.max-pool-size", "nuxeo.vcs.min-pool-size", "nuxeo.vcs.max-pool-size",
             "nuxeo.notification.eMailSubjectPrefix", "mailservice.user", "mailservice.password", "mail.store.protocol",
@@ -173,7 +189,7 @@ public class SetupWizardActionBean implements Serializable {
     @Factory(value = "setupConfigGenerator", scope = ScopeType.PAGE)
     public ConfigurationGenerator getConfigurationGenerator() {
         if (setupConfigGenerator == null) {
-            setupConfigGenerator = new ConfigurationGenerator();
+            setupConfigGenerator = ConfigurationGenerator.build();
             if (setupConfigGenerator.init()) {
                 setParameters();
             }
@@ -183,7 +199,7 @@ public class SetupWizardActionBean implements Serializable {
 
     @Factory(value = "setupConfigurable", scope = ScopeType.APPLICATION)
     public boolean isConfigurable() {
-        return setupConfigGenerator.isConfigurable();
+        return setupConfigGenerator.getConfigurationHolder().isLoaded();
     }
 
     @Factory(value = "advancedParams", scope = ScopeType.EVENT)
@@ -214,7 +230,12 @@ public class SetupWizardActionBean implements Serializable {
             }
         }
         for (String keyParam : managedKeyParameters) {
-            String parameter = userConfig.getProperty(keyParam);
+            String parameter;
+            if (PARAM_TEMPLATE_DBNAME.equals(keyParam)) {
+                parameter = setupConfigGenerator.getConfigurationHolder().getIncludedDBTemplateName();
+            } else {
+                parameter = userConfig.getProperty(keyParam);
+            }
             setParameter(keyParam, parameter);
         }
 
@@ -263,12 +284,17 @@ public class SetupWizardActionBean implements Serializable {
             parameters.put("nuxeo.http.proxy.port", "");
         }
 
-        // Remove empty values for password keys
-        for (String pwdKey : SECRET_KEYS) {
-            if (StringUtils.isEmpty((String) parameters.get(pwdKey))) {
-                parameters.remove(pwdKey);
-            }
+        if (parameters.containsKey(PARAM_TEMPLATE_DBNAME)) {
+            ConfigurationHolder configHolder = setupConfigGenerator.getConfigurationHolder();
+            String previousDbTemplate = configHolder.getIncludedDBTemplateName();
+            String newDbTemplate = parameters.remove(PARAM_TEMPLATE_DBNAME).toString();
+            advancedParameters.put(PARAM_TEMPLATES_NAME,
+                           configHolder.getProperty(PARAM_TEMPLATES_NAME).replace(previousDbTemplate, newDbTemplate));
         }
+
+        // Remove empty values for password keys
+        parameters.entrySet()
+                  .removeIf(e -> e.getKey().contains("password") && StringUtils.isEmpty((String) e.getValue()));
 
         // compute <String, String> parameters for the ConfigurationGenerator
         Stream<Entry<String, Serializable>> parametersStream = parameters.entrySet().stream();
@@ -330,21 +356,34 @@ public class SetupWizardActionBean implements Serializable {
             dbPwd = (String) parameters.get("nuxeo.db.password");
         }
 
+        var properties = new Properties();
+        properties.put(PARAM_DB_NAME, dbName);
+        properties.put(PARAM_DB_USER, dbUser);
+        properties.put(PARAM_DB_PWD, dbPwd);
+        properties.put(PARAM_DB_HOST, dbHost);
+        properties.put(PARAM_DB_PORT, dbPort);
+
         String errorLabel = null;
         Exception error = null;
         try {
-            setupConfigGenerator.checkDatabaseConnection(
-                    (String) parameters.get(ConfigurationGenerator.PARAM_TEMPLATE_DBNAME), dbName, dbUser, dbPwd,
-                    dbHost, dbPort);
-        } catch (IOException e) {
-            errorLabel = ERROR_DB_FS;
-            error = e;
-        } catch (DatabaseDriverException e) {
-            errorLabel = ERROR_DB_DRIVER;
-            error = e;
-        } catch (SQLException e) {
-            errorLabel = ERROR_DB_CONNECTION;
-            error = e;
+            var configHolder = setupConfigGenerator.getConfigurationHolder();
+            var configHolderForCheck = new ConfigurationHolder(configHolder.getHomePath(), configHolder.getNuxeoConfPath());
+            configHolderForCheck.putTemplateAll(
+                    configHolder.getTemplatesPath().resolve(parameters.get(PARAM_TEMPLATE_DBNAME).toString()),
+                    properties);
+            new DBCheck().check(setupConfigGenerator.getConfigurationHolder());
+        } catch (ConfigurationException e) {
+            Throwable cause = e.getCause();
+            if (cause instanceof DatabaseDriverException) {
+                errorLabel = ERROR_DB_DRIVER;
+                error = e;
+            } else if (cause instanceof SQLException) {
+                errorLabel = ERROR_DB_CONNECTION;
+                error = e;
+            } else {
+                errorLabel = ERROR_DB_FS;
+                error = e;
+            }
         }
         if (error != null) {
             log.error(error, error);
@@ -368,7 +407,13 @@ public class SetupWizardActionBean implements Serializable {
             log.error("Bad component returned " + select);
             throw new AbortProcessingException("Bad component returned " + select);
         }
-        setupConfigGenerator.changeDBTemplate(dbTemplate);
+        try {
+            String previousDbTemplate = setupConfigGenerator.getConfigurationHolder().getIncludedDBTemplateName();
+            setupConfigGenerator.rmTemplate(previousDbTemplate);
+            setupConfigGenerator.addTemplate(dbTemplate);
+        } catch (ConfigurationException e) {
+            log.error("Error reading basic configuration.", e);
+        }
         setParameters();
         Contexts.getEventContext().remove("setupParams");
         Contexts.getEventContext().remove("advancedParams");
@@ -468,7 +513,7 @@ public class SetupWizardActionBean implements Serializable {
         String errorLabel = null;
         Exception error = null;
         try {
-            setupConfigGenerator.checkLdapConnection(ldapUrl, null, null, false);
+            checkLdapConnection(ldapUrl, null, null, false);
         } catch (NamingException e) {
             errorLabel = ERROR_LDAP_CONNECTION;
             error = e;
@@ -513,7 +558,7 @@ public class SetupWizardActionBean implements Serializable {
         String errorLabel = null;
         Exception error = null;
         try {
-            setupConfigGenerator.checkLdapConnection(ldapUrl, ldapBindDn, ldapBindPwd, true);
+            checkLdapConnection(ldapUrl, ldapBindDn, ldapBindPwd, true);
         } catch (NamingException e) {
             if (e instanceof AuthenticationException) {
                 errorLabel = ERROR_LDAP_AUTHENTICATION;
@@ -533,6 +578,48 @@ public class SetupWizardActionBean implements Serializable {
                 ComponentUtils.translate(context, "error.ldap.auth.none"), null);
         message.setSeverity(FacesMessage.SEVERITY_INFO);
         context.addMessage(component.getClientId(context), message);
+    }
+    /**
+     * Check if the LDAP parameters are correct to bind to a LDAP server. if authenticate argument is true, it will also
+     * check if the authentication against the LDAP server succeeds
+     *
+     * @param authenticate Indicates if authentication against LDAP should be checked.
+     * @since 11.5
+     * @implNote Previously in {@link ConfigurationGenerator}
+     */
+    public void checkLdapConnection(String ldapUrl, String ldapBindDn, String ldapBindPwd, boolean authenticate)
+            throws NamingException {
+        checkLdapConnection(getContextEnv(ldapUrl, ldapBindDn, ldapBindPwd, authenticate));
+    }
+
+    /**
+     * @param contextEnv Environment properties to build a {@link InitialDirContext}
+     * @since 11.5
+     * @implNote Previously in {@link ConfigurationGenerator}
+     */
+    protected void checkLdapConnection(Hashtable<Object, Object> contextEnv) throws NamingException {
+        DirContext dirContext = new InitialDirContext(contextEnv);
+        dirContext.close();
+    }
+
+    /**
+     * Build a {@link Hashtable} which contains environment properties to instantiate a {@link InitialDirContext}
+     *
+     * @since 11.5
+     * @implNote Previously in {@link ConfigurationGenerator}
+     */
+    protected Hashtable<Object, Object> getContextEnv(String ldapUrl, String bindDn, String bindPassword,
+            boolean checkAuthentication) {
+        Hashtable<Object, Object> contextEnv = new Hashtable<>();
+        contextEnv.put(javax.naming.Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+        contextEnv.put("com.sun.jndi.ldap.connect.timeout", "10000");
+        contextEnv.put(javax.naming.Context.PROVIDER_URL, ldapUrl);
+        if (checkAuthentication) {
+            contextEnv.put(javax.naming.Context.SECURITY_AUTHENTICATION, "simple");
+            contextEnv.put(javax.naming.Context.SECURITY_PRINCIPAL, bindDn);
+            contextEnv.put(javax.naming.Context.SECURITY_CREDENTIALS, bindPassword);
+        }
+        return contextEnv;
     }
 
 }
