@@ -42,25 +42,23 @@ public class TestTypeLabelAlphabeticalOrder {
         messages.put("label.note", "A note");
         TypeLabelAlphabeticalOrder comparator = new TypeLabelAlphabeticalOrder(messages);
 
-        Type type1 = new Type();
-        Type type2 = new Type();
-        type1.setId("File");
-        type2.setId("Note");
+        Type type1 = new Type("File", null);
+        Type type2 = new Type("Note", null);
 
         // Empty label for both types: fall back on ids -> "File" < "Note"
         assertTrue(comparator.compare(type1, type2) < 0);
 
         // Empty label for type2: use label for type1 and fall back on id for type2 -> "File" < "Note"
-        type1.setLabel("label.file");
+        type1 = new Type("File", "label.file");
         assertTrue(comparator.compare(type1, type2) < 0);
 
         // Empty label for type1: use label for type2 and fall back on id for type1 -> "File" > "A note"
-        type1.setLabel(null);
-        type2.setLabel("label.note");
+        type1 = new Type("File", null);
+        type2 = new Type("Note", "label.note");
         assertTrue(comparator.compare(type1, type2) > 0);
 
         // Label for both types -> "File" > "A note"
-        type1.setLabel("label.file");
+        type1 = new Type("File", "label.file");
         assertTrue(comparator.compare(type1, type2) > 0);
 
         // Empty messages: fall back on labels -> "label.file" < "label.note"
