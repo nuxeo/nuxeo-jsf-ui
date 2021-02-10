@@ -187,12 +187,6 @@
     <resource name="confirm-alerts.xhtml" type="xhtml">
       <uri>/incl/confirm-alerts.xhtml</uri>
     </resource>
-    <resource name="DragAndDrop.js" type="js">
-      <uri>/scripts/DragAndDrop.js</uri>
-    </resource>
-    <resource name="tableSelections.js" type="js">
-      <uri>/scripts/tableSelections.js</uri>
-    </resource>
     <resource name="customSeamRemotingWaiter.js" type="js">
       <uri>/scripts/customSeamRemotingWaiter.js</uri>
     </resource>

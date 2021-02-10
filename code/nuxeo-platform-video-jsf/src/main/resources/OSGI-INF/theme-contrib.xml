@@ -18,9 +18,6 @@
   </extension>
 
   <extension target="org.nuxeo.ecm.platform.WebResources" point="resources">
-    <resource name="popup-utils.js">
-      <uri>/scripts/popup-utils.js</uri>
-    </resource>
     <resource name="video-js.css">
       <uri>/css/video-js.css</uri>
     </resource>
