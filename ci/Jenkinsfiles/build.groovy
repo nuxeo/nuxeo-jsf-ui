@@ -43,7 +43,7 @@ void runFunctionalTests(String baseDir) {
     }
   } finally {
     try {
-      archiveArtifacts allowEmptyArchive: true, artifacts: "${baseDir}/**/target/failsafe-reports/*, ${baseDir}/**/target/**/*.log, ${baseDir}/**/target/*.png, ${baseDir}/**/target/**/distribution.properties, ${baseDir}/**/target/**/configuration.properties"
+      archiveArtifacts allowEmptyArchive: true, artifacts: "${baseDir}/**/target/failsafe-reports/*, ${baseDir}/**/target/**/*.log, ${baseDir}/**/target/*.png, ${baseDir}/**/target/*.html, ${baseDir}/**/target/**/distribution.properties, ${baseDir}/**/target/**/configuration.properties"
     } catch (err) {
       echo hudson.Functions.printThrowable(err)
     }
@@ -176,14 +176,29 @@ pipeline {
           """
           runFunctionalTests('ftests')
         }
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-diff-jsf-ui-ftests/**/log/server.log"
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-jsf-ui-hotreload-tests/**/log/server.log"
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-jsf-ui-webdriver-tests/**/log/server.log"
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-lang-ext-incomplete-jsf-ui-ftests/**/log/server.log"
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-platform-forms-layout-demo-tests/**/log/server.log"
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-signature-jsf-ui-ftests/**/log/server.log"
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-smart-search-jsf-ui-ftests/**/log/server.log"
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-virtual-navigation-jsf-ui-ftests/**/log/server.log"
+        // duplicated to avoid including error-web logs...
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-3d-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-csv-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-diff-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-diff-pictures-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-drive-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-easyshare-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-groups-rights-audit-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-imap-connector-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-jsf-ui-hotreload-tests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-jsf-ui-webdriver-tests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-lang-ext-incomplete-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-liveconnect-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-multi-tenant-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-platform-forms-layout-demo-tests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-quota-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-shibboleth-invitation-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-shibboleth-login-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-signature-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-smart-search-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-template-rendering-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-tree-snapshot-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
+        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-virtual-navigation-jsf-ui-ftests/**/log/server.log", unstableIfFound: true
       }
       post {
         always {
