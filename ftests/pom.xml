@@ -16,6 +16,10 @@
   </properties>
 
   <modules>
+    <module>nuxeo-jsf-ui-webdriver-tests</module>
+    <module>nuxeo-platform-error-web-tests</module>
+    <module>nuxeo-platform-forms-layout-demo-tests</module>
+    <module>nuxeo-jsf-ui-hotreload-tests</module>
     <module>nuxeo-3d-jsf-ui-ftests</module>
     <!-- NXP-28036: ignored -->
     <!-- <module>nuxeo-amazon-s3-jsf-ui-ftests</module> -->
@@ -26,15 +30,11 @@
     <module>nuxeo-easyshare-jsf-ui-ftests</module>
     <module>nuxeo-groups-rights-audit-jsf-ui-ftests</module>
     <module>nuxeo-imap-connector-jsf-ui-ftests</module>
-    <module>nuxeo-jsf-ui-hotreload-tests</module>
-    <module>nuxeo-jsf-ui-webdriver-tests</module>
     <module>nuxeo-lang-ext-incomplete-jsf-ui-ftests</module>
     <module>nuxeo-liveconnect-jsf-ui-ftests</module>
     <!-- NXP-28036: ignored -->
     <!-- <module>nuxeo-microsoft-azure-jsf-ui-ftests</module> -->
     <module>nuxeo-multi-tenant-jsf-ui-ftests</module>
-    <module>nuxeo-platform-error-web-tests</module>
-    <module>nuxeo-platform-forms-layout-demo-tests</module>
     <module>nuxeo-quota-jsf-ui-ftests</module>
     <module>nuxeo-shibboleth-invitation-jsf-ui-ftests</module>
     <module>nuxeo-shibboleth-login-jsf-ui-ftests</module>
