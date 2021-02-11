@@ -57,6 +57,7 @@ import org.nuxeo.runtime.test.runner.RuntimeFeature;
  */
 @RunWith(FeaturesRunner.class)
 @Features(RuntimeFeature.class)
+@Deploy("org.nuxeo.ecm.core.schema")
 @Deploy("org.nuxeo.ecm.platform.forms.layout.client.tests:layouts-test-schemas.xml")
 public class TestHelpers {
 
@@ -97,78 +98,64 @@ public class TestHelpers {
         return FileUtils.getResourcePathFromContext(filePath);
     }
 
-    protected byte[] getGeneratedInputStream(Document doc) throws Exception {
+    protected byte[] getGeneratedInputStream(Document doc) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         OutputFormat format = OutputFormat.createPrettyPrint();
         XMLWriter writer = null;
         try {
             writer = new XMLWriter(out, format);
             writer.write(doc.getDocument());
-
         } finally {
             if (writer != null) {
                 writer.close();
             }
         }
-
         byte[] res = out.toByteArray();
 
         // for debug
         File file = Framework.createTempFile("test", ".xml");
-        FileOutputStream fileOut = new FileOutputStream(file);
-        fileOut.write(res);
-        fileOut.close();
+        try (FileOutputStream fileOut = new FileOutputStream(file)) {
+            fileOut.write(res);
+        }
 
         return res;
     }
 
     @Test
-    public void testLayoutAutomaticGeneration() throws Exception {
+    public void testLayoutAutomaticGeneration() throws IOException {
         SchemaManager sm = Framework.getService(SchemaManager.class);
         Document doc = LayoutAutomaticGeneration.generateLayoutOutput(sm, "dublincore", false);
-
         byte[] generated = getGeneratedInputStream(doc);
-
         try (InputStream expected = new FileInputStream(getTestFile("layouts-generated-contrib.xml"))) {
-
             InputStream generatedStream = new ByteArrayInputStream(generated);
-
-            assertEquals(read(expected).replaceAll("\r?\n", ""), read(generatedStream).replaceAll("\r?\n", ""));
+            assertEquals(read(expected), read(generatedStream));
         }
     }
 
     @Test
-    public void testLayoutAutomaticGenerationWithLabel() throws Exception {
+    public void testLayoutAutomaticGenerationWithLabel() throws IOException {
         SchemaManager sm = Framework.getService(SchemaManager.class);
         Document doc = LayoutAutomaticGeneration.generateLayoutOutput(sm, "dublincore", true);
-
         byte[] generated = getGeneratedInputStream(doc);
-
         try (InputStream expected = new FileInputStream(getTestFile("layouts-generated-with-labels-contrib.xml"))) {
-
             InputStream generatedStream = new ByteArrayInputStream(generated);
-
-            assertEquals(read(expected).replaceAll("\r?\n", ""), read(generatedStream).replaceAll("\r?\n", ""));
+            assertEquals(read(expected), read(generatedStream));
         }
     }
 
     protected String read(InputStream in) throws IOException {
-        return IOUtils.toString(in, UTF_8);
+        return IOUtils.toString(in, UTF_8).replaceAll("\r?\n", "");
     }
 
     @Test
-    public void testGenerateUniqueId() throws Exception {
+    public void testGenerateUniqueId() {
         MockFacesContext faces = new MockFacesContext();
         faces.mapExpression("#{" + NuxeoLayoutIdManagerBean.NAME + "}", new NuxeoLayoutIdManagerBean());
-        String unique_1 = FaceletHandlerHelper.generateUniqueId(faces, "foo");
-        assertEquals("foo", unique_1);
-        String unique_2 = FaceletHandlerHelper.generateUniqueId(faces, "foo");
-        assertEquals("foo_1", unique_2);
+        assertEquals("foo", FaceletHandlerHelper.generateUniqueId(faces, "foo"));
+        assertEquals("foo_1", FaceletHandlerHelper.generateUniqueId(faces, "foo"));
         // ask for a name already incremented
-        String unique_3 = FaceletHandlerHelper.generateUniqueId(faces, "foo_1");
-        assertEquals("foo_2", unique_3);
+        assertEquals("foo_2", FaceletHandlerHelper.generateUniqueId(faces, "foo_1"));
         // again with several levels
-        String unique_4 = FaceletHandlerHelper.generateUniqueId(faces, "foo_1_1");
-        assertEquals("foo_3", unique_4);
+        assertEquals("foo_3", FaceletHandlerHelper.generateUniqueId(faces, "foo_1_1"));
     }
 }

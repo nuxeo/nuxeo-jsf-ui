@@ -45,6 +45,9 @@ import org.nuxeo.ecm.platform.forms.layout.facelets.WidgetTypeHandler;
  */
 public interface WebLayoutManager extends LayoutManager {
 
+    /** @since 11.5 **/
+    String CATEGORY_XML_ATTRIBUTE = "category";
+
     String JSF_CATEGORY = "jsf";
 
     /**

@@ -170,7 +170,6 @@ public class TestLayoutComponent {
         assertEquals("testLocalSubwidget", subRefs[1].getName());
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     public void testComplexLayoutRegistration() {
         LayoutDefinition filesLayout = service.getLayoutDefinition("files");

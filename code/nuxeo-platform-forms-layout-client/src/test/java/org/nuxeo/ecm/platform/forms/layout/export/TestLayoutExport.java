@@ -44,6 +44,7 @@ import org.nuxeo.ecm.platform.forms.layout.api.WidgetTypeDefinition;
 import org.nuxeo.ecm.platform.forms.layout.api.service.LayoutStore;
 import org.nuxeo.ecm.platform.forms.layout.service.WebLayoutManager;
 import org.nuxeo.runtime.api.Framework;
+import org.nuxeo.runtime.stream.RuntimeStreamFeature;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -55,8 +56,7 @@ import org.skyscreamer.jsonassert.JSONAssert;
  * @since 5.4
  */
 @RunWith(FeaturesRunner.class)
-@Features(RuntimeFeature.class)
-@Deploy("org.nuxeo.runtime.stream")
+@Features({ RuntimeFeature.class, RuntimeStreamFeature.class })
 @Deploy("org.nuxeo.ecm.core.io")
 @Deploy("org.nuxeo.ecm.platform.forms.layout.core")
 @Deploy("org.nuxeo.ecm.platform.forms.layout.export")

@@ -51,13 +51,13 @@
       </code>
 
     </documentation>
-    <object
-      class="org.nuxeo.ecm.platform.forms.layout.descriptors.WidgetTypeDescriptor" />
+    <object class="org.nuxeo.ecm.platform.forms.layout.descriptors.WidgetTypeDescriptor" />
+    <registry class="org.nuxeo.ecm.platform.forms.layout.service.WebLayoutRegistry$WidgetTypeRegistry" />
   </extension-point>
 
   <extension-point name="layouttypes">
-    <object
-      class="org.nuxeo.ecm.platform.forms.layout.descriptors.LayoutTypeDescriptor" />
+    <object class="org.nuxeo.ecm.platform.forms.layout.descriptors.LayoutTypeDescriptor" />
+    <registry class="org.nuxeo.ecm.platform.forms.layout.service.WebLayoutRegistry$LayoutTypeRegistry" />
   </extension-point>
 
   <extension-point name="layouts">
@@ -185,8 +185,8 @@
       </code>
 
     </documentation>
-    <object
-      class="org.nuxeo.ecm.platform.forms.layout.descriptors.LayoutDescriptor" />
+    <object class="org.nuxeo.ecm.platform.forms.layout.descriptors.LayoutDescriptor" />
+    <registry class="org.nuxeo.ecm.platform.forms.layout.service.WebLayoutRegistry$LayoutRegistry" />
   </extension-point>
 
   <extension-point name="widgets">
@@ -201,8 +201,8 @@
       found in the layout definition.
     </documentation>
 
-    <object
-      class="org.nuxeo.ecm.platform.forms.layout.descriptors.WidgetDescriptor" />
+    <object class="org.nuxeo.ecm.platform.forms.layout.descriptors.WidgetDescriptor" />
+    <registry class="org.nuxeo.ecm.platform.forms.layout.service.WebLayoutRegistry$WidgetRegistry" />
   </extension-point>
 
   <extension-point name="disabledPropertyRefs">
