@@ -66,10 +66,6 @@ import org.nuxeo.ecm.platform.forms.layout.api.impl.WidgetImpl;
 import org.nuxeo.ecm.platform.forms.layout.api.impl.WidgetReferenceImpl;
 import org.nuxeo.ecm.platform.forms.layout.core.service.AbstractLayoutManager;
 import org.nuxeo.ecm.platform.forms.layout.core.service.LayoutStoreImpl;
-import org.nuxeo.ecm.platform.forms.layout.descriptors.LayoutDescriptor;
-import org.nuxeo.ecm.platform.forms.layout.descriptors.LayoutTypeDescriptor;
-import org.nuxeo.ecm.platform.forms.layout.descriptors.WidgetDescriptor;
-import org.nuxeo.ecm.platform.forms.layout.descriptors.WidgetTypeDescriptor;
 import org.nuxeo.ecm.platform.forms.layout.facelets.RenderVariables;
 import org.nuxeo.ecm.platform.forms.layout.facelets.WidgetTypeHandler;
 import org.nuxeo.ecm.platform.forms.layout.facelets.plugins.TemplateWidgetTypeHandler;
@@ -118,15 +114,7 @@ public class WebLayoutManagerImpl extends AbstractLayoutManager implements WebLa
 
     @Override
     public void registerContribution(Object contribution, String extensionPoint, ComponentInstance contributor) {
-        if (extensionPoint.equals(WIDGET_TYPES_EP_NAME)) {
-            registerWidgetType(((WidgetTypeDescriptor) contribution).getWidgetTypeDefinition());
-        } else if (extensionPoint.equals(LAYOUT_TYPES_EP_NAME)) {
-            registerLayoutType(((LayoutTypeDescriptor) contribution).getLayoutTypeDefinition());
-        } else if (extensionPoint.equals(LAYOUTS_EP_NAME)) {
-            registerLayout(((LayoutDescriptor) contribution).getLayoutDefinition());
-        } else if (extensionPoint.equals(WIDGETS_EP_NAME)) {
-            registerWidget(((WidgetDescriptor) contribution).getWidgetDefinition());
-        } else if (extensionPoint.equals(PROPS_REF_EP_NAME)) {
+        if (extensionPoint.equals(PROPS_REF_EP_NAME)) {
             registerDisabledPropertyRef(((DisabledPropertyRefDescriptor) contribution));
         } else {
             log.error(String.format("Unknown extension point '%s', can't register !", extensionPoint));
@@ -135,15 +123,7 @@ public class WebLayoutManagerImpl extends AbstractLayoutManager implements WebLa
 
     @Override
     public void unregisterContribution(Object contribution, String extensionPoint, ComponentInstance contributor) {
-        if (extensionPoint.equals(WIDGET_TYPES_EP_NAME)) {
-            unregisterWidgetType(((WidgetTypeDescriptor) contribution).getWidgetTypeDefinition());
-        } else if (extensionPoint.equals(LAYOUT_TYPES_EP_NAME)) {
-            unregisterLayoutType(((LayoutTypeDescriptor) contribution).getLayoutTypeDefinition());
-        } else if (extensionPoint.equals(LAYOUTS_EP_NAME)) {
-            unregisterLayout(((LayoutDescriptor) contribution).getLayoutDefinition());
-        } else if (extensionPoint.equals(WIDGETS_EP_NAME)) {
-            unregisterWidget(((WidgetDescriptor) contribution).getWidgetDefinition());
-        } else if (extensionPoint.equals(PROPS_REF_EP_NAME)) {
+        if (extensionPoint.equals(PROPS_REF_EP_NAME)) {
             unregisterDisabledPropertyRef(((DisabledPropertyRefDescriptor) contribution));
         } else {
             log.error(String.format("Unknown extension point '%s', can't unregister !", extensionPoint));
