@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <Appenders>
+    <File name="FILE" fileName="${sys:nuxeo.log.dir}/server.log" append="false">
+      <ThresholdFilter level="DEBUG" onMatch="ACCEPT" />
+      <PatternLayout pattern="%d{DEFAULT} [%t] %-5p [%C{1}] %m%n" />
+    </File>
+  </Appenders>
+  <Loggers>
+    <!-- Tests cause error logs on loggers below -->
+    <Logger name="org.nuxeo.ecm.platform.web.common.exceptionhandling.DefaultNuxeoExceptionHandler" level="off" />
+    <Logger name="nuxeo-error-log" level="off" />
+    <Logger name="org.nuxeo.ecm.platform.ui.web.application.NuxeoUnknownResource" level="off" />
+    <Logger name="javax.enterprise.resource.webcontainer.jsf.application" level="off" />
+
+    <Root level="warn">
+      <AppenderRef ref="FILE" />
+    </Root>
+  </Loggers>
+</Configuration>

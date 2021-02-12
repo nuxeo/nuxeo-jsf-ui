@@ -15,6 +15,7 @@
     <maven.deploy.skip>true</maven.deploy.skip>
     <nuxeo.ftests.tier5>false</nuxeo.ftests.tier5>
     <nuxeo.ftests.tier6>false</nuxeo.ftests.tier6>
+    <nuxeo.ftests.tier7>false</nuxeo.ftests.tier7>
   </properties>
 
   <profiles>
@@ -40,6 +41,18 @@
         </property>
       </activation>
       <modules>
+        <module>nuxeo-jsf-ui-hotreload-tests</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>ftestsTier7</id>
+      <activation>
+        <property>
+          <name>nuxeo.ftests.tier7</name>
+        </property>
+      </activation>
+      <modules>
         <module>nuxeo-3d-jsf-ui-ftests</module>
         <!-- NXP-28036: ignored -->
         <!-- <module>nuxeo-amazon-s3-jsf-ui-ftests</module> -->
@@ -50,7 +63,6 @@
         <module>nuxeo-easyshare-jsf-ui-ftests</module>
         <module>nuxeo-groups-rights-audit-jsf-ui-ftests</module>
         <module>nuxeo-imap-connector-jsf-ui-ftests</module>
-        <module>nuxeo-jsf-ui-hotreload-tests</module>
         <module>nuxeo-lang-ext-incomplete-jsf-ui-ftests</module>
         <module>nuxeo-liveconnect-jsf-ui-ftests</module>
         <!-- NXP-28036: ignored -->
