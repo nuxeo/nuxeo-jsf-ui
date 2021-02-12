@@ -24,6 +24,7 @@
     <copy todir="${nuxeo.nxserver}/bundles/">
       <artifact:file key="org.nuxeo.ecm.platform:nuxeo-platform-error-web" />
     </copy>
+    <copy file="${out.dir}/test-classes/log4j2-server-test.xml" tofile="${nuxeo.home}/lib/log4j2.xml" />
   </target>
 
 </project>

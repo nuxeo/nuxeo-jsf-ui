@@ -177,6 +177,7 @@ pipeline {
           """
           runFunctionalTests('ftests', 'nuxeo.ftests.tier5')
           runFunctionalTests('ftests', 'nuxeo.ftests.tier6')
+          runFunctionalTests('ftests', 'nuxeo.ftests.tier7')
         }
       }
       post {
