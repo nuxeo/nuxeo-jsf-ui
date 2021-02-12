@@ -36,11 +36,12 @@ def isPullRequest() {
   return BRANCH_NAME =~ /PR-.*/
 }
 
-void runFunctionalTests(String baseDir) {
+void runFunctionalTests(String baseDir, String tier) {
   try {
     retry(2) {
-      sh "mvn -B -nsu -f ${baseDir}/pom.xml verify"
+      sh "mvn -B -nsu -D${tier} -f ${baseDir}/pom.xml verify"
     }
+    findText regexp: ".*ERROR.*", fileSet: "ftests/**/log/server.log"
   } finally {
     try {
       archiveArtifacts allowEmptyArchive: true, artifacts: "${baseDir}/**/target/failsafe-reports/*, ${baseDir}/**/target/**/*.log, ${baseDir}/**/target/*.png, ${baseDir}/**/target/*.html, ${baseDir}/**/target/**/distribution.properties, ${baseDir}/**/target/**/configuration.properties"
@@ -174,16 +175,9 @@ pipeline {
             Run "dev" functional tests
             ----------------------------------------
           """
-          runFunctionalTests('ftests')
+          runFunctionalTests('ftests', 'nuxeo.ftests.tier5')
+          runFunctionalTests('ftests', 'nuxeo.ftests.tier6')
         }
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-diff-jsf-ui-ftests/**/log/server.log"
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-jsf-ui-hotreload-tests/**/log/server.log"
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-jsf-ui-webdriver-tests/**/log/server.log"
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-lang-ext-incomplete-jsf-ui-ftests/**/log/server.log"
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-platform-forms-layout-demo-tests/**/log/server.log"
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-signature-jsf-ui-ftests/**/log/server.log"
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-smart-search-jsf-ui-ftests/**/log/server.log"
-        findText regexp: ".*ERROR.*", fileSet: "ftests/nuxeo-virtual-navigation-jsf-ui-ftests/**/log/server.log"
       }
       post {
         always {
