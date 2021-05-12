@@ -43,12 +43,11 @@ pipeline {
   agent {
     label 'jenkins-nuxeo-jsf-11'
   }
-  triggers {
-    upstream(
-      threshold: hudson.model.Result.SUCCESS,
-      upstreamProjects: '/nuxeo/11.x/release-nuxeo',
-    )
+
+  parameters {
+    string(name: 'NUXEO_RELEASE_VERSION', defaultValue: '', description: 'Nuxeo release version.')
   }
+
   environment {
     MAVEN_ARGS = '-B -nsu -Dnuxeo.skip.enforcer=true -Prelease'
     MAVEN_OPTS = "$MAVEN_OPTS -Xms512m -Xmx3072m"
@@ -96,7 +95,9 @@ pipeline {
             ----------------------------------------
             """
             echo "MAVEN_OPTS=$MAVEN_OPTS"
-            sh "mvn ${MAVEN_ARGS} -V versions:update-parent -DgenerateBackupPoms=false"
+            sh """
+              mvn ${MAVEN_ARGS} -V versions:update-parent "-DparentVersion=[${params.NUXEO_RELEASE_VERSION}]" -DgenerateBackupPoms=false
+            """
 
             def releaseVersion = readMavenPom().getParent().getVersion()
             echo """
