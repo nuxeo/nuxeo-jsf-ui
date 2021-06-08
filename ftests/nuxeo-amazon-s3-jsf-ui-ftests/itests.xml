@@ -37,7 +37,7 @@
   <target name="prepare-bucket">
     <antcall target="set-conf">
       <param name="name" value="nuxeo.s3storage.bucket" />
-      <param name="value" value="nuxeo-mp-s3-test" />
+      <param name="value" value="nuxeo-platform-tests-mp-s3" />
     </antcall>
     <antcall target="set-conf">
       <param name="name" value="nuxeo.s3storage.region" />
@@ -48,11 +48,11 @@
   <target name="cleanup-bucket">
     <echo message="Bucket contents:" />
     <exec executable="s3cmd">
-      <arg line="ls s3://nuxeo-mp-s3-test" />
+      <arg line="ls s3://nuxeo-platform-tests-mp-s3" />
     </exec>
     <echo message="Emptying bucket." />
     <exec executable="s3cmd">
-      <arg line="del --recursive --force s3://nuxeo-mp-s3-test" />
+      <arg line="del --recursive --force s3://nuxeo-platform-tests-mp-s3" />
     </exec>
   </target>
 
