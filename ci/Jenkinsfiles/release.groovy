@@ -44,10 +44,6 @@ pipeline {
     label 'jenkins-nuxeo-jsf-11'
   }
 
-  parameters {
-    string(name: 'NUXEO_RELEASE_VERSION', defaultValue: '', description: 'Nuxeo release version.')
-  }
-
   environment {
     MAVEN_ARGS = '-B -nsu -Dnuxeo.skip.enforcer=true -Prelease'
     MAVEN_OPTS = "$MAVEN_OPTS -Xms512m -Xmx3072m"
