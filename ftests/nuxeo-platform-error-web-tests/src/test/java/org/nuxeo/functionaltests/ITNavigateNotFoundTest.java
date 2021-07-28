@@ -18,6 +18,7 @@
  */
 package org.nuxeo.functionaltests;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.nuxeo.functionaltests.pages.ErrorPage;
 import org.nuxeo.functionaltests.pages.LoginPage;
@@ -42,6 +43,7 @@ public class ITNavigateNotFoundTest extends AbstractTest {
     }
 
     @Test
+    @Ignore("NXP-30535")
     public void testDocumentNotFound() throws Exception {
         driver.get(NUXEO_URL + "/nxpath/foo@view_documents");
         ErrorPage errorPage = asPage(ErrorPage.class);
