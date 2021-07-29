@@ -33,6 +33,7 @@ import org.nuxeo.functionaltests.formsLayoutDemo.page.ValidationPage;
  */
 public class ITLayoutDocumentValidationTest extends AbstractTest {
 
+    @Ignore("NXP-29479")
     @Test
     public void testDocumentValidationEmpty() {
         ValidationPage page = get(ValidationPage.PAGE_PATH, ValidationPage.class);
